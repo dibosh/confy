@@ -18,7 +18,7 @@ $ git clone git://github.com/asm-products/confy
 $ cd confy
 
 $ npm install
-$ node app.js
+$ npm start
 ```
 
 ## Idea

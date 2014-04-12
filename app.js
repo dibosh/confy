@@ -8,7 +8,12 @@ var app = express();
 app.use(favicon());
 app.use(logger('dev'));
 
-app.use('/api', require('./apps/api'));
+// Use subdomain for api in production
+if (app.get('env') === 'development') {
+    app.use('/api', require('./apps/api'));
+} else {
+    app.use(vhost('api.confy.io', require('./apps/api')));
+}
 
 app.use(express.static(path.join(__dirname, 'public')));
 

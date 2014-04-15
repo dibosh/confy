@@ -14,11 +14,12 @@ Prerequisites are:
  * CouchDB __v1.2.x__ [dbname: confy]
 
 ```bash
-$ git clone git://github.com/asm-products/confy
-$ cd confy
+$ git clone git://github.com/asm-products/confy && cd confy
 
-$ npm install
-$ npm start
+$ export MAILGUN_API_KEY="key-*************"
+$ export MAILGUN_DOMAIN="sample.mailgun.org"
+
+$ npm install && node app.js
 ```
 
 ## Idea

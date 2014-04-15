@@ -5,6 +5,10 @@ var logger = require('morgan');
 
 var app = express();
 
+// Setup environment variables
+require('./env')(app);
+
+// Setup middleware
 app.use(favicon());
 app.use(logger('dev'));
 
@@ -15,6 +19,7 @@ if (app.get('env') === 'development') {
     app.use(vhost('api.confy.io', require('./apps/api')));
 }
 
+// Static middleware
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Catch 404 and forwarding to error handler
@@ -45,8 +50,6 @@ app.use(function(err, req, res, next) {
 });
 
 // Start Server
-app.set('port', process.env.PORT || 3000);
-
 var server = app.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 })

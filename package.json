@@ -1,9 +1,14 @@
 {
   "name": "confy",
   "version": "0.0.1",
+  "description": "Helping developers seperate config from code",
   "private": true,
-  "scripts": {
-    "start": "node app.js"
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/asm-products/confy"
+  },
+  "engines": {
+    "node": "0.10.x"
   },
   "dependencies": {
     "express": "~4.0.0",

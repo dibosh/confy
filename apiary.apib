@@ -1,0 +1,525 @@
+FORMAT: 1A
+HOST: https://api.confy.io
+
+# confy
+
+Authentication is compulsory to access all the API endpoints.
+
+# Group Users
+
+Users should be created through the web interface only.
+
+## User [/user]
+
+### Retrieve an User [GET]
+
+Get authenticated user's profile.
+
++ Response 200 (application/json)
+
+        {
+          "_id": "users/jsmith",
+          "username": "jsmith",
+          "email": "johnsmith@gmail.com"
+        }
+
+### Create an User [POST]
+
+Register an user. __Restricted to web interface__.
+
++ Request (application/json)
+
+        {
+          "username": "jsmith",
+          "email": "johnsmith@gmail.com"
+        }
+
++ Response 201 (application/json)
+
+        {
+          "_id": "users/jsmith",
+          "username": "jsmith",
+          "email": "johnsmith@gmail.com"
+        }
+
+
+### Update an User [PATCH]
+
+Update the authenticated user's profile. An __email__ is the only thing which can be updated.
+
++ Request (application/json)
+
+        {
+          "email": "john.smith@gmail.com"
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "users/jsmith",
+          "username": "jsmith",
+          "email": "john.smith@gmail.com"
+        }
+
+# Group Organizations
+
+Organizations are owned by users and only (s)he can add/remove teams and projects for that organization. A default organization will be created for every user.
+
+## Organizations [/orgs]
+
+### List Organizations [GET]
+
+List all organizations owned by the authenticated user.
+
++ Response 200 (application/json)
+
+        [{
+          "_id": "orgs/bigcompany",
+          "name": "BigCompany",
+          "owner": "jsmith",
+          "email": "contact@bigcompany.com",
+          "plan": "silver"
+        }, {
+          "_id": "orgs/mystartup",
+          "name": "MyStartup",
+          "owner": "jsmith",
+          "email": "johnsmith@gmail.com",
+          "plan": "bronze"
+        }, {
+          "_id": "orgs/jsmith",
+          "name": "jsmith",
+          "owner": "jsmith",
+          "email": "johnsmith@gmail.com",
+          "plan": "personal"
+        }]
+
+### Create an Organization [POST]
+
+Create an organization with a name and the email for billing. _You have to use web interface to select a billing plan afterwards_.
+
++ Request (application/json)
+
+        {
+          "name": "OpenSourceProject"
+          "email": "admin@opensourceproject.com",
+        }
+
++ Response 201 (application/json)
+
+        {
+          "_id": "orgs/opensourceproject",
+          "name": "OpenSourceProject",
+          "owner": "jsmith",
+          "email": "admin@opensourceproject.com",
+          "plan": "none"
+        }
+
+## Organization [/orgs/{org}]
+
+Authenticated user should own the organization for the below endpoints.
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+
+### Retrieve an Organization [GET]
+
+Get the organization specified by the given name.
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/mystartup",
+          "name": "MyStartup",
+          "owner": "jsmith",
+          "email": "johnsmith@gmail.com",
+          "plan": "personal"
+        }
+
+### Update an Organization [PATCH]
+
+Update the given organization. An __email__ is the only thing which can be updated.
+
++ Request (application/json)
+
+        {
+          "email": "john.smith@gmail.com"
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/mystartup",
+          "name": "MyStartup",
+          "owner": "jsmith",
+          "email": "john.smith@gmail.com",
+          "plan": "personal"
+        }
+
+### Delete an Organization [DELETE]
+
+Delete the given organization. Cannot delete the default organization. __Restricted to web interface__.
+
++ Response 204
+
+## Billing [/orgs/{org}/billing]
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+
+### Subscribe to a Plan [POST]
+
+Subscribe the organization to a plan. This can also be used when upgrading or downgrading a plan. __Only used by stripe checkout__. Confy will update the stripe customer if he already exists.
+
++ Request (application/json)
+
+        {
+          "stripeToken": "tok_3phltsyDWXUAUt",
+          "plan": "gold"
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/mystartup",
+          "name": "MyStartup",
+          "owner": "jsmith",
+          "email": "john.smith@gmail.com",
+          "plan": "gold"
+        }
+
+# Group Teams
+
+Every organization will have a default team named __All__. Authenticated user should own the organization for the below endpoints.
+
+## Teams [/orgs/{org}/teams]
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+
+### List all Teams [GET]
+
+List all teams of the given organization.
+
++ Response 200 (application/json)
+
+        [{
+          "_id": "orgs/bigcompany/teams/engineering",
+          "name": "Engineering",
+          "description": "The engineering guys",
+          "members": ["jenny", "laura"]
+        }, {
+          "_id": "orgs/bigcompany/teams/all",
+          "name": "All",
+          "description": "Can see every project",
+          "members": ["jsmith"]
+        }]
+
+### Create a Team [POST]
+
+Create a team for the given organization.
+
++ Request (application/json)
+
+        {
+          "name": "Consultants",
+          "description": "Consultants will have restricted access",
+          "members": ["eric"]
+        }
+
++ Response 201 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/teams/consultants",
+          "name": "Consultants",
+          "description": "Consultants will have restricted access",
+          "members": ["eric"]
+        }
+
+## Team [/orgs/{org}/teams/{team}]
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+    + team (required, string) ... Name of the team
+
+### Retrieve a Team [GET]
+
+Get a specific team in a specific organization.
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/teams/consultants",
+          "name": "Consultants",
+          "description": "Consultants will have restricted access",
+          "members": ["eric"]
+        }
+
+### Update a Team [PATCH]
+
+Update a specific team. __Description__ is the only thing which can be updated.
+
++ Request (application/json)
+
+        {
+          "description": "Consultants will be restricted"
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/teams/consultants",
+          "name": "Consultants",
+          "description": "Consultants will be restricted",
+          "members": ["eric"]
+        }
+
+### Delete a Team [DELETE]
+
+Delete the given team. Cannot delete the default team in the organization.
+
++ Response 204
+
+## Members [/orgs/{org}/teams/{team}/member]
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+    + team (required, string) ... Name of the team
+
+### Add a Member [POST]
+
+Add members to the given team. The __members__ in the request needs to be an array.
+
++ Request (application/json)
+
+        {
+          "members": ["ben"]
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/teams/consultants",
+          "name": "Consultants",
+          "description": "Consultants will be restricted",
+          "members": ["eric", "ben"]
+        }
+
+### Remove a Member [DELETE]
+
+Remove members from the given team. The __members__ in the request needs to be an array.
+
++ Request (application/json)
+
+        {
+          "members": ["ben"]
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/teams/consultants",
+          "name": "Consultants",
+          "description": "Consultants will be restricted",
+          "members": ["eric"]
+        }
+
+# Group Projects
+
+Each project has __one__ configuration document which can have many keys and values.
+
+## Projects [/orgs/{org}/projects]
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+
+### List all Projects [GET]
+
+List all the projects of the organization which can be seen by the authenticated user.
+
++ Response 200 (application/json)
+
+        [{
+          "_id": "orgs/bigcompany/projects/urlshortener",
+          "name": "UrlShortener",
+          "description": "Service to be used by bots",
+          "teams": ["all", "engineering", "consultants"]
+        }, {
+          "_id": "orgs/bigcompany/projects/main",
+          "name": "Main",
+          "description": "Main product",
+          "teams": ["all", "engineering"]
+        }, {
+          "_id": "orgs/bigcompany/projects/blog",
+          "name": "Blog",
+          "description": "Company's blog",
+          "teams": ["all"]
+        }]
+
+### Create a Project [POST]
+
+Create a project. _Authenticated user should own the organization_. Only the __all__ team will be able to see the project initially.
+
++ Request (application/json)
+
+        {
+          "name": "KnowledgeBase",
+          "title": "Wiki and FAQ for support"
+        }
+
++ Response 201 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/projects/knowledgebase",
+          "name": "KnowledgeBase",
+          "description": "Wiki and FAQ for support",
+          "teams": ["all"]
+        }
+
+## Project [/orgs/{org}/projects/{project}]
+
+Authenticated user should own the organization for the below endpoints.
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+    + project (required, string) ... Name of the project
+
+### Retrieve a Project [GET]
+
+Get a specific project.
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/projects/urlshortener",
+          "name": "UrlShortener",
+          "description": "Service to be used by bots",
+          "teams": ["all", "engineering", "consultants"]
+        }
+
+### Update a Project [PATCH]
+
+Update a specific project. __Description__ is the only thing which can be updated.
+
++ Request (application/json)
+
+        {
+          "description": "Url shortening as a service"
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/projects/urlshortener",
+          "name": "UrlShortener",
+          "description": "Url shortening as a service",
+          "teams": ["all", "engineering", "consultants"]
+        }
+
+### Delete a Project [DELETE]
+
+Delete the given project.
+
++ Response 204
+
+## Access [/orgs/{org}/projects/{project}/access]
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+    + project (required, string) ... Name of the project
+
+### Add a Team [POST]
+
+Give project access to the given teams. The __teams__ in the request needs to be an array.
+
++ Request (application/json)
+
+        {
+          "teams": ["engineering"]
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/projects/knowledgebase",
+          "name": "KnowledgeBase",
+          "description": "Wiki and FAQ for support",
+          "teams": ["all", "engineering"]
+        }
+
+### Remove a Team [DELETE]
+
+Remove project access for the given team. The __teams__ in the request needs to be an array.
+
++ Request (application/json)
+
+        {
+          "teams": ["consultants"]
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/projects/urlshortener",
+          "name": "UrlShortener",
+          "description": "Url shortening as a service",
+          "teams": ["all", "engineering"]
+        }
+
+## Configuration [/orgs/{org}/projects/{project}/config]
+
+Any member of the team which has access to the project can retrieve the configuration document or edit it.
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+    + project (required, string) ... Name of the project
+
+### Retrieve the configuration [GET]
+
+Get the configuration document for the project.
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/projects/blog/config",
+          "port": 3000,
+          "random": [1, 2, 3],
+          "database": {
+            "host": "http://couchvendor.com/bigcompany",
+            "port": 5984,
+            "name": "blog"
+          }
+        }
+
+### Update the configuration [PATCH]
+
+Update the configuration document for the project. We will patch the document recursively.
+
++ Request (application/json)
+
+        {
+          "database": {
+            "port": 6984
+          },
+          "random": null
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/projects/blog/config",
+          "port": 3000,
+          "database": {
+            "host": "http://couchvendor.com/bigcompany",
+            "port": 6984,
+            "name": "blog"
+          }
+        }

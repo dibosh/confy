@@ -73,12 +73,9 @@ module.exports = function (app, db) {
           if (err) return next(err);
 
           if (body.ok) {
-            db.get(body.id, function (err, body) {
-              if (err) return next(err);
-
-              app.utils.shield(body, ['password', '_rev']);
-              res.json(body);
-            });
+            req.body._id = body.id;
+            app.utils.shield(req.body, ['password']);
+            res.json(req.body);
           }
         });
       });

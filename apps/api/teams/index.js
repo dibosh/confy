@@ -22,6 +22,21 @@ module.exports = function (app, db) {
     res.json(req.team);
   });
 
+  // Update a team
+  app.patch('/orgs/:org/teams/:team', app.auth, app.auth.owner, function (req, res, next) {
+    app.utils.permit(req, ['description']);
+    app.utils.merge(req.team, req.body);
+
+    db.insert(req.team, req.team._id, function (err, body) {
+      if (err) return next(err);
+
+      if (body.ok) {
+        app.utils.shield(req.team, ['_rev']);
+        res.json(req.team);
+      }
+    });
+  });
+
   // Delete a team
   app.delete('/orgs/:org/teams/:team', app.auth, app.auth.owner, function (req, res, next) {
     db.destroy(req.team._id, req.team._rev, function (err, body) {

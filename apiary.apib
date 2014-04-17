@@ -221,24 +221,25 @@ List all teams of the given organization.
           "_id": "orgs/bigcompany/teams/engineering",
           "name": "Engineering",
           "description": "The engineering guys",
-          "members": ["jenny", "laura"]
+          "members": ["jenny", "laura"],
+          "type": "team"
         }, {
           "_id": "orgs/bigcompany/teams/all",
           "name": "All",
           "description": "Can see every project",
-          "members": ["jsmith"]
+          "members": ["jsmith"],
+          "type": "team"
         }]
 
 ### Create a Team [POST]
 
-Create a team for the given organization.
+Create a team for the given organization. __You will have to add a team member afterwards__.
 
 + Request (application/json)
 
         {
           "name": "Consultants",
-          "description": "Consultants will have restricted access",
-          "members": ["eric"]
+          "description": "Consultants will have restricted access"
         }
 
 + Response 201 (application/json)
@@ -247,7 +248,8 @@ Create a team for the given organization.
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will have restricted access",
-          "members": ["eric"]
+          "members": [],
+          "type": "team"
         }
 
 ## Team [/orgs/{org}/teams/{team}]
@@ -267,7 +269,8 @@ Get a specific team in a specific organization.
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will have restricted access",
-          "members": ["eric"]
+          "members": ["eric"],
+          "type": "team"
         }
 
 ### Update a Team [PATCH]
@@ -286,7 +289,8 @@ Update a specific team. __Description__ is the only thing which can be updated.
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "members": ["eric"]
+          "members": ["eric"],
+          "type": "team"
         }
 
 ### Delete a Team [DELETE]
@@ -318,7 +322,8 @@ Add members to the given team. The __members__ in the request needs to be an arr
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "members": ["eric", "ben"]
+          "members": ["eric", "ben"],
+          "type": "team"
         }
 
 ### Remove a Member [DELETE]
@@ -337,7 +342,8 @@ Remove members from the given team. The __members__ in the request needs to be a
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "members": ["eric"]
+          "members": ["eric"],
+          "type": "team"
         }
 
 # Group Projects

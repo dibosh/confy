@@ -1,5 +1,29 @@
 module.exports = function (app, db) {
 
+  // Org param
+  app.param('org', function (req, res, next, org) {
+    db.get('orgs/' + org, function (err, body) {
+      if (err) return next(err);
+
+      if (body) {
+        req.org = body;
+        return next();
+      }
+
+      return app.errors.notfound(res);
+    });
+  });
+
+  // Retrieve an org
+  app.get('/orgs/:org', app.auth, function (req, res, next) {
+    if (req.org.owner == req.user.username) {
+      app.utils.shield(req.org, ['_rev']);
+      res.json(req.org);
+    }
+
+    return app.errors.notfound(res);
+  });
+
   // Create an org
   app.post('/orgs', app.auth, function (req, res, next) {
     app.utils.permit(req, ['name', 'email']);
@@ -28,7 +52,7 @@ module.exports = function (app, db) {
       }
 
       req.body.type = 'org';
-      req.body.owner = res.locals.user.username;
+      req.body.owner = req.user.username;
       req.body.plan = 'none';
 
       // Insert org

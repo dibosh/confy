@@ -32,4 +32,10 @@ module.exports = function (app) {
     res.status(401);
     res.json({ message: 'Bad credentials' });
   }
+
+  // Not found error
+  app.errors.notfound = function (res) {
+    res.status(404);
+    res.json({ message: 'Not found' });
+  }
 };

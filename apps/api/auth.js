@@ -24,4 +24,12 @@ module.exports = function (app, db) {
       return app.errors.auth(res);
     });
   }
+
+  app.auth.owner = function (req, res, next) {
+    if (req.org.owner != req.user.username) {
+      return app.errors.notfound(res);
+    }
+
+    return next();
+  }
 };

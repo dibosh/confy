@@ -1,6 +1,11 @@
 module.exports = function (app) {
   app.errors = {};
 
+  // Catch 404
+  app.use(function (req, res, next) {
+    app.errors.notfound(res);
+  });
+
   // Development error handler will print stacktrace
   if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {

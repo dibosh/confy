@@ -86,7 +86,7 @@ module.exports = function (app, db) {
     var orgLowerName = req.org.name.toLowerCase()
       , lowerName = name.toLowerCase();
 
-    // Search for existing teamname
+    // Search for existing team name
     db.view('teams', 'name', {key: [orgLowerName + '/' + lowerName]}, function (err, body) {
       if (err) return next(err);
 

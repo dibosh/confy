@@ -373,17 +373,23 @@ List all the projects of the organization which can be seen by the authenticated
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Service to be used by bots",
-          "teams": ["all", "engineering", "consultants"]
+          "teams": ["all", "engineering", "consultants"],
+          "org": "bigcompany",
+          "type": "project"
         }, {
           "_id": "orgs/bigcompany/projects/main",
           "name": "Main",
           "description": "Main product",
-          "teams": ["all", "engineering"]
+          "teams": ["all", "engineering"],
+          "org": "bigcompany",
+          "type": "project"
         }, {
           "_id": "orgs/bigcompany/projects/blog",
           "name": "Blog",
           "description": "Company's blog",
-          "teams": ["all"]
+          "teams": ["all"],
+          "org": "bigcompany",
+          "type": "project"
         }]
 
 ### Create a Project [POST]
@@ -394,7 +400,7 @@ Create a project. _Authenticated user should own the organization_. Only the __a
 
         {
           "name": "KnowledgeBase",
-          "title": "Wiki and FAQ for support"
+          "description": "Wiki and FAQ for support"
         }
 
 + Response 201 (application/json)
@@ -403,7 +409,9 @@ Create a project. _Authenticated user should own the organization_. Only the __a
           "_id": "orgs/bigcompany/projects/knowledgebase",
           "name": "KnowledgeBase",
           "description": "Wiki and FAQ for support",
-          "teams": ["all"]
+          "teams": ["all"],
+          "org": "bigcompany",
+          "type": "project"
         }
 
 ## Project [/orgs/{org}/projects/{project}]
@@ -425,7 +433,9 @@ Get a specific project.
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Service to be used by bots",
-          "teams": ["all", "engineering", "consultants"]
+          "teams": ["all", "engineering", "consultants"],
+          "org": "bigcompany",
+          "type": "project"
         }
 
 ### Update a Project [PATCH]
@@ -444,7 +454,9 @@ Update a specific project. __Description__ is the only thing which can be update
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Url shortening as a service",
-          "teams": ["all", "engineering", "consultants"]
+          "teams": ["all", "engineering", "consultants"],
+          "org": "bigcompany",
+          "type": "project"
         }
 
 ### Delete a Project [DELETE]
@@ -476,7 +488,9 @@ Give project access to the given teams. The __teams__ in the request needs to be
           "_id": "orgs/bigcompany/projects/knowledgebase",
           "name": "KnowledgeBase",
           "description": "Wiki and FAQ for support",
-          "teams": ["all", "engineering"]
+          "teams": ["all", "engineering"],
+          "org": "bigcompany",
+          "type": "project"
         }
 
 ### Remove a Team [DELETE]
@@ -495,7 +509,9 @@ Remove project access for the given team. The __teams__ in the request needs to 
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Url shortening as a service",
-          "teams": ["all", "engineering"]
+          "teams": ["all", "engineering"],
+          "org": "bigcompany",
+          "type": "project"
         }
 
 ## Configuration [/orgs/{org}/projects/{project}/config]

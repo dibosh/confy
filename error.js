@@ -1,4 +1,5 @@
 module.exports = function (app) {
+  app.errors = {};
 
   // Development error handler will print stacktrace
   if (app.get('env') === 'development') {
@@ -19,4 +20,13 @@ module.exports = function (app) {
       error: {}
     });
   });
+
+  // Validation error
+  app.errors.validation = function (res, errs) {
+    res.status(422);
+    res.json({
+      message: 'Validation failed',
+      errors: errs
+    })
+  }
 };

@@ -1,6 +1,8 @@
 module.exports = function (app) {
 
-  app.permit = function (req, fields) {
+  app.utils = {};
+
+  app.utils.permit = function (req, fields) {
     req.oldBody = req.body;
     req.body = {};
 
@@ -11,7 +13,19 @@ module.exports = function (app) {
     });
   };
 
-  app.shield = function (body, fields) {
+  app.utils.need = function (req, fields) {
+    var errs = [];
+
+    fields.forEach(function (field) {
+      if (req.body[field] === undefined) {
+        errs.push({ field: field, code: 'missing' });
+      }
+    });
+
+    return errs;
+  }
+
+  app.utils.shield = function (body, fields) {
     fields.forEach(function (field) {
       if (body[field]) {
         delete body[field];

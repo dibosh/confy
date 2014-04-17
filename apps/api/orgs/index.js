@@ -32,12 +32,31 @@ module.exports = function (app, db) {
 
   // Retrieve an org
   app.get('/orgs/:org', app.auth, function (req, res, next) {
-    if (req.org.owner == req.user.username) {
-      app.utils.shield(req.org, ['_rev']);
-      res.json(req.org);
+    if (req.org.owner != req.user.username) {
+      return app.errors.notfound(res);
     }
 
-    return app.errors.notfound(res);
+    app.utils.shield(req.org, ['_rev']);
+    res.json(req.org);
+  });
+
+  // Update an org
+  app.patch('/orgs/:org', app.auth, function (req, res, next) {
+    if (req.org.owner != req.user.username) {
+      return app.errors.notfound(res);
+    }
+
+    app.utils.permit(req, ['email']);
+    app.utils.merge(req.org, req.body);
+
+    db.insert(req.org, req.org._id, function (err, body) {
+      if (err) return next(err);
+
+      if (body.ok) {
+        app.utils.shield(req.org, ['_rev']);
+        res.json(req.org);
+      }
+    });
   });
 
   // Create an org

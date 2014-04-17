@@ -20,7 +20,9 @@ Get authenticated user's profile.
         {
           "_id": "users/jsmith",
           "username": "jsmith",
-          "email": "johnsmith@gmail.com"
+          "email": "johnsmith@gmail.com",
+          "verified": true,
+          "type": "user"
         }
 
 ### Create an User [POST]
@@ -41,9 +43,9 @@ Register an user. __Restricted to web interface__.
           "_id": "users/jsmith",
           "username": "jsmith",
           "email": "johnsmith@gmail.com",
-          "verified": false
+          "verified": false,
+          "type": "user"
         }
-
 
 ### Update an User [PATCH]
 
@@ -60,7 +62,9 @@ Update the authenticated user's profile. An __email__ is the only thing which ca
         {
           "_id": "users/jsmith",
           "username": "jsmith",
-          "email": "john.smith@gmail.com"
+          "email": "john.smith@gmail.com",
+          "verified": false,
+          "type": "user"
         }
 
 # Group Organizations

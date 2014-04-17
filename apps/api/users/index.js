@@ -8,7 +8,8 @@ module.exports = function (app, db) {
 
   // Retrieve an user
   app.get('/user', app.auth, function (req, res, next) {
-    res.json({});
+    app.utils.shield(res.locals.user, ['password', '_rev']);
+    res.json(res.locals.user);
   });
 
   // Create an user
@@ -52,7 +53,7 @@ module.exports = function (app, db) {
             db.get(body.id, function (err, body) {
               if (err) return next(err);
 
-              app.utils.shield(body, ['password', 'type', '_rev']);
+              app.utils.shield(body, ['password', '_rev']);
               res.json(body);
             });
           }

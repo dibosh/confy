@@ -8,8 +8,8 @@ module.exports = function (app, db) {
 
   // Retrieve an user
   app.get('/user', app.auth, function (req, res, next) {
-    app.utils.shield(res.locals.user, ['password', '_rev']);
-    res.json(res.locals.user);
+    app.utils.shield(req.user, ['password', '_rev']);
+    res.json(req.user);
   });
 
   // Update an user
@@ -21,14 +21,14 @@ module.exports = function (app, db) {
       req.body.verified = false;
     }
 
-    app.utils.merge(res.locals.user, req.body);
+    app.utils.merge(req.user, req.body);
 
-    db.insert(res.locals.user, res.locals.user._id, function (err, body) {
+    db.insert(req.user, req.user._id, function (err, body) {
       if (err) return next(err);
 
       if (body.ok) {
-        app.utils.shield(res.locals.user, ['password', '_rev']);
-        res.json(res.locals.user);
+        app.utils.shield(req.user, ['password', '_rev']);
+        res.json(req.user);
       }
     });
   });
@@ -62,7 +62,6 @@ module.exports = function (app, db) {
 
         // Encrypt password
         req.body.password = cryptPass(req.body.password);
-
         req.body.type = 'user';
 
         // Send verification email
@@ -75,6 +74,7 @@ module.exports = function (app, db) {
           if (body.ok) {
             req.body._id = body.id;
             app.utils.shield(req.body, ['password']);
+            res.status(201);
             res.json(req.body);
           }
         });

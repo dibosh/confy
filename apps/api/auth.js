@@ -16,12 +16,20 @@ module.exports = function (app, db) {
     db.get('users/' + username, function (err, body) {
       if (err) return next(err);
 
-      if (bcrypt.compareSync(password, body.password)) {
-        res.locals.user = body;
+      if (body && bcrypt.compareSync(password, body.password)) {
+        req.user = body;
         return next();
       }
 
       return app.errors.auth(res);
     });
+  }
+
+  app.auth.owner = function (req, res, next) {
+    if (req.org.owner != req.user.username) {
+      return app.errors.notfound(res);
+    }
+
+    return next();
   }
 };

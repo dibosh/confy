@@ -1,6 +1,11 @@
 module.exports = function (app) {
   app.errors = {};
 
+  // Catch 404
+  app.use(function (req, res, next) {
+    app.errors.notfound(res);
+  });
+
   // Development error handler will print stacktrace
   if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
@@ -31,5 +36,11 @@ module.exports = function (app) {
   app.errors.auth = function (res) {
     res.status(401);
     res.json({ message: 'Bad credentials' });
+  }
+
+  // Not found error
+  app.errors.notfound = function (res) {
+    res.status(404);
+    res.json({ message: 'Not found' });
   }
 };

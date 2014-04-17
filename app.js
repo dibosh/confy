@@ -22,13 +22,6 @@ if (app.get('env') === 'development') {
 // Static middleware
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Catch 404 and forwarding to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
 // Error handling
 require('./error')(app);
 

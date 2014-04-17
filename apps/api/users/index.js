@@ -62,7 +62,6 @@ module.exports = function (app, db) {
 
         // Encrypt password
         req.body.password = cryptPass(req.body.password);
-
         req.body.type = 'user';
 
         // Send verification email

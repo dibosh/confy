@@ -84,19 +84,22 @@ List all organizations owned by the authenticated user.
           "name": "BigCompany",
           "owner": "jsmith",
           "email": "contact@bigcompany.com",
-          "plan": "silver"
+          "plan": "silver",
+          "type": "org"
         }, {
           "_id": "orgs/mystartup",
           "name": "MyStartup",
           "owner": "jsmith",
           "email": "johnsmith@gmail.com",
-          "plan": "bronze"
+          "plan": "bronze",
+          "type": "org"
         }, {
           "_id": "orgs/jsmith",
           "name": "jsmith",
           "owner": "jsmith",
           "email": "johnsmith@gmail.com",
-          "plan": "personal"
+          "plan": "personal",
+          "type": "org"
         }]
 
 ### Create an Organization [POST]
@@ -117,7 +120,8 @@ Create an organization with a name and the email for billing. _You have to use w
           "name": "OpenSourceProject",
           "owner": "jsmith",
           "email": "admin@opensourceproject.com",
-          "plan": "none"
+          "plan": "none",
+          "type": "org"
         }
 
 ## Organization [/orgs/{org}]
@@ -139,7 +143,8 @@ Get the organization specified by the given name.
           "name": "MyStartup",
           "owner": "jsmith",
           "email": "johnsmith@gmail.com",
-          "plan": "personal"
+          "plan": "personal",
+          "type": "org"
         }
 
 ### Update an Organization [PATCH]
@@ -159,7 +164,8 @@ Update the given organization. An __email__ is the only thing which can be updat
           "name": "MyStartup",
           "owner": "jsmith",
           "email": "john.smith@gmail.com",
-          "plan": "personal"
+          "plan": "personal",
+          "type": "org"
         }
 
 ### Delete an Organization [DELETE]

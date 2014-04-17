@@ -3,7 +3,10 @@ var express = require('express')
 
 var app = express();
 
-var db = nano(process.env.DATABASE_URL || 'http://localhost:5984').use('confy');
+// Setup environment variables
+require('../../env')(app);
+
+var db = nano(app.get('db')).use('confy');
 
 require('./users')(app, db);
 
@@ -16,6 +19,9 @@ require('./teams/members')(app, db);
 require('./projects')(app, db);
 require('./projects/access')(app, db);
 require('./projects/config')(app, db);
+
+// Error handling
+require('../../error')(app);
 
 // Export app
 module.exports = app;

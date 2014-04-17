@@ -14,9 +14,9 @@ app.use(logger('dev'));
 
 // Use subdomain for api in production
 if (app.get('env') === 'development') {
-    app.use('/api', require('./apps/api'));
+  app.use('/api', require('./apps/api'));
 } else {
-    app.use(vhost('api.confy.io', require('./apps/api')));
+  app.use(vhost('api.confy.io', require('./apps/api')));
 }
 
 // Static middleware
@@ -24,30 +24,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-// Development error handler will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.json({
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// Production error handler no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.json({
-        message: err.message,
-        error: {}
-    });
-});
+// Error handling
+require('./error')(app);
 
 // Start Server
 var server = app.listen(app.get('port'), function () {

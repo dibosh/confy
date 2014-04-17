@@ -4,9 +4,12 @@ var cryptPass = function (password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 };
 
-var comparePass = bcrypt.compareSync;
-
 module.exports = function (app, db) {
+
+  // Retrieve an user
+  app.get('/user', app.auth, function (req, res, next) {
+    res.json({});
+  });
 
   // Create an user
   app.post('/user', function (req, res, next) {

@@ -24,9 +24,12 @@ module.exports = function (app) {
   // Validation error
   app.errors.validation = function (res, errs) {
     res.status(422);
-    res.json({
-      message: 'Validation failed',
-      errors: errs
-    })
+    res.json({ message: 'Validation failed', errors: errs });
+  }
+
+  // Authentication error
+  app.errors.auth = function (res) {
+    res.status(401);
+    res.json({ message: 'Bad credentials' });
   }
 };

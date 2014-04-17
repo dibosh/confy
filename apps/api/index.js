@@ -19,6 +19,9 @@ var db = nano(app.get('db')).use('confy');
 // Setup utility functions
 require('./utils')(app);
 
+// Setup auth helpers
+require('./auth')(app, db);
+
 // Setup API
 require('./users')(app, db);
 

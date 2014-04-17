@@ -22,6 +22,18 @@ module.exports = function (app, db) {
     res.json(req.team);
   });
 
+  // Delete a team
+  app.delete('/orgs/:org/teams/:team', app.auth, app.auth.owner, function (req, res, next) {
+    db.destroy(req.team._id, req.team._rev, function (err, body) {
+      console.log(err, body);
+      if (err) return next(err);
+
+      if (body.ok) {
+        res.send(204);
+      }
+    });
+  });
+
   // Create a team
   app.post('/orgs/:org/teams', app.auth, app.auth.owner, function (req, res, next) {
     app.utils.permit(req, ['name', 'description']);

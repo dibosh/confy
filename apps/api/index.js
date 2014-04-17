@@ -6,8 +6,13 @@ var app = express();
 // Setup environment variables
 require('../../env')(app);
 
+// Setup mailer
+require('../../mailer')(app);
+
+// Setup database handler
 var db = nano(app.get('db')).use('confy');
 
+// Setup API
 require('./users')(app, db);
 
 require('./orgs')(app, db);

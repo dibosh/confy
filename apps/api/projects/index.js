@@ -22,6 +22,33 @@ module.exports = function (app, db) {
     res.json(req.project);
   });
 
+  // Update a project
+  app.patch('/orgs/:org/projects/:project', app.auth.owner, function (req, res, next) {
+    app.utils.permit(req, ['description']);
+    app.utils.merge(req.project, req.body);
+
+    db.insert(req.project, req.project._id, function (err, body) {
+      if (err) return next(err);
+
+      if (body.ok) {
+        app.utils.shield(req.project, ['_rev']);
+        res.json(req.project);
+      }
+    });
+  });
+
+  // Delete a project
+  app.delete('/orgs/:org/projects/:project', app.auth.owner, function (req, res, next) {
+    db.destroy(req.project._id, req.project._rev, function (err, body) {
+      console.log(err, body);
+      if (err) return next(err);
+
+      if (body.ok) {
+        res.send(204);
+      }
+    });
+  });
+
   // Create a project
   app.post('/orgs/:org/projects', app.auth.owner, function (req, res, next) {
     app.utils.permit(req, ['name', 'description']);

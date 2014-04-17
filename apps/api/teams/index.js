@@ -16,6 +16,23 @@ module.exports = function (app, db) {
     });
   });
 
+  // List all teams
+  app.get('/orgs/:org/teams', app.auth, app.auth.owner, function (req, res, next) {
+    db.view('teams', 'org', function (err, body) {
+      if (err) return next(err);
+
+      if (body.rows.length > 0) {
+        body = body.rows.map(function (row) {
+          app.utils.shield(row.value, ['_rev']);
+          return row.value;
+        });
+
+        res.json(body);
+      }
+    });
+
+  });
+
   // Retrieve a team
   app.get('/orgs/:org/teams/:team', app.auth, app.auth.owner, function (req, res, next) {
     app.utils.shield(req.team, ['_rev']);
@@ -79,6 +96,7 @@ module.exports = function (app, db) {
 
       req.body.type = 'team';
       req.body.members = [];
+      req.body.org = orgLowerName;
 
       // Insert team
       db.insert(req.body, 'orgs/' + orgLowerName + '/teams/' + lowerName, function (err, body) {

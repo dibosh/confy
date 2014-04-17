@@ -222,12 +222,14 @@ List all teams of the given organization.
           "name": "Engineering",
           "description": "The engineering guys",
           "members": ["jenny", "laura"],
+          "org": "bigcompany",
           "type": "team"
         }, {
           "_id": "orgs/bigcompany/teams/all",
           "name": "All",
           "description": "Can see every project",
           "members": ["jsmith"],
+          "org": "bigcompany",
           "type": "team"
         }]
 
@@ -249,6 +251,7 @@ Create a team for the given organization. __You will have to add a team member a
           "name": "Consultants",
           "description": "Consultants will have restricted access",
           "members": [],
+          "org": "bigcompany",
           "type": "team"
         }
 
@@ -270,6 +273,7 @@ Get a specific team in a specific organization.
           "name": "Consultants",
           "description": "Consultants will have restricted access",
           "members": ["eric"],
+          "org": "bigcompany",
           "type": "team"
         }
 
@@ -290,6 +294,7 @@ Update a specific team. __Description__ is the only thing which can be updated.
           "name": "Consultants",
           "description": "Consultants will be restricted",
           "members": ["eric"],
+          "org": "bigcompany",
           "type": "team"
         }
 
@@ -323,6 +328,7 @@ Add members to the given team. The __members__ in the request needs to be an arr
           "name": "Consultants",
           "description": "Consultants will be restricted",
           "members": ["eric", "ben"],
+          "org": "bigcompany",
           "type": "team"
         }
 
@@ -343,6 +349,7 @@ Remove members from the given team. The __members__ in the request needs to be a
           "name": "Consultants",
           "description": "Consultants will be restricted",
           "members": ["eric"],
+          "org": "bigcompany",
           "type": "team"
         }
 

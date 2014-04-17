@@ -12,6 +12,27 @@ module.exports = function (app, db) {
     res.json(res.locals.user);
   });
 
+  // Update an user
+  app.patch('/user', app.auth, function (req, res, next) {
+    app.utils.permit(req, ['email']);
+
+    // If updating email, send verification email
+    if (req.body.email) {
+      req.body.verified = false;
+    }
+
+    app.utils.merge(res.locals.user, req.body);
+
+    db.insert(res.locals.user, res.locals.user._id, function (err, body) {
+      if (err) return next(err);
+
+      if (body.ok) {
+        app.utils.shield(res.locals.user, ['password', '_rev']);
+        res.json(res.locals.user);
+      }
+    });
+  });
+
   // Create an user
   app.post('/user', function (req, res, next) {
     app.utils.permit(req, ['username', 'email', 'password']);
@@ -43,6 +64,8 @@ module.exports = function (app, db) {
         req.body.password = cryptPass(req.body.password);
 
         req.body.type = 'user';
+
+        // Send verification email
         req.body.verified = false;
 
         // Insert user

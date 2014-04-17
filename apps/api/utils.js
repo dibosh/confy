@@ -2,6 +2,12 @@ module.exports = function (app) {
 
   app.utils = {};
 
+  app.utils.merge = function (oldBody, newBody) {
+    Object.keys(newBody).forEach(function (key) {
+      oldBody[key] = newBody[key];
+    });
+  }
+
   app.utils.permit = function (req, fields) {
     req.oldBody = req.body;
     req.body = {};

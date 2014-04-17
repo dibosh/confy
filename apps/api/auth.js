@@ -26,10 +26,14 @@ module.exports = function (app, db) {
   }
 
   app.auth.owner = function (req, res, next) {
-    if (req.org.owner != req.user.username) {
-      return app.errors.notfound(res);
-    }
+    app.auth(req, res, function (err) {
+      if (err) return next(err);
 
-    return next();
+      if (req.org === undefined || req.org.owner != req.user.username) {
+        return app.errors.notfound(res);
+      }
+
+      return next();
+    });
   }
 };

@@ -31,13 +31,13 @@ module.exports = function (app, db) {
   });
 
   // Retrieve an org
-  app.get('/orgs/:org', app.auth, app.auth.owner, function (req, res, next) {
+  app.get('/orgs/:org', app.auth.owner, function (req, res, next) {
     app.utils.shield(req.org, ['_rev']);
     res.json(req.org);
   });
 
   // Update an org
-  app.patch('/orgs/:org', app.auth, app.auth.owner, function (req, res, next) {
+  app.patch('/orgs/:org', app.auth.owner, function (req, res, next) {
     app.utils.permit(req, ['email']);
     app.utils.merge(req.org, req.body);
 
@@ -52,7 +52,7 @@ module.exports = function (app, db) {
   });
 
   // Delete an org
-  app.delete('/orgs/:org', app.auth, app.auth.owner, function (req, res, next) {
+  app.delete('/orgs/:org', app.auth.owner, function (req, res, next) {
     db.destroy(req.org._id, req.org._rev, function (err, body) {
       console.log(err, body);
       if (err) return next(err);

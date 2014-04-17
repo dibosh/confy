@@ -17,7 +17,7 @@ module.exports = function (app, db) {
   });
 
   // List all teams
-  app.get('/orgs/:org/teams', app.auth, app.auth.owner, function (req, res, next) {
+  app.get('/orgs/:org/teams', app.auth.owner, function (req, res, next) {
     db.view('teams', 'org', function (err, body) {
       if (err) return next(err);
 
@@ -34,13 +34,13 @@ module.exports = function (app, db) {
   });
 
   // Retrieve a team
-  app.get('/orgs/:org/teams/:team', app.auth, app.auth.owner, function (req, res, next) {
+  app.get('/orgs/:org/teams/:team', app.auth.owner, function (req, res, next) {
     app.utils.shield(req.team, ['_rev']);
     res.json(req.team);
   });
 
   // Update a team
-  app.patch('/orgs/:org/teams/:team', app.auth, app.auth.owner, function (req, res, next) {
+  app.patch('/orgs/:org/teams/:team', app.auth.owner, function (req, res, next) {
     app.utils.permit(req, ['description']);
     app.utils.merge(req.team, req.body);
 
@@ -55,7 +55,7 @@ module.exports = function (app, db) {
   });
 
   // Delete a team
-  app.delete('/orgs/:org/teams/:team', app.auth, app.auth.owner, function (req, res, next) {
+  app.delete('/orgs/:org/teams/:team', app.auth.owner, function (req, res, next) {
     db.destroy(req.team._id, req.team._rev, function (err, body) {
       console.log(err, body);
       if (err) return next(err);
@@ -67,7 +67,7 @@ module.exports = function (app, db) {
   });
 
   // Create a team
-  app.post('/orgs/:org/teams', app.auth, app.auth.owner, function (req, res, next) {
+  app.post('/orgs/:org/teams', app.auth.owner, function (req, res, next) {
     app.utils.permit(req, ['name', 'description']);
 
     // Check for required params

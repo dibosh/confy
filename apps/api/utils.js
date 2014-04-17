@@ -33,9 +33,7 @@ module.exports = function (app) {
 
   app.utils.shield = function (body, fields) {
     fields.forEach(function (field) {
-      if (body[field]) {
-        delete body[field];
-      }
+      if (body[field]) delete body[field];
     });
   }
 

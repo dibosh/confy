@@ -14,6 +14,22 @@ module.exports = function (app, db) {
     });
   });
 
+  // List all orgs
+  app.get('/orgs', app.auth, function (req, res, next) {
+    db.view('orgs', 'owner', function (err, body) {
+      if (err) return next(err);
+
+      if (body.rows.length > 0) {
+        body = body.rows.map(function (row) {
+          app.utils.shield(row.value, ['_rev']);
+          return row.value;
+        });
+
+        res.json(body);
+      }
+    });
+  });
+
   // Retrieve an org
   app.get('/orgs/:org', app.auth, function (req, res, next) {
     if (req.org.owner == req.user.username) {
@@ -61,6 +77,7 @@ module.exports = function (app, db) {
 
         if (body.ok) {
           req.body._id = body.id;
+          res.status(201);
           res.json(req.body);
         }
       });

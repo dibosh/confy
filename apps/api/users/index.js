@@ -28,6 +28,7 @@ module.exports = function (app, db) {
 
       if (body.ok) {
         app.utils.shield(req.user, ['password', '_rev']);
+        res.status(201);
         res.json(req.user);
       }
     });

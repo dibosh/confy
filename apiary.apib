@@ -221,14 +221,14 @@ List all teams of the given organization.
           "_id": "orgs/bigcompany/teams/engineering",
           "name": "Engineering",
           "description": "The engineering guys",
-          "members": ["jenny", "laura"],
+          "users": ["jenny", "laura"],
           "org": "bigcompany",
           "type": "team"
         }, {
           "_id": "orgs/bigcompany/teams/all",
           "name": "All",
           "description": "Can see every project",
-          "members": ["jsmith"],
+          "users": ["jsmith"],
           "org": "bigcompany",
           "type": "team"
         }]
@@ -250,7 +250,7 @@ Create a team for the given organization. __You will have to add a team member a
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will have restricted access",
-          "members": [],
+          "users": [],
           "org": "bigcompany",
           "type": "team"
         }
@@ -272,7 +272,7 @@ Get a specific team in a specific organization.
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will have restricted access",
-          "members": ["eric"],
+          "users": ["eric"],
           "org": "bigcompany",
           "type": "team"
         }
@@ -293,7 +293,7 @@ Update a specific team. __Description__ is the only thing which can be updated.
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "members": ["eric"],
+          "users": ["eric"],
           "org": "bigcompany",
           "type": "team"
         }
@@ -313,12 +313,12 @@ Delete the given team. Cannot delete the default team in the organization.
 
 ### Add a Member [POST]
 
-Add members to the given team. The __members__ in the request needs to be an array.
+Add users to the given team. The __users__ in the request needs to be an array.
 
 + Request (application/json)
 
         {
-          "members": ["ben"]
+          "users": ["ben"]
         }
 
 + Response 200 (application/json)
@@ -327,19 +327,19 @@ Add members to the given team. The __members__ in the request needs to be an arr
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "members": ["eric", "ben"],
+          "users": ["eric", "ben"],
           "org": "bigcompany",
           "type": "team"
         }
 
 ### Remove a Member [DELETE]
 
-Remove members from the given team. The __members__ in the request needs to be an array.
+Remove users from the given team. The __users__ in the request needs to be an array.
 
 + Request (application/json)
 
         {
-          "members": ["ben"]
+          "users": ["ben"]
         }
 
 + Response 200 (application/json)
@@ -348,7 +348,7 @@ Remove members from the given team. The __members__ in the request needs to be a
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "members": ["eric"],
+          "users": ["eric"],
           "org": "bigcompany",
           "type": "team"
         }

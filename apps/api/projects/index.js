@@ -16,6 +16,24 @@ module.exports = function (app, db) {
     });
   });
 
+  // List all projects the user has access to.
+  app.get('/orgs/:org/projects', app.auth, function (req, res, next) {
+    var key = req.org.name.toLowerCase() + '/' + req.user.username;
+
+    db.view('teams', 'user', {keys: [key]}, function (err, body) {
+      if (err) return next(err);
+
+      if (body.rows) {
+        body = body.rows.map(function (row) {
+          app.utils.shield(row.value, ['_rev']);
+          return row.value;
+        });
+
+        res.json(body);
+      } else next();
+    });
+  });
+
   // Retrieve a project
   app.get('/orgs/:org/projects/:project', app.auth.owner, function (req, res, next) {
     app.utils.shield(req.project, ['_rev']);
@@ -33,19 +51,18 @@ module.exports = function (app, db) {
       if (body.ok) {
         app.utils.shield(req.project, ['_rev']);
         res.json(req.project);
-      }
+      } else next();
     });
   });
 
   // Delete a project
   app.delete('/orgs/:org/projects/:project', app.auth.owner, function (req, res, next) {
     db.destroy(req.project._id, req.project._rev, function (err, body) {
-      console.log(err, body);
       if (err) return next(err);
 
       if (body.ok) {
         res.send(204);
-      }
+      } else next();
     });
   });
 
@@ -89,7 +106,7 @@ module.exports = function (app, db) {
           req.body._id = body.id;
           res.status(201);
           res.json(req.body);
-        }
+        } else next();
       });
     });
   });

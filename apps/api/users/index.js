@@ -29,7 +29,7 @@ module.exports = function (app, db) {
       if (body.ok) {
         app.utils.shield(req.user, ['password', '_rev']);
         res.json(req.user);
-      }
+      } else next();
     });
   });
 
@@ -76,7 +76,7 @@ module.exports = function (app, db) {
             app.utils.shield(req.body, ['password']);
             res.status(201);
             res.json(req.body);
-          }
+          } else next();
         });
       });
     });

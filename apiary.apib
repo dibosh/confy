@@ -221,14 +221,14 @@ List all teams of the given organization.
           "_id": "orgs/bigcompany/teams/engineering",
           "name": "Engineering",
           "description": "The engineering guys",
-          "members": ["jenny", "laura"],
+          "users": ["jenny", "laura"],
           "org": "bigcompany",
           "type": "team"
         }, {
           "_id": "orgs/bigcompany/teams/all",
           "name": "All",
           "description": "Can see every project",
-          "members": ["jsmith"],
+          "users": ["jsmith"],
           "org": "bigcompany",
           "type": "team"
         }]
@@ -250,7 +250,7 @@ Create a team for the given organization. __You will have to add a team member a
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will have restricted access",
-          "members": [],
+          "users": [],
           "org": "bigcompany",
           "type": "team"
         }
@@ -272,7 +272,7 @@ Get a specific team in a specific organization.
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will have restricted access",
-          "members": ["eric"],
+          "users": ["eric"],
           "org": "bigcompany",
           "type": "team"
         }
@@ -293,7 +293,7 @@ Update a specific team. __Description__ is the only thing which can be updated.
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "members": ["eric"],
+          "users": ["eric"],
           "org": "bigcompany",
           "type": "team"
         }
@@ -313,12 +313,12 @@ Delete the given team. Cannot delete the default team in the organization.
 
 ### Add a Member [POST]
 
-Add members to the given team. The __members__ in the request needs to be an array.
+Add users to the given team. The __users__ in the request needs to be an array.
 
 + Request (application/json)
 
         {
-          "members": ["ben"]
+          "users": ["ben"]
         }
 
 + Response 200 (application/json)
@@ -327,19 +327,19 @@ Add members to the given team. The __members__ in the request needs to be an arr
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "members": ["eric", "ben"],
+          "users": ["eric", "ben"],
           "org": "bigcompany",
           "type": "team"
         }
 
 ### Remove a Member [DELETE]
 
-Remove members from the given team. The __members__ in the request needs to be an array.
+Remove users from the given team. The __users__ in the request needs to be an array.
 
 + Request (application/json)
 
         {
-          "members": ["ben"]
+          "users": ["ben"]
         }
 
 + Response 200 (application/json)
@@ -348,7 +348,7 @@ Remove members from the given team. The __members__ in the request needs to be a
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "members": ["eric"],
+          "users": ["eric"],
           "org": "bigcompany",
           "type": "team"
         }
@@ -373,17 +373,20 @@ List all the projects of the organization which can be seen by the authenticated
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Service to be used by bots",
-          "teams": ["all", "engineering", "consultants"]
+          "org": "bigcompany",
+          "type": "project"
         }, {
           "_id": "orgs/bigcompany/projects/main",
           "name": "Main",
           "description": "Main product",
-          "teams": ["all", "engineering"]
+          "org": "bigcompany",
+          "type": "project"
         }, {
           "_id": "orgs/bigcompany/projects/blog",
           "name": "Blog",
           "description": "Company's blog",
-          "teams": ["all"]
+          "org": "bigcompany",
+          "type": "project"
         }]
 
 ### Create a Project [POST]
@@ -394,7 +397,7 @@ Create a project. _Authenticated user should own the organization_. Only the __a
 
         {
           "name": "KnowledgeBase",
-          "title": "Wiki and FAQ for support"
+          "description": "Wiki and FAQ for support"
         }
 
 + Response 201 (application/json)
@@ -403,7 +406,9 @@ Create a project. _Authenticated user should own the organization_. Only the __a
           "_id": "orgs/bigcompany/projects/knowledgebase",
           "name": "KnowledgeBase",
           "description": "Wiki and FAQ for support",
-          "teams": ["all"]
+          "teams": ["all"],
+          "org": "bigcompany",
+          "type": "project"
         }
 
 ## Project [/orgs/{org}/projects/{project}]
@@ -425,7 +430,9 @@ Get a specific project.
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Service to be used by bots",
-          "teams": ["all", "engineering", "consultants"]
+          "teams": ["all", "engineering", "consultants"],
+          "org": "bigcompany",
+          "type": "project"
         }
 
 ### Update a Project [PATCH]
@@ -444,7 +451,9 @@ Update a specific project. __Description__ is the only thing which can be update
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Url shortening as a service",
-          "teams": ["all", "engineering", "consultants"]
+          "teams": ["all", "engineering", "consultants"],
+          "org": "bigcompany",
+          "type": "project"
         }
 
 ### Delete a Project [DELETE]
@@ -476,7 +485,9 @@ Give project access to the given teams. The __teams__ in the request needs to be
           "_id": "orgs/bigcompany/projects/knowledgebase",
           "name": "KnowledgeBase",
           "description": "Wiki and FAQ for support",
-          "teams": ["all", "engineering"]
+          "teams": ["all", "engineering"],
+          "org": "bigcompany",
+          "type": "project"
         }
 
 ### Remove a Team [DELETE]
@@ -495,7 +506,9 @@ Remove project access for the given team. The __teams__ in the request needs to 
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Url shortening as a service",
-          "teams": ["all", "engineering"]
+          "teams": ["all", "engineering"],
+          "org": "bigcompany",
+          "type": "project"
         }
 
 ## Configuration [/orgs/{org}/projects/{project}/config]

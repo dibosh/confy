@@ -17,30 +17,29 @@ module.exports = function (app, db) {
   });
 
   // List all teams
-  app.get('/orgs/:org/teams', app.auth, app.auth.owner, function (req, res, next) {
-    db.view('teams', 'org', function (err, body) {
+  app.get('/orgs/:org/teams', app.auth.owner, function (req, res, next) {
+    db.view('teams', 'org', {keys: [req.org.name.toLowerCase()]}, function (err, body) {
       if (err) return next(err);
 
-      if (body.rows.length > 0) {
+      if (body.rows) {
         body = body.rows.map(function (row) {
           app.utils.shield(row.value, ['_rev']);
           return row.value;
         });
 
         res.json(body);
-      }
+      } else next();
     });
-
   });
 
   // Retrieve a team
-  app.get('/orgs/:org/teams/:team', app.auth, app.auth.owner, function (req, res, next) {
+  app.get('/orgs/:org/teams/:team', app.auth.owner, function (req, res, next) {
     app.utils.shield(req.team, ['_rev']);
     res.json(req.team);
   });
 
   // Update a team
-  app.patch('/orgs/:org/teams/:team', app.auth, app.auth.owner, function (req, res, next) {
+  app.patch('/orgs/:org/teams/:team', app.auth.owner, function (req, res, next) {
     app.utils.permit(req, ['description']);
     app.utils.merge(req.team, req.body);
 
@@ -50,24 +49,23 @@ module.exports = function (app, db) {
       if (body.ok) {
         app.utils.shield(req.team, ['_rev']);
         res.json(req.team);
-      }
+      } else next();
     });
   });
 
   // Delete a team
-  app.delete('/orgs/:org/teams/:team', app.auth, app.auth.owner, function (req, res, next) {
+  app.delete('/orgs/:org/teams/:team', app.auth.owner, function (req, res, next) {
     db.destroy(req.team._id, req.team._rev, function (err, body) {
-      console.log(err, body);
       if (err) return next(err);
 
       if (body.ok) {
         res.send(204);
-      }
+      } else next();
     });
   });
 
   // Create a team
-  app.post('/orgs/:org/teams', app.auth, app.auth.owner, function (req, res, next) {
+  app.post('/orgs/:org/teams', app.auth.owner, function (req, res, next) {
     app.utils.permit(req, ['name', 'description']);
 
     // Check for required params
@@ -86,7 +84,7 @@ module.exports = function (app, db) {
     var orgLowerName = req.org.name.toLowerCase()
       , lowerName = name.toLowerCase();
 
-    // Search for existing teamname
+    // Search for existing team name
     db.view('teams', 'name', {key: [orgLowerName + '/' + lowerName]}, function (err, body) {
       if (err) return next(err);
 
@@ -95,7 +93,7 @@ module.exports = function (app, db) {
       }
 
       req.body.type = 'team';
-      req.body.members = [];
+      req.body.users = [];
       req.body.org = orgLowerName;
 
       // Insert team
@@ -106,7 +104,7 @@ module.exports = function (app, db) {
           req.body._id = body.id;
           res.status(201);
           res.json(req.body);
-        }
+        } else next();
       });
     });
   });

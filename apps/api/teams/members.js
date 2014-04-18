@@ -70,7 +70,7 @@ module.exports = function (app, db) {
       }
 
       // Update the team
-      req.team.users = req.team.users.concat([user]);
+      req.team.users.push(user);
       update(req, res, next);
     });
   });

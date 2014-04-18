@@ -60,7 +60,7 @@ module.exports = function (app, db) {
       req.body.username = req.body.username.toLowerCase();
 
       // Search for existing username
-      db.view('users', 'username', {keys: [req.body.username]}, function (err, body) {
+      db.view('orgs', 'name', {keys: [req.body.username]}, function (err, body) {
         if (err) return next(err);
 
         if (body.rows.length > 0) {
@@ -70,20 +70,18 @@ module.exports = function (app, db) {
         // Encrypt password
         req.body.password = cryptPass(req.body.password);
         req.body.type = 'user';
+        req.body._id = 'users/' + req.body.username;
 
         // Send verification email
         req.body.verified = false;
 
         // Insert user
-        db.insert(req.body, 'users/' + req.body.username, function (err, body) {
+        db.bulk(app.utils.bulk.user(req.body), function (err, body) {
           if (err) return next(err);
 
-          if (body.ok) {
-            req.body._id = body.id;
-            app.utils.shield(req.body, ['password']);
-            res.status(201);
-            res.json(req.body);
-          } else next();
+          app.utils.shield(req.body, ['password']);
+          res.status(201);
+          res.json(req.body);
         });
       });
     });

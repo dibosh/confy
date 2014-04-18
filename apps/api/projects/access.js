@@ -74,7 +74,7 @@ module.exports = function (app, db) {
       }
 
       // Update the project
-      req.project.teams = req.project.teams.concat([team]);
+      req.project.teams.push(team);
       update(req, res, next);
     });
   });

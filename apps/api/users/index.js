@@ -39,6 +39,11 @@ module.exports = function (app, db) {
 
     // Check for required params
     var errs = app.utils.need(req, ['username', 'email', 'password'])
+    var user = req.body.username;
+
+    if (typeof user != 'string' || user.match(/[a-z0-9]*/i)[0] != user) {
+      errs.push({ field: 'username', code: 'invalid' });
+    }
 
     if (errs.length > 0) {
       return app.errors.validation(res, errs);
@@ -51,6 +56,8 @@ module.exports = function (app, db) {
       if (body.rows.length > 0) {
         return app.errors.validation(res, [{ field: 'email', code: 'already_exists' }]);
       }
+
+      req.body.username = req.body.username.toLowerCase();
 
       // Search for existing username
       db.view('users', 'username', {keys: [req.body.username]}, function (err, body) {

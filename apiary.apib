@@ -313,12 +313,12 @@ Delete the given team. Cannot delete the default team in the organization.
 
 ### Add a Member [POST]
 
-Add users to the given team. The __users__ in the request needs to be an array.
+Add users to the given team. The __user__ in the request needs to be a string.
 
 + Request (application/json)
 
         {
-          "users": ["ben"]
+          "user": "ben"
         }
 
 + Response 200 (application/json)
@@ -334,12 +334,12 @@ Add users to the given team. The __users__ in the request needs to be an array.
 
 ### Remove a Member [DELETE]
 
-Remove users from the given team. The __users__ in the request needs to be an array.
+Remove users from the given team. The __user__ in the request needs to be a string.
 
 + Request (application/json)
 
         {
-          "users": ["ben"]
+          "user": "ben"
         }
 
 + Response 200 (application/json)
@@ -471,7 +471,7 @@ Delete the given project.
 
 ### Add a Team [POST]
 
-Give project access to the given teams. The __teams__ in the request needs to be an array.
+Give project access to the given teams. The __team__ in the request needs to be a string.
 
 + Request (application/json)
 
@@ -492,7 +492,7 @@ Give project access to the given teams. The __teams__ in the request needs to be
 
 ### Remove a Team [DELETE]
 
-Remove project access for the given team. The __teams__ in the request needs to be an array.
+Remove project access for the given team. The __team__ in the request needs to be a string.
 
 + Request (application/json)
 

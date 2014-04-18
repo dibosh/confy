@@ -92,16 +92,20 @@ module.exports = function (app, db) {
       req.body.type = 'org';
       req.body.owner = req.user.username;
       req.body.plan = 'none';
+      req.body._id = 'orgs/' + lowerName;
+
+      req.team = {
+        _id: 'orgs/' + lowerName + '/teams/all',
+        name: 'All', description: 'Has access to all projects',
+        users: [req.user.username], org: lowerName, type: 'team'
+      }
 
       // Insert org
-      db.insert(req.body, 'orgs/' + lowerName, function (err, body) {
+      db.bulk({ docs: [req.body, req.team]}, { all_or_nothing: true }, function (err, body) {
         if (err) return next(err);
 
-        if (body.ok) {
-          req.body._id = body.id;
-          res.status(201);
-          res.json(req.body);
-        } else next();
+        res.status(201);
+        res.json(req.body);
       });
     });
   });

@@ -120,7 +120,7 @@ module.exports = function (app, db) {
       }
 
       req.body.type = 'project';
-      req.body.teams = [];
+      req.body.teams = ['all'];
       req.body.org = orgLowerName;
 
       // Insert project

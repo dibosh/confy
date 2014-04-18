@@ -1,11 +1,10 @@
 module.exports = function (app, db) {
 
-  app.post('/orgs/:org/projects/:project/access', app.auth.owner, function (req, res, next) {
+  var check = function (req, res) {
     app.utils.permit(req, ['team']);
 
     // Check for required params
     var errs = app.utils.need(req, ['team']);
-
     var team = req.body.team;
 
     if (typeof team != 'string' || team.match(/[a-z0-9]*/i)[0] != team) {
@@ -13,11 +12,52 @@ module.exports = function (app, db) {
     }
 
     if (errs.length > 0) {
-      return app.errors.validation(res, errs);
+      app.errors.validation(res, errs);
+      return true;
     }
 
-    var orgLowerName = req.org.name.toLowerCase();
-    team = team.toLowerCase();
+    return false;
+  }
+
+  var update = function (req, res, next) {
+    db.insert(req.project, req.project._id, function (err, body) {
+      if (err) return next(err);
+
+      if (body.ok) {
+        app.utils.shield(req.project, ['_rev']);
+        res.json(req.project);
+      } else next();
+    });
+  }
+
+  app.delete('/orgs/:org/projects/:project/access', app.auth.owner, function (req, res, next) {
+    if (check(req, res)) return;
+
+    var orgLowerName = req.org.name.toLowerCase()
+      , team = req.body.team.toLowerCase();
+
+    if (team == 'all') {
+      return app.errors.validation(res, [{ field: 'team', code: 'forbidden'}]);
+    }
+
+    // If team does not have access
+    var teamIndex = req.project.teams.indexOf(team);
+
+    if (teamIndex == -1) {
+        app.utils.shield(req.project, ['_rev']);
+        return res.json(req.project);
+    }
+
+    // Update the project
+    req.project.teams.splice(teamIndex, 1);
+    update(req, res, next);
+  });
+
+  app.post('/orgs/:org/projects/:project/access', app.auth.owner, function (req, res, next) {
+    if (check(req, res)) return;
+
+    var orgLowerName = req.org.name.toLowerCase()
+      , team = req.body.team.toLowerCase();
 
     // Check if team exists
     db.get('orgs/' + orgLowerName + '/teams/' + team, function (err, body) {
@@ -33,16 +73,9 @@ module.exports = function (app, db) {
         return res.json(req.project);
       }
 
+      // Update the project
       req.project.teams = req.project.teams.concat([team]);
-
-      db.insert(req.project, req.project._id, function (err, body) {
-        if (err) return next(err);
-
-        if (body.ok) {
-          app.utils.shield(req.project, ['_rev']);
-          res.json(req.project);
-        } else next();
-      });
+      update(req, res, next);
     });
   });
 

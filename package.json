@@ -18,6 +18,7 @@
     "cookie-parser": "~1.0.1",
     "body-parser": "~1.0.0",
     "nano": "~5.7.1",
-    "mailgun-js": "~0.4.5"
+    "mailgun-js": "~0.4.5",
+    "async": "~0.7.0"
   }
 }

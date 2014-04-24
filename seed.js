@@ -41,13 +41,20 @@ var seeding = function () {
   });
 };
 
+var creating = function () {
+  nano.db.create('confy', function (err) {
+    if (err) return console.log("Error creating database");
+    return seeding();
+  });
+};
+
 nano.db.get('confy', function (err) {
   if (err && err.reason == 'no_db_file') {
-    nano.db.create('confy', function (err) {
-      if (err) return console.log("Error creating database");
-      return seeding();
-    });
-  } else {
-    return seeding();
+    return creating();
   }
+
+  nano.db.destroy('confy', function (err) {
+    if (err) return console.log("Error creating database");
+    return creating();
+  });
 });

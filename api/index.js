@@ -5,13 +5,13 @@ var express = require('express')
 var app = express();
 
 // Setup environment variables
-require('../../env')(app);
+require('../utils/env')(app);
 
 // Setup middleware
 app.use(bodyParser());
 
 // Setup mailer
-require('../../mailer')(app);
+require('../utils/mailer')(app);
 
 // Setup database handler
 var db = nano(app.get('db')).use('confy');
@@ -36,7 +36,7 @@ require('./projects/access')(app, db);
 require('./projects/config')(app, db);
 
 // Error handling
-require('../../error')(app);
+require('../utils/error')(app);
 
 // Export app
 module.exports = app;

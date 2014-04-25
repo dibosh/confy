@@ -28,7 +28,7 @@ module.exports = function (app, db) {
       }
 
       req.body.type = 'project';
-      req.body.teams = ['all'];
+      req.body.teams = {'all': true};
       req.body.org = orgLowerName;
       req.body._id = 'orgs/' + orgLowerName + '/projects/' + lowerName;
 

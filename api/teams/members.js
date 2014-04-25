@@ -37,15 +37,13 @@ module.exports = function (app, db) {
       , user = req.body.user.toLowerCase();
 
     // If user is not a member
-    var userIndex = req.team.users.indexOf(user);
-
-    if (userIndex == -1) {
+    if (req.team.users[user] === undefined) {
         app.utils.shield(req.team, ['_rev']);
         return res.json(req.team);
     }
 
     // Update the team
-    req.team.users.splice(userIndex, 1);
+    delete req.team.users[user];
     update(req, res, next);
   });
 
@@ -64,13 +62,13 @@ module.exports = function (app, db) {
       }
 
       // If user is already a member
-      if (req.team.users.indexOf(user) != -1) {
+      if (req.team.users[user] === true) {
         app.utils.shield(req.team, ['_rev']);
         return res.json(req.team);
       }
 
       // Update the team
-      req.team.users.push(user);
+      req.team.users[user] = true;
       update(req, res, next);
     });
   });

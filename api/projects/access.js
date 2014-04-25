@@ -41,15 +41,13 @@ module.exports = function (app, db) {
     }
 
     // If team does not have access
-    var teamIndex = req.project.teams.indexOf(team);
-
-    if (teamIndex == -1) {
+    if (req.project.teams[team] === undefined) {
         app.utils.shield(req.project, ['_rev']);
         return res.json(req.project);
     }
 
     // Update the project
-    req.project.teams.splice(teamIndex, 1);
+    delete req.project.teams[team];
     update(req, res, next);
   });
 
@@ -68,13 +66,13 @@ module.exports = function (app, db) {
       }
 
       // If team already has access
-      if (req.project.teams.indexOf(team) != -1) {
+      if (req.project.teams[team] === true) {
         app.utils.shield(req.project, ['_rev']);
         return res.json(req.project);
       }
 
       // Update the project
-      req.project.teams.push(team);
+      req.project.teams[team] = true;
       update(req, res, next);
     });
   });

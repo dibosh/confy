@@ -28,7 +28,7 @@ module.exports = function (app, db) {
       }
 
       req.body.type = 'team';
-      req.body.users = [];
+      req.body.users = {};
       req.body.org = orgLowerName;
       req.body._id = 'orgs/' + orgLowerName + '/teams/' + lowerName;
 

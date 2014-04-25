@@ -2,10 +2,13 @@ module.exports = function (app) {
   app.bulk = {};
 
   app.bulk.org = function (org, user) {
+    var users = {};
+    users[user.username] = true;
+
     var team = {
       _id: 'orgs/' + org.name.toLowerCase() + '/teams/all',
       name: 'All', description: 'Has access to all projects',
-      users: [user.username], org: org.name.toLowerCase(), type: 'team'
+      users: users, org: org.name.toLowerCase(), type: 'team'
     };
 
     return { docs: [org, team] };

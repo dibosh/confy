@@ -5,7 +5,7 @@ module.exports = function (macro) {
     'Users': {
       'Creating them with missing params': {
         topic: function () {
-          macro.post('/user', {}, this.callback);
+          macro.post('/user', {}, null, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(4)
@@ -15,7 +15,7 @@ module.exports = function (macro) {
           macro.post('/user', {
             username: 'jsmith', password: 'secret',
             email: 'pavan.sss1991@gmail.com'
-          }, this.callback);
+          }, null, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(1)
@@ -25,7 +25,7 @@ module.exports = function (macro) {
           macro.post('/user', {
             username: 'pksunkara', password: 'secret',
             email: 'pk@sunkara.com'
-          }, this.callback);
+          }, null, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(1)
@@ -37,7 +37,7 @@ module.exports = function (macro) {
             password: 'secret',
             email: 'johnsmith@gmail.com',
             random: '123xyz'
-          }, this.callback);
+          }, null, this.callback);
         },
         'should return 201': macro.status(201),
         'should return user': function (err, res, body) {
@@ -45,7 +45,7 @@ module.exports = function (macro) {
           assert.equal(body.username, 'jsmith');
           assert.equal(body.email, 'johnsmith@gmail.com');
           assert.equal(body.type, 'user');
-          assert.equal(body.verified, false);
+          assert.isFalse(body.verified);
         },
         'should not return password': function (err, res, body) {
           assert.isUndefined(body.password);

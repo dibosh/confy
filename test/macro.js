@@ -11,11 +11,30 @@ module.exports = {
       json: true
     }, callback);
   },
-  post: function (path, body, callback) {
+  post: function (path, body, auth, callback) {
     request({
       url: 'http://localhost:3000' + path,
       method: 'POST',
       body: body,
+      auth: auth,
+      json: true
+    }, callback);
+  },
+  patch: function (path, body, auth, callback) {
+    request({
+      url: 'http://localhost:3000' + path,
+      method: 'PATCH',
+      body: body,
+      auth: auth,
+      json: true
+    }, callback);
+  },
+  delete: function (path, body, auth, callback) {
+    request({
+      url: 'http://localhost:3000' + path,
+      method: 'DELETE',
+      body: body,
+      auth: auth,
       json: true
     }, callback);
   },
@@ -50,7 +69,7 @@ module.exports = {
   validation: function (number) {
     return function (err, res, body) {
       assert.equal(body.message, 'Validation failed');
-      assert.equal(body.errors.length, number);
+      assert.lengthOf(body.errors, number);
     }
   }
 }

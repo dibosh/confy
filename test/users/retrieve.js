@@ -13,7 +13,7 @@ module.exports = function (macro) {
           assert.equal(body.username, 'jsmith');
           assert.equal(body.email, 'johnsmith@gmail.com');
           assert.equal(body.type, 'user');
-          assert.equal(body.verified, false);
+          assert.isFalse(body.verified);
         },
         'should not retun password': function (err, res, body) {
           assert.isUndefined(body.password);

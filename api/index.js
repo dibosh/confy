@@ -11,7 +11,7 @@ require('./utils/env')(app);
 app.use(bodyParser());
 
 // Setup database handler
-var db = nano(app.get('db')).use('confy');
+var db = nano(app.get('db')).use(app.get('dbname'));
 
 // Setup utility functions
 require('./utils/auth')(app, db);

@@ -20,5 +20,12 @@
     "nano": "~5.7.1",
     "mailgun-js": "~0.4.5",
     "async": "~0.7.0"
+  },
+  "devDependencies": {
+    "vows": "~0.7.0",
+    "request": "~2.34.0"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/vows test/test.js --spec"
   }
 }

@@ -1,8 +1,9 @@
 var bcrypt = require('bcrypt');
 
 module.exports = function (app, db) {
+  app.auth = {};
 
-  app.auth = function (req, res, next) {
+  app.auth.user = function (req, res, next) {
     if (req.headers.authorization === undefined) {
       return app.errors.auth(res);
     }
@@ -26,7 +27,7 @@ module.exports = function (app, db) {
   }
 
   app.auth.owner = function (req, res, next) {
-    app.auth(req, res, function (err) {
+    app.auth.user(req, res, function (err) {
       if (err) return next(err);
 
       if (req.org === undefined || req.org.owner != req.user.username) {

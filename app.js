@@ -7,7 +7,7 @@ var app = express();
 var api = require('./api');
 
 // Setup environment variables
-require('./utils/env')(app);
+require('./api/utils/env')(app);
 
 // Setup middleware
 app.use(favicon());
@@ -24,7 +24,7 @@ if (app.get('env') === 'development') {
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Error handling
-require('./utils/error')(app);
+require('./api/utils/error')(app);
 
 // Start Server
 var server = app.listen(app.get('port'), function () {

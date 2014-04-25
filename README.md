@@ -1,4 +1,4 @@
-# Confy
+# Confy [![Build Status](https://travis-ci.org/asm-products/confy.svg)](https://travis-ci.org/asm-products/confy)
 
 _Helping developers seperate config from code_
 

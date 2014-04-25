@@ -2,9 +2,11 @@ var assert = require('assert')
   , nano = require('nano')('http://localhost:5984')
   , vows = require('vows');
 
+process.env.CLOUDANT_DBNAME = 'confy-test';
+
 var seed = require('./seed')
   , app = require('../api')
-  , client = require('./client');
+  , macro = require('./macro');
 
 vows.describe('confy').addBatch({
   'Database': {
@@ -46,7 +48,6 @@ vows.describe('confy').addBatch({
 }).addBatch({
   'API Server': {
     topic: function () {
-      process.env.CLOUDANT_DBNAME = 'confy-test';
       app.listen(app.get('port'), this.callback);
     },
     'should be running': function (server) {
@@ -54,13 +55,26 @@ vows.describe('confy').addBatch({
     },
     'should respond with 404': {
       topic: function () {
-        client.get('/info', this.callback);
+        macro.get('/info', this.callback);
       },
       'when requesting non-existent url': function (err, res, body) {
         assert.isNull(err);
         assert.equal(res.statusCode, 404);
-        assert.deepEqual(body, '{"message":"Not found"}');
+        assert.deepEqual(body, {'message':'Not found'});
       }
+    }
+  }
+}).addBatch(require('./users/create')(macro, assert))
+.addBatch({
+  'Database': {
+    topic: function () {
+      var callback = this.callback;
+      nano.db.destroy('confy-test', function (err, body) {
+        nano.db.get('confy-test', callback);
+      })
+    },
+    'should be destroyed': function (err, body) {
+      assert.equal(err.reason, 'no_db_file');
     }
   }
 }).export(module);

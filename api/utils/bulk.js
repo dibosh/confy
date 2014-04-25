@@ -15,8 +15,11 @@ module.exports = function (app) {
   };
 
   app.bulk.user = function (user) {
+    var users = {};
+    users[user.username] = 1;
+
     var org = {
-      _id: 'orgs/' + user.username, plan: 'none', type: 'org',
+      _id: 'orgs/' + user.username, plan: 'none', type: 'org', users: users,
       name: user.username, email: user.email, owner: user.username
     };
 

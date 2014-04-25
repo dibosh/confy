@@ -3,10 +3,11 @@ var request = require('request')
   , nano = require('nano')('http://localhost:5984').db.use('confy-test');
 
 module.exports = {
-  get: function (path, callback) {
+  get: function (path, auth, callback) {
     request({
       url: 'http://localhost:3000' + path,
       method: 'GET',
+      auth: auth,
       json: true
     }, callback);
   },

@@ -53,18 +53,18 @@ vows.describe('confy').addBatch({
     'should be running': function (server) {
       assert.isNotNull(server);
     },
-    'should respond with 404': {
+    'for non-existent url': {
       topic: function () {
-        macro.get('/info', this.callback);
+        macro.get('/info', null, this.callback);
       },
-      'when requesting non-existent url': function (err, res, body) {
-        assert.isNull(err);
-        assert.equal(res.statusCode, 404);
+      'should return 404': macro.status(404),
+      'should return not found': function (err, res, body) {
         assert.deepEqual(body, {'message':'Not found'});
       }
     }
   }
-}).addBatch(require('./users/create')(macro, assert))
+}).addBatch(require('./users/create')(macro))
+.addBatch(require('./users/retrieve')(macro))
 .addBatch({
   'Database': {
     topic: function () {

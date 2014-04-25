@@ -1,4 +1,6 @@
-module.exports = function (macro, assert) {
+var assert = require('assert');
+
+module.exports = function (macro) {
   return {
     'Users': {
       'Creating them with missing params': {
@@ -7,6 +9,26 @@ module.exports = function (macro, assert) {
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(4)
+      },
+      'Creating them with existing email': {
+        topic: function () {
+          macro.post('/user', {
+            username: 'jsmith', password: 'secret',
+            email: 'pavan.sss1991@gmail.com'
+          }, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1)
+      },
+      'Creating them with existing username': {
+        topic: function () {
+          macro.post('/user', {
+            username: 'pksunkara', password: 'secret',
+            email: 'pk@sunkara.com'
+          }, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1)
       },
       'Creating them': {
         topic: function () {

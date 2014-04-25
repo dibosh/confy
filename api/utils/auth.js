@@ -15,7 +15,9 @@ module.exports = function (app, db) {
     var password = auth.substr(auth.indexOf(':') + 1);
 
     db.get('users/' + username, function (err, body) {
-      if (err) return next(err);
+      if (err && err.reason != 'missing') {
+        return next(err);
+      }
 
       if (body && bcrypt.compareSync(password, body.password)) {
         req.user = body;

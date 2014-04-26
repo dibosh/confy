@@ -203,7 +203,7 @@ Subscribe the organization to a plan. This can also be used when upgrading or do
 
 # Group Teams
 
-Every organization will have a default team named __All__.
+Every organization will have a default team named __All__. Owner of the organization will be a default member for every team.
 
 ## Teams [/orgs/{org}/teams]
 
@@ -221,14 +221,14 @@ List all teams of the given organization authenticated user is a member of. All 
           "_id": "orgs/bigcompany/teams/engineering",
           "name": "Engineering",
           "description": "The engineering guys",
-          "users": ["jenny", "laura", "jsmith"],
+          "users": ["bobmarley", "jenny", "laura", "jsmith"],
           "org": "bigcompany",
           "type": "team"
         }, {
           "_id": "orgs/bigcompany/teams/sideprojects",
           "name": "SideProjects",
           "description": "Team managing side projects",
-          "users": ["jsmith", "willy"],
+          "users": ["bobmarley", "jsmith", "willy"],
           "org": "bigcompany",
           "type": "team"
         }]
@@ -250,7 +250,7 @@ Create a team for the given organization. __You will have to add a team member a
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will have restricted access",
-          "users": [],
+          "users": ["bobmarley"],
           "org": "bigcompany",
           "type": "team"
         }
@@ -272,7 +272,7 @@ Get a specific team in a specific organization. Access only if the authenticated
           "_id": "orgs/bigcompany/teams/sideprojects",
           "name": "SideProjects",
           "description": "Team managing side projects",
-          "users": ["jsmith", "willy"],
+          "users": ["bobmarley", "jsmith", "willy"],
           "org": "bigcompany",
           "type": "team"
         }
@@ -293,7 +293,7 @@ Update a specific team. __Description__ is the only thing which can be updated. 
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "users": ["eric"],
+          "users": ["bobmarley", "eric"],
           "org": "bigcompany",
           "type": "team"
         }
@@ -329,14 +329,14 @@ Add users to the given team. The __user__ in the request needs to be a string.
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "users": ["eric", "ben"],
+          "users": ["bobmarley", "eric", "ben"],
           "org": "bigcompany",
           "type": "team"
         }
 
 ### Remove a Member [DELETE]
 
-Remove users from the given team. The __user__ in the request needs to be a string.
+Remove users from the given team. The __user__ in the request needs to be a string. Cannot delete the default member in a team.
 
 + Request (application/json)
 
@@ -350,7 +350,7 @@ Remove users from the given team. The __user__ in the request needs to be a stri
           "_id": "orgs/bigcompany/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
-          "users": ["eric"],
+          "users": ["bobmarley", "eric"],
           "org": "bigcompany",
           "type": "team"
         }

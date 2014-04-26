@@ -203,7 +203,7 @@ Subscribe the organization to a plan. This can also be used when upgrading or do
 
 # Group Teams
 
-Every organization will have a default team named __All__. Authenticated user should own the organization for the below endpoints.
+Every organization will have a default team named __All__.
 
 ## Teams [/orgs/{org}/teams]
 
@@ -213,7 +213,7 @@ Every organization will have a default team named __All__. Authenticated user sh
 
 ### List all Teams [GET]
 
-List all teams of the given organization.
+List all teams of the given organization authenticated user is a member of. All the teams if authenticated user is the owner of the organization.
 
 + Response 200 (application/json)
 
@@ -221,21 +221,21 @@ List all teams of the given organization.
           "_id": "orgs/bigcompany/teams/engineering",
           "name": "Engineering",
           "description": "The engineering guys",
-          "users": ["jenny", "laura"],
+          "users": ["jenny", "laura", "jsmith"],
           "org": "bigcompany",
           "type": "team"
         }, {
-          "_id": "orgs/bigcompany/teams/all",
-          "name": "All",
-          "description": "Can see every project",
-          "users": ["jsmith"],
+          "_id": "orgs/bigcompany/teams/sideprojects",
+          "name": "SideProjects",
+          "description": "Team managing side projects",
+          "users": ["jsmith", "willy"],
           "org": "bigcompany",
           "type": "team"
         }]
 
 ### Create a Team [POST]
 
-Create a team for the given organization. __You will have to add a team member afterwards__.
+Create a team for the given organization. __You will have to add a team member afterwards__. Only authenticated user is allowed.
 
 + Request (application/json)
 
@@ -264,22 +264,22 @@ Create a team for the given organization. __You will have to add a team member a
 
 ### Retrieve a Team [GET]
 
-Get a specific team in a specific organization.
+Get a specific team in a specific organization. Access only if the authenticated user is a member of the team or the owner of the org.
 
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/teams/consultants",
-          "name": "Consultants",
-          "description": "Consultants will have restricted access",
-          "users": ["eric"],
+          "_id": "orgs/bigcompany/teams/sideprojects",
+          "name": "SideProjects",
+          "description": "Team managing side projects",
+          "users": ["jsmith", "willy"],
           "org": "bigcompany",
           "type": "team"
         }
 
 ### Update a Team [PATCH]
 
-Update a specific team. __Description__ is the only thing which can be updated.
+Update a specific team. __Description__ is the only thing which can be updated. Authenticated user should be the owner of the organization.
 
 + Request (application/json)
 
@@ -300,11 +300,13 @@ Update a specific team. __Description__ is the only thing which can be updated.
 
 ### Delete a Team [DELETE]
 
-Delete the given team. Cannot delete the default team in the organization.
+Delete the given team. Cannot delete the default team in the organization. Authenticated user should be the owner of the organization.
 
 + Response 204
 
 ## Members [/orgs/{org}/teams/{team}/member]
+
+Authenticated user should be the owner of the organization.
 
 + Parameters
 

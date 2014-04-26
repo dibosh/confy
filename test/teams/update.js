@@ -23,7 +23,7 @@ module.exports = function (macro) {
           assert.isUndefined(body.random);
         },
         'should return users array': function (err, res, body) {
-          assert.lengthOf(body.users, 0);
+          assert.lengthOf(body.users, 1);
         },
         'should update team doc and it': macro.doc('orgs/jsmith/teams/dev', {
           'should have updated description': function (err, body) {

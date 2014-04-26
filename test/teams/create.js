@@ -55,8 +55,11 @@ module.exports = function (macro) {
         'should not save other keys': function (err, res, body) {
           assert.isUndefined(body.random);
         },
-        'should return users as empty array': function (err, res, body) {
-          assert.lengthOf(body.users, 0);
+        'should return users as array': function (err, res, body) {
+          assert.lengthOf(body.users, 1);
+        },
+        'should have org owner as default user': function (err, res, body) {
+          assert.equal(body.users[0], 'jsmith');
         }
       }
     }

@@ -47,6 +47,26 @@ module.exports = function (macro) {
           }
         })
       },
+      'Adding already member to team': {
+        topic: function () {
+          macro.post('/orgs/firesize/teams/dev/member', {
+            user: 'jsmith', random: 'u2e83'
+          }, {user: 'jsmith', pass: 'secret'}, this.callback);
+        },
+        'should return 200': macro.status(200),
+        'should return the team doc': function (err, res, body) {
+          assert.equal(body._id, 'orgs/firesize/teams/dev');
+          assert.equal(body.name, 'Dev');
+          assert.equal(body.description, 'Main product developers');
+          assert.equal(body.org, 'firesize');
+          assert.equal(body.type, 'team');
+        },
+        'should not update the org doc and it': macro.doc('orgs/firesize', {
+          'should not increment the count for the user': function (err, body) {
+            assert.equal(body.users['jsmith'], 2);
+          }
+        })
+      },
       'Adding member to team with member': {
         topic: function () {
           macro.post('/orgs/confy/teams/consultants/member', {

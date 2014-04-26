@@ -57,6 +57,31 @@ module.exports = function (macro) {
           }
         })
       },
+      'Removing non-member from team': {
+        topic: function () {
+          macro.delete('/orgs/firesize/teams/dev/member', {
+            user: 'vanstee'
+          }, {user: 'jsmith', pass: 'secret'}, this.callback);
+        },
+        'should return 200': macro.status(200),
+        'should return the team doc': function (err, res, body) {
+          assert.equal(body._id, 'orgs/firesize/teams/dev');
+          assert.equal(body.name, 'Dev');
+          assert.equal(body.description, 'Main product developers');
+          assert.equal(body.org, 'firesize');
+          assert.equal(body.type, 'team');
+        },
+        'should not update the team doc and it': macro.doc('orgs/firesize/teams/dev', {
+          'should not have user in users list': function (err, body) {
+            assert.isUndefined(body.users['vanstee']);
+          }
+        }),
+        'should not update the org doc and it': macro.doc('orgs/firesize', {
+          'should not change the count for the user': function (err, body) {
+            assert.isUndefined(body.users['vanstee']);
+          }
+        })
+      },
       'Removing member from team with member': {
         topic: function () {
           macro.delete('/orgs/confy/teams/consultants/member', {

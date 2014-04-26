@@ -20,7 +20,7 @@ module.exports = function (app, db) {
       , lowerName = name.toLowerCase();
 
     // Search for existing team name
-    db.view('teams', 'name', {key: [orgLowerName + '/' + lowerName]}, function (err, body) {
+    db.view('teams', 'name', {keys: [orgLowerName + '/' + lowerName]}, function (err, body) {
       if (err) return next(err);
 
       if (body.rows.length > 0) {
@@ -35,6 +35,8 @@ module.exports = function (app, db) {
       // Insert team
       db.insert(req.body, req.body._id, function (err, body) {
         if (err) return next(err);
+
+        req.body.users = Object.keys(req.body.users);
 
         res.status(201);
         res.json(req.body);

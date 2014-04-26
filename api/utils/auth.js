@@ -32,6 +32,10 @@ module.exports = function (app, db) {
     app.auth.user(req, res, function (err) {
       if (err) return next(err);
 
+      if (req.org.users[req.user.username] === undefined) {
+        return app.errors.notfound(res);
+      }
+
       if (req.org.owner != req.user.username) {
         return app.errors.auth(res);
       }

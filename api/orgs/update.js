@@ -9,7 +9,7 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
-        app.utils.shield(req.org, ['_rev']);
+        app.utils.shield(req.org, ['users', '_rev']);
         res.json(req.org);
       } else next();
     });

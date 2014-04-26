@@ -75,14 +75,14 @@ Organizations are owned by users and only (s)he can add/remove teams and project
 
 ### List Organizations [GET]
 
-List all organizations owned by the authenticated user.
+List all organizations the authenticated user is a member of.
 
 + Response 200 (application/json)
 
         [{
           "_id": "orgs/bigcompany",
           "name": "BigCompany",
-          "owner": "jsmith",
+          "owner": "bobmarley",
           "email": "contact@bigcompany.com",
           "plan": "silver",
           "type": "org"
@@ -126,30 +126,28 @@ Create an organization with a name and the email for billing. _You have to use w
 
 ## Organization [/orgs/{org}]
 
-Authenticated user should own the organization for the below endpoints.
-
 + Parameters
 
     + org (required, string) ... Name of the organization
 
 ### Retrieve an Organization [GET]
 
-Get the organization specified by the given name.
+Get the organization specified by the given name if the authenticated user is a member.
 
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/mystartup",
-          "name": "MyStartup",
-          "owner": "jsmith",
-          "email": "johnsmith@gmail.com",
-          "plan": "personal",
+          "_id": "orgs/bigcompany",
+          "name": "BigCompany",
+          "owner": "bobmarley",
+          "email": "contact@bigcompany.com",
+          "plan": "silver",
           "type": "org"
         }
 
 ### Update an Organization [PATCH]
 
-Update the given organization. An __email__ is the only thing which can be updated.
+Update the given organization if the authenticated user is the owner. An __email__ is the only thing which can be updated.
 
 + Request (application/json)
 
@@ -170,11 +168,13 @@ Update the given organization. An __email__ is the only thing which can be updat
 
 ### Delete an Organization [DELETE]
 
-Delete the given organization. Cannot delete the default organization. __Restricted to web interface__.
+Delete the given organization if the authenticated user is the owner. Cannot delete the default organization. __Restricted to web interface__.
 
 + Response 204
 
 ## Billing [/orgs/{org}/billing]
+
+Authenticated user needs to be the owner of the organization.
 
 + Parameters
 

@@ -5,7 +5,7 @@ module.exports = function (macro) {
     'Teams': {
       'Updating team with owner': {
         topic: function () {
-          macro.patch('/orgs/jsmith/teams/dev', {
+          macro.patch('/orgs/firesize/teams/dev', {
             description: 'Main product developers',
             random: '1i3je738ujf',
             org: 'hacked'
@@ -13,10 +13,10 @@ module.exports = function (macro) {
         },
         'should return 200': macro.status(200),
         'should return the team': function (err, res, body) {
-          assert.equal(body._id, 'orgs/jsmith/teams/dev');
+          assert.equal(body._id, 'orgs/firesize/teams/dev');
           assert.equal(body.name, 'Dev');
           assert.equal(body.description, 'Main product developers');
-          assert.equal(body.org, 'jsmith');
+          assert.equal(body.org, 'firesize');
           assert.equal(body.type, 'team');
         },
         'should not update random fields': function (err, res, body) {
@@ -25,7 +25,7 @@ module.exports = function (macro) {
         'should return users array': function (err, res, body) {
           assert.lengthOf(body.users, 1);
         },
-        'should update team doc and it': macro.doc('orgs/jsmith/teams/dev', {
+        'should update team doc and it': macro.doc('orgs/firesize/teams/dev', {
           'should have updated description': function (err, body) {
             assert.equal(body.description, 'Main product developers');
           }

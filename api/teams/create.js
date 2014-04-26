@@ -33,8 +33,10 @@ module.exports = function (app, db) {
       req.body.org = orgLowerName;
       req.body._id = 'orgs/' + orgLowerName + '/teams/' + lowerName;
 
+      req.org.users[req.org.owner]++;
+
       // Insert team
-      db.insert(req.body, req.body._id, function (err, body) {
+      db.bulk({docs: [req.body, req.org]}, {all_or_nothing: true}, function (err, body) {
         if (err) return next(err);
 
         req.body.users = Object.keys(req.body.users);

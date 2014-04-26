@@ -72,7 +72,7 @@ vows.describe('confy').addBatch({
 .addBatch(require('./orgs/list')(macro))
 .addBatch(require('./teams/create')(macro))
 .addBatch(require('./teams/retrieve')(macro))
-// .addBatch(require('./teams/update')(macro))
+.addBatch(require('./teams/update')(macro))
 // .addBatch(require('./teams/list')(macro))
 .addBatch({
   'Database': {

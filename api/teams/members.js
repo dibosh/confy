@@ -23,6 +23,7 @@ module.exports = function (app, db) {
     db.bulk({docs: [req.team, req.org]}, {all_or_nothing: true}, function (err, body) {
       if (err) return next(err);
 
+      req.team.users = Object.keys(req.team.users);
       app.utils.shield(req.team, ['_rev']);
       res.json(req.team);
     });
@@ -36,8 +37,14 @@ module.exports = function (app, db) {
 
     // If user is not a member
     if (req.team.users[user] === undefined) {
-        app.utils.shield(req.team, ['_rev']);
-        return res.json(req.team);
+      req.team.users = Object.keys(req.team.users);
+      app.utils.shield(req.team, ['_rev']);
+      return res.json(req.team);
+    }
+
+    // If user is the default user
+    if (req.org.owner == user) {
+      return app.errors.validation(res, [{ field: 'user', code: 'forbidden' }])
     }
 
     // Update the data
@@ -67,6 +74,7 @@ module.exports = function (app, db) {
 
       // If user is already a member
       if (req.team.users[user] === true) {
+        req.team.users = Object.keys(req.team.users);
         app.utils.shield(req.team, ['_rev']);
         return res.json(req.team);
       }

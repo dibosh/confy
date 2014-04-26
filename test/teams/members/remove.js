@@ -3,14 +3,14 @@ var assert = require('assert');
 module.exports = function (macro) {
   return {
     'Teams': {
-      'Deleting member from team with missing params': {
+      'Removing member from team with missing params': {
         topic: function () {
           macro.delete('/orgs/firesize/teams/dev/member', {}, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(2)
       },
-      'Deleting member from team': {
+      'Removing member from team': {
         topic: function () {
           macro.delete('/orgs/firesize/teams/dev/member', {
             user: 'pksunkara', random: 'u2e83'
@@ -38,7 +38,26 @@ module.exports = function (macro) {
           }
         })
       },
-      'Deleting member from team with member': {
+      'Removing owner member from team': {
+        topic: function () {
+          macro.delete('/orgs/firesize/teams/dev/member', {
+            user: 'jsmith'
+          }, {user: 'jsmith', pass: 'secret'}, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1),
+        'should not update the team doc and it': macro.doc('orgs/firesize/teams/dev', {
+          'should have owner in users list': function (err, body) {
+            assert.isTrue(body.users['jsmith']);
+          }
+        }),
+        'should not update the org doc and it': macro.doc('orgs/firesize', {
+          'should not change the count for the user': function (err, body) {
+            assert.equal(body.users['jsmith'], 2);
+          }
+        })
+      },
+      'Removing member from team with member': {
         topic: function () {
           macro.delete('/orgs/confy/teams/consultants/member', {
             users: 'whatupdave',
@@ -54,7 +73,7 @@ module.exports = function (macro) {
           }
         })
       },
-      'Deleting member from team with no access': {
+      'Removing member from team with no access': {
         topic: function () {
           macro.delete('/orgs/confy/teams/consultants/member', {
             users: 'whatupdave',

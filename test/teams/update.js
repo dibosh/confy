@@ -42,7 +42,7 @@ module.exports = function (macro) {
           assert.deepEqual(body, {message: 'Bad credentials'});
         },
         'should not update team doc and it': macro.doc('orgs/confy/teams/consultants', {
-          'should have old email': function (err, body) {
+          'should have old description': function (err, body) {
             assert.equal(body.description, 'Consultants will have restricted access to the projects');
           }
         })
@@ -58,7 +58,7 @@ module.exports = function (macro) {
           assert.deepEqual(body, {message: 'Not found'});
         },
         'should not update team doc and it': macro.doc('orgs/confy/teams/consultants', {
-          'should have old email': function (err, body) {
+          'should have old description': function (err, body) {
             assert.equal(body.description, 'Consultants will have restricted access to the projects');
           }
         })

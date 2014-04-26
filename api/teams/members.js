@@ -20,13 +20,11 @@ module.exports = function (app, db) {
   }
 
   var update = function (req, res, next) {
-    db.bulk({ docs: [req.team, req.org] }, { all_or_nothing: true }, function (err, body) {
+    db.bulk({docs: [req.team, req.org]}, {all_or_nothing: true}, function (err, body) {
       if (err) return next(err);
 
-      if (body.ok) {
-        app.utils.shield(req.team, ['_rev']);
-        res.json(req.team);
-      } else next();
+      app.utils.shield(req.team, ['_rev']);
+      res.json(req.team);
     });
   }
 
@@ -75,7 +73,10 @@ module.exports = function (app, db) {
 
       // Update the data
       req.team.users[user] = true;
+
+      req.org.users[user] = req.org.users[user] || 0;
       req.org.users[user]++;
+
       update(req, res, next);
     });
   });

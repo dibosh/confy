@@ -62,7 +62,7 @@ module.exports = function (macro) {
           assert.equal(body.users[0], 'jsmith');
         },
         'should create team doc and it': macro.doc('orgs/firesize/teams/dev', {
-          'should have user in list of users': function (err, body) {
+          'should have owner in list of users': function (err, body) {
             assert.deepEqual(body.users, {jsmith: true});
           }
         }),

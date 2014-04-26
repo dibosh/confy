@@ -33,7 +33,23 @@ module.exports = function (macro) {
           assert.equal(body.owner, 'jsmith');
           assert.equal(body.type, 'org');
           assert.equal(body.plan, 'none');
-
+        },
+        'should not return users list': function (err, res, body) {
+          assert.isUndefined(body.users);
+        }
+      },
+      'Retrieving org with member': {
+        topic: function () {
+          macro.get('/orgs/confy', {user: 'vanstee', pass: 'password'}, this.callback);
+        },
+        'should return 200': macro.status(200),
+        'should return the org': function (err, res, body) {
+          assert.equal(body._id, 'orgs/confy');
+          assert.equal(body.name, 'Confy');
+          assert.equal(body.email, 'admin@confy.io');
+          assert.equal(body.owner, 'pksunkara');
+          assert.equal(body.type, 'org');
+          assert.equal(body.plan, 'none');
         },
         'should not return users list': function (err, res, body) {
           assert.isUndefined(body.users);

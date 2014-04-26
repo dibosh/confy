@@ -20,7 +20,7 @@ module.exports = function (app, db) {
   }
 
   var update = function (req, res, next) {
-    db.bulk({ docs: [req.team, req.org] }, function (err, body) {
+    db.bulk({ docs: [req.team, req.org] }, { all_or_nothing: true }, function (err, body) {
       if (err) return next(err);
 
       if (body.ok) {

@@ -51,7 +51,7 @@ module.exports = function (app, db) {
         req.body.verified = false;
 
         // Insert user
-        db.bulk(app.bulk.user(req.body), function (err, body) {
+        db.bulk(app.bulk.user(req.body), { all_or_nothing: true }, function (err, body) {
           if (err) return next(err);
 
           app.utils.shield(req.body, ['password']);

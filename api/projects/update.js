@@ -9,7 +9,9 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
-        app.utils.shield(req.project, ['_rev']);
+        req.project.teams = Object.keys(req.project.teams);
+
+        app.utils.shield(req.project, ['users', '_rev']);
         res.json(req.project);
       } else next();
     });

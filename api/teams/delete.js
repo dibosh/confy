@@ -5,6 +5,11 @@ module.exports = function (app, db) {
     var org = req.org.name.toLowerCase()
       , team = req.team.name.toLowerCase();
 
+    // If team is the default team
+    if (team == 'all') {
+      return app.errors.validation(res, [{ field: 'team', code: 'forbidden' }])
+    }
+
     // Update projects
     db.view('projects', 'team', {keys:[org + '/' + team]}, function (err, body) {
       if (err) return next(err);

@@ -60,6 +60,18 @@ module.exports = {
 
     return ret;
   },
+  nodoc: function (doc, reason) {
+    return {
+      topic: function () {
+        nano.get(doc, this.callback)
+      },
+      'should not exist': function (err, body) {
+        assert.isNotNull(err);
+        assert.equal(err.reason, reason);
+        assert.isUndefined(body);
+      }
+    };
+  },
   status: function (code) {
     return function (err, res) {
       assert.isNull(err);

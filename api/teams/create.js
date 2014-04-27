@@ -16,11 +16,11 @@ module.exports = function (app, db) {
       return app.errors.validation(res, errs);
     }
 
-    var orgLowerName = req.org.name.toLowerCase()
-      , lowerName = name.toLowerCase();
+    var org = req.org.name.toLowerCase()
+      , team = name.toLowerCase();
 
     // Search for existing team name
-    db.view('teams', 'name', {keys: [orgLowerName + '/' + lowerName]}, function (err, body) {
+    db.view('teams', 'name', {keys: [org + '/' + team]}, function (err, body) {
       if (err) return next(err);
 
       if (body.rows.length > 0) {
@@ -30,8 +30,8 @@ module.exports = function (app, db) {
       req.body.type = 'team';
       req.body.users = {};
       req.body.users[req.org.owner] = true;
-      req.body.org = orgLowerName;
-      req.body._id = 'orgs/' + orgLowerName + '/teams/' + lowerName;
+      req.body.org = org;
+      req.body._id = 'orgs/' + org + '/teams/' + team;
 
       req.org.users[req.org.owner]++;
 

@@ -16,11 +16,11 @@ module.exports = function (app, db) {
       return app.errors.validation(res, errs);
     }
 
-    var orgLowerName = req.org.name.toLowerCase()
-      , lowerName = name.toLowerCase();
+    var org = req.org.name.toLowerCase()
+      , project = name.toLowerCase();
 
     // Search for existing project name
-    db.view('projects', 'name', {keys: [orgLowerName + '/' + lowerName]}, function (err, body) {
+    db.view('projects', 'name', {keys: [org + '/' + project]}, function (err, body) {
       if (err) return next(err);
 
       if (body.rows.length > 0) {
@@ -30,11 +30,11 @@ module.exports = function (app, db) {
       req.body.type = 'project';
       req.body.teams = {'all': true};
       req.body.users = {};
-      req.body.org = orgLowerName;
-      req.body._id = 'orgs/' + orgLowerName + '/projects/' + lowerName;
+      req.body.org = org;
+      req.body._id = 'orgs/' + org + '/projects/' + project;
 
       // Get members from 'all' team
-      db.get('orgs/' + orgLowerName + '/teams/all', function (err, body) {
+      db.get('orgs/' + org + '/teams/all', function (err, body) {
         if (err) return next(err);
 
         Object.keys(body.users).forEach(function (user) {

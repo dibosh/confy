@@ -24,7 +24,8 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
-        app.utils.shield(req.project, ['_rev']);
+        req.project.teams = Object.keys(req.project.teams);
+        app.utils.shield(req.project, ['users', '_rev']);
         res.json(req.project);
       } else next();
     });
@@ -33,7 +34,7 @@ module.exports = function (app, db) {
   app.delete('/orgs/:org/projects/:project/access', app.auth.owner, function (req, res, next) {
     if (check(req, res)) return;
 
-    var orgLowerName = req.org.name.toLowerCase()
+    var org = req.org.name.toLowerCase()
       , team = req.body.team.toLowerCase();
 
     if (team == 'all') {
@@ -54,11 +55,11 @@ module.exports = function (app, db) {
   app.post('/orgs/:org/projects/:project/access', app.auth.owner, function (req, res, next) {
     if (check(req, res)) return;
 
-    var orgLowerName = req.org.name.toLowerCase()
+    var org = req.org.name.toLowerCase()
       , team = req.body.team.toLowerCase();
 
     // Check if team exists
-    db.get('orgs/' + orgLowerName + '/teams/' + team, function (err, body) {
+    db.get('orgs/' + org + '/teams/' + team, function (err, body) {
       if (err) {
         if (err.message == 'missing') {
           return app.errors.validation(res, [{ field: 'team', code: 'does_not_exist' }]);
@@ -67,12 +68,22 @@ module.exports = function (app, db) {
 
       // If team already has access
       if (req.project.teams[team] === true) {
-        app.utils.shield(req.project, ['_rev']);
+        req.project.teams = Object.keys(req.project.teams);
+        app.utils.shield(req.project, ['users', '_rev']);
         return res.json(req.project);
       }
 
       // Update the project
       req.project.teams[team] = true;
+
+      Object.keys(body.users).forEach(function (user) {
+        if (req.project.users[user] === undefined) {
+            req.project.users[user] = 0;
+        }
+
+        req.project.users[user]++;
+      });
+
       update(req, res, next);
     });
   });

@@ -78,7 +78,7 @@ module.exports = function (macro) {
       'Adding member to team with member': {
         topic: function () {
           macro.post('/orgs/confy/teams/consultants/member', {
-            users: 'zdenek',
+            user: 'zdenek',
           }, {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 401': macro.status(401),
@@ -94,7 +94,7 @@ module.exports = function (macro) {
       'Adding member to team with no access': {
         topic: function () {
           macro.post('/orgs/confy/teams/consultants/member', {
-            users: 'zdenek',
+            user: 'zdenek',
           }, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
         'should return 404': macro.status(404),

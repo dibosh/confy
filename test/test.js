@@ -82,6 +82,7 @@ vows.describe('confy').addBatch({
 .addBatch(require('./teams/members/add')(macro))
 .addBatch(require('./teams/members/remove')(macro))
 .addBatch(require('./teams/delete')(macro))
+.addBatch(require('./orgs/delete')(macro))
 .addBatch({
   'Database': {
     topic: function () {

@@ -79,6 +79,7 @@ vows.describe('confy').addBatch({
 .addBatch(require('./projects/update')(macro))
 .addBatch(require('./projects/list')(macro))
 .addBatch(require('./projects/access/add')(macro))
+.addBatch(require('./projects/access/remove')(macro))
 .addBatch(require('./teams/members/add')(macro))
 .addBatch(require('./teams/members/remove')(macro))
 .addBatch(require('./projects/delete')(macro))

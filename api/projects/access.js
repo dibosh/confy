@@ -37,19 +37,34 @@ module.exports = function (app, db) {
     var org = req.org.name.toLowerCase()
       , team = req.body.team.toLowerCase();
 
+    // If team is the default team
     if (team == 'all') {
       return app.errors.validation(res, [{ field: 'team', code: 'forbidden'}]);
     }
 
     // If team does not have access
     if (req.project.teams[team] === undefined) {
-        app.utils.shield(req.project, ['_rev']);
-        return res.json(req.project);
+      req.project.teams = Object.keys(req.project.teams);
+      app.utils.shield(req.project, ['users', '_rev']);
+      return res.json(req.project);
     }
 
-    // Update the project
-    delete req.project.teams[team];
-    update(req, res, next);
+    db.get('orgs/' + org + '/teams/' + team, function (err, body) {
+      if (err) return next(err);
+
+      // Update the project
+      delete req.project.teams[team];
+
+      Object.keys(body.users).forEach(function (user) {
+        req.project.users[user]--;
+
+        if (req.project.users[user] === 0) {
+          delete req.project.users[user];
+        }
+      });
+
+      update(req, res, next);
+    });
   });
 
   app.post('/orgs/:org/projects/:project/access', app.auth.owner, function (req, res, next) {

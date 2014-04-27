@@ -39,16 +39,16 @@ module.exports = function (app, db) {
       , team = req.team.name.toLowerCase()
       , user = req.body.user.toLowerCase();
 
+    // If user is the default user
+    if (req.org.owner == user) {
+      return app.errors.validation(res, [{ field: 'user', code: 'forbidden' }])
+    }
+
     // If user is not a member
     if (req.team.users[user] === undefined) {
       req.team.users = Object.keys(req.team.users);
       app.utils.shield(req.team, ['_rev']);
       return res.json(req.team);
-    }
-
-    // If user is the default user
-    if (req.org.owner == user) {
-      return app.errors.validation(res, [{ field: 'user', code: 'forbidden' }])
     }
 
     db.view('projects', 'team', {keys:[org + '/' + team]}, function (err, body) {

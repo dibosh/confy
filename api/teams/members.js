@@ -19,8 +19,11 @@ module.exports = function (app, db) {
     return false;
   }
 
-  var update = function (req, res, next) {
-    db.bulk({docs: [req.team, req.org]}, {all_or_nothing: true}, function (err, body) {
+  var update = function (projects, req, res, next) {
+    projects.push(req.team);
+    projects.push(req.org);
+
+    db.bulk({docs: projects}, {all_or_nothing: true}, function (err, body) {
       if (err) return next(err);
 
       req.team.users = Object.keys(req.team.users);
@@ -32,7 +35,8 @@ module.exports = function (app, db) {
   app.delete('/orgs/:org/teams/:team/member', app.auth.owner, function (req, res, next) {
     if (check(req, res)) return;
 
-    var orgLowerName = req.org.name.toLowerCase()
+    var org = req.org.name.toLowerCase()
+      , team = req.team.name.toLowerCase()
       , user = req.body.user.toLowerCase();
 
     // If user is not a member
@@ -47,21 +51,36 @@ module.exports = function (app, db) {
       return app.errors.validation(res, [{ field: 'user', code: 'forbidden' }])
     }
 
-    // Update the data
-    delete req.team.users[user];
-    req.org.users[user]--;
+    db.view('projects', 'team', {keys:[org + '/' + team]}, function (err, body) {
+      if (err) return next(err);
 
-    if (req.org.users[user] === 0) {
-      delete req.org.users[user];
-    }
+      var projects = body.rows.map(function (row) {
+        row.value.users[user]--;
 
-    update(req, res, next);
+        if (row.value.users[user] === 0) {
+          delete row.value.users[user];
+        }
+
+        return row.value;
+      });
+
+      // Update the data
+      delete req.team.users[user];
+      req.org.users[user]--;
+
+      if (req.org.users[user] === 0) {
+        delete req.org.users[user];
+      }
+
+      update(projects, req, res, next);
+    });
   });
 
   app.post('/orgs/:org/teams/:team/member', app.auth.owner, function (req, res, next) {
     if (check(req, res)) return;
 
-    var orgLowerName = req.org.name.toLowerCase()
+    var org = req.org.name.toLowerCase()
+      , team = req.team.name.toLowerCase()
       , user = req.body.user.toLowerCase();
 
     // Check if user exists
@@ -79,13 +98,31 @@ module.exports = function (app, db) {
         return res.json(req.team);
       }
 
-      // Update the data
-      req.team.users[user] = true;
+      // Update projects
+      db.view('projects', 'team', {keys:[org + '/' + team]}, function (err, body) {
+        if (err) return next(err);
 
-      req.org.users[user] = req.org.users[user] || 0;
-      req.org.users[user]++;
+        var projects = body.rows.map(function (row) {
+          if (row.value.users[user] === undefined) {
+            row.value.users[user] = 0;
+          }
 
-      update(req, res, next);
+          row.value.users[user]++;
+
+          return row.value;
+        });
+
+        // Update the data
+        req.team.users[user] = true;
+
+        if (req.org.users[user] === undefined) {
+          req.org.users[user] = 0;
+        }
+
+        req.org.users[user]++;
+
+        update(projects, req, res, next);
+      });
     });
   });
 

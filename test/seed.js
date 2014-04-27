@@ -9,7 +9,7 @@ module.exports = {
     {"_id":"orgs/confy/projects/main","name":"Main","description":"Main app","type":"project","teams":{"all":true,"engineering":true},"org":"confy","users":{"pksunkara":2}},
     {"_id":"orgs/confy/projects/urlshortener","name":"UrlShortener","description":"Service to be used by bots","type":"project","teams":{"all":true},"org":"confy","users":{"pksunkara":1}},
     {"_id":"orgs/confy/projects/knowledgebase/config",},
-    {"_id":"orgs/confy/projects/main/config"},
+    {"_id":"orgs/confy/projects/main/config","port":5000,"name":"confy","database":{"port":5984,"url":"http://db.confy.io","user":"admin","pass":"secret"}},
     {"_id":"orgs/confy/projects/urlshortener/config"},
     {"_id":"orgs/confy/teams/all","name":"All","description":"Owners","type":"team","users":{"pksunkara":true},"org":"confy"},
     {"_id":"orgs/confy/teams/consultants","name":"Consultants","description":"Consultants will have restricted access to the projects","users":{"pksunkara":true,"whatupdave":true,"vanstee":true},"org":"confy","type":"team"},

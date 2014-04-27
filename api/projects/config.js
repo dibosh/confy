@@ -27,14 +27,14 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       // Update the data
-      deepExtend(body, req.body);
+      req.body = deepExtend(body, req.body);
 
-      db.insert(body, body._id, function (err, body) {
+      db.insert(req.body, req.body._id, function (err, body) {
         if (err) return next(err);
 
         if (body.ok) {
-          app.utils.shield(body, ['_rev']);
-          res.json(body);
+          app.utils.shield(req.body, ['_rev']);
+          res.json(req.body);
         } else return next();
       });
     });

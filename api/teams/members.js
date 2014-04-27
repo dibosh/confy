@@ -19,11 +19,11 @@ module.exports = function (app, db) {
     return false;
   }
 
-  var update = function (projects, req, res, next) {
-    projects.push(req.team);
-    projects.push(req.org);
+  var update = function (docs, req, res, next) {
+    docs.push(req.team);
+    docs.push(req.org);
 
-    db.bulk({docs: projects}, {all_or_nothing: true}, function (err, body) {
+    db.bulk({docs: docs}, {all_or_nothing: true}, function (err, body) {
       if (err) return next(err);
 
       req.team.users = Object.keys(req.team.users);
@@ -54,7 +54,7 @@ module.exports = function (app, db) {
     db.view('projects', 'team', {keys:[org + '/' + team]}, function (err, body) {
       if (err) return next(err);
 
-      var projects = body.rows.map(function (row) {
+      var docs = body.rows.map(function (row) {
         row.value.users[user]--;
 
         if (row.value.users[user] === 0) {
@@ -72,7 +72,7 @@ module.exports = function (app, db) {
         delete req.org.users[user];
       }
 
-      update(projects, req, res, next);
+      update(docs, req, res, next);
     });
   });
 
@@ -102,7 +102,7 @@ module.exports = function (app, db) {
       db.view('projects', 'team', {keys:[org + '/' + team]}, function (err, body) {
         if (err) return next(err);
 
-        var projects = body.rows.map(function (row) {
+        var docs = body.rows.map(function (row) {
           if (row.value.users[user] === undefined) {
             row.value.users[user] = 0;
           }
@@ -121,7 +121,7 @@ module.exports = function (app, db) {
 
         req.org.users[user]++;
 
-        update(projects, req, res, next);
+        update(docs, req, res, next);
       });
     });
   });

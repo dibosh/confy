@@ -14,7 +14,7 @@ module.exports = function (app, db) {
     db.view('projects', 'team', {keys:[org + '/' + team]}, function (err, body) {
       if (err) return next(err);
 
-      var projects = body.rows.map(function (row) {
+      var docs = body.rows.map(function (row) {
         delete row.value.teams[team];
 
         Object.keys(req.team.users).forEach(function (user) {
@@ -39,10 +39,10 @@ module.exports = function (app, db) {
         }
       });
 
-      projects.push(req.org);
-      projects.push(req.team);
+      docs.push(req.org);
+      docs.push(req.team);
 
-      db.bulk({docs: projects}, {all_or_nothing: true}, function (err, body) {
+      db.bulk({docs: docs}, {all_or_nothing: true}, function (err, body) {
         if (err) return next(err);
 
         res.send(204);

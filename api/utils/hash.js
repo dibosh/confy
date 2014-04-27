@@ -8,6 +8,15 @@ module.exports = function (app) {
     });
   }
 
+  // Forbid certain keys
+  app.utils.forbid = function (req, fields) {
+    req.oldBody = req.body;
+
+    fields.forEach(function (field) {
+      delete req.body[field];
+    });
+  };
+
   // Only accept certain keys
   app.utils.permit = function (req, fields) {
     req.oldBody = req.body;

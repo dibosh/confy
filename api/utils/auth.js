@@ -43,4 +43,16 @@ module.exports = function (app, db) {
       return next();
     });
   }
+
+  app.auth.project = function (req, res, next) {
+    app.auth.user(req, res, function (err) {
+      if (err) return next(err);
+
+      if (req.project.users[req.user.username] === undefined) {
+        return app.errors.notfound(res);
+      }
+
+      return next();
+    });
+  }
 };

@@ -5,7 +5,9 @@ module.exports = function (app, db) {
     var id = 'orgs/' + req.org.name.toLowerCase() + '/projects/' + project;
 
     db.get(id, function (err, body) {
-      if (err) return next(err);
+      if (err && err.reason != 'missing') {
+        return next(err);
+      }
 
       if (body) {
         req.project = body;

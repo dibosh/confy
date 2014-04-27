@@ -20,7 +20,7 @@ module.exports = function (app, db) {
       , lowerName = name.toLowerCase();
 
     // Search for existing project name
-    db.view('projects', 'name', {key: [orgLowerName + '/' + lowerName]}, function (err, body) {
+    db.view('projects', 'name', {keys: [orgLowerName + '/' + lowerName]}, function (err, body) {
       if (err) return next(err);
 
       if (body.rows.length > 0) {
@@ -29,17 +29,30 @@ module.exports = function (app, db) {
 
       req.body.type = 'project';
       req.body.teams = {'all': true};
+      req.body.users = {};
       req.body.org = orgLowerName;
       req.body._id = 'orgs/' + orgLowerName + '/projects/' + lowerName;
 
-      // Insert project
-      db.insert(req.body, req.body._id, function (err, body) {
+      // Get members from 'all' team
+      db.get('orgs/' + orgLowerName + '/teams/all', function (err, body) {
         if (err) return next(err);
 
-        if (body.ok) {
-          res.status(201);
-          res.json(req.body);
-        } else next();
+        Object.keys(body.users).forEach(function (user) {
+          req.body.users[user] = 1;
+        });
+
+        // Insert project
+        db.insert(req.body, req.body._id, function (err, body) {
+          if (err) return next(err);
+
+          if (body.ok) {
+            req.body.teams = Object.keys(req.body.teams);
+            delete req.body.users;
+
+            res.status(201);
+            res.json(req.body);
+          } else next();
+        });
       });
     });
   });

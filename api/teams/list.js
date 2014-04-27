@@ -1,6 +1,6 @@
 module.exports = function (app, db) {
 
-  // List all teams
+  // List all teams the user has access to
   app.get('/orgs/:org/teams', app.auth.user, function (req, res, next) {
     db.view('teams', 'user', {keys: [req.org.name.toLowerCase() + '/' + req.user.username]}, function (err, body) {
       if (err) return next(err);

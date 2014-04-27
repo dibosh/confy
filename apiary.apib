@@ -375,18 +375,21 @@ List all the projects of the organization which can be seen by the authenticated
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Service to be used by bots",
+          "teams": ["all", "sideprojects"],
           "org": "bigcompany",
           "type": "project"
         }, {
           "_id": "orgs/bigcompany/projects/main",
           "name": "Main",
           "description": "Main product",
+          "teams": ["all", "engineering"],
           "org": "bigcompany",
           "type": "project"
         }, {
           "_id": "orgs/bigcompany/projects/blog",
           "name": "Blog",
           "description": "Company's blog",
+          "teams": ["all", "engineering"],
           "org": "bigcompany",
           "type": "project"
         }]
@@ -415,8 +418,6 @@ Create a project. _Authenticated user should own the organization_. Only the __a
 
 ## Project [/orgs/{org}/projects/{project}]
 
-Authenticated user should own the organization for the below endpoints.
-
 + Parameters
 
     + org (required, string) ... Name of the organization
@@ -424,7 +425,7 @@ Authenticated user should own the organization for the below endpoints.
 
 ### Retrieve a Project [GET]
 
-Get a specific project.
+Get a specific project in a specific organization. Works only if the authenticated user has access to the project.
 
 + Response 200 (application/json)
 
@@ -432,14 +433,14 @@ Get a specific project.
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Service to be used by bots",
-          "teams": ["all", "engineering", "consultants"],
+          "teams": ["all", "sideprojects"],
           "org": "bigcompany",
           "type": "project"
         }
 
 ### Update a Project [PATCH]
 
-Update a specific project. __Description__ is the only thing which can be updated.
+Update a specific project. __Description__ is the only thing which can be updated. Authenticated user should be the owner of the organization.
 
 + Request (application/json)
 
@@ -453,18 +454,20 @@ Update a specific project. __Description__ is the only thing which can be update
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Url shortening as a service",
-          "teams": ["all", "engineering", "consultants"],
+          "teams": ["all", "sideprojects"],
           "org": "bigcompany",
           "type": "project"
         }
 
 ### Delete a Project [DELETE]
 
-Delete the given project.
+Delete the given project. Authenticated user should be the owner of the organization.
 
 + Response 204
 
 ## Access [/orgs/{org}/projects/{project}/access]
+
+Authenticated user should be the owner of the organization for the below endpoints.
 
 + Parameters
 
@@ -499,7 +502,7 @@ Remove project access for the given team. The __team__ in the request needs to b
 + Request (application/json)
 
         {
-          "team": "consultants"
+          "team": "sideprojects"
         }
 
 + Response 200 (application/json)
@@ -508,7 +511,7 @@ Remove project access for the given team. The __team__ in the request needs to b
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Url shortening as a service",
-          "teams": ["all", "engineering"],
+          "teams": ["all"],
           "org": "bigcompany",
           "type": "project"
         }

@@ -15,7 +15,7 @@ module.exports = function (macro) {
           assert.equal(body[0]._id, 'orgs/confy/teams/consultants');
         },
         'should return users array for teams': function (err, res, body) {
-          assert.lengthOf(body[0].users, 3);
+          assert.deepEqual(body[0].users, ['pksunkara','whatupdave','vanstee']);
         }
       }
     }

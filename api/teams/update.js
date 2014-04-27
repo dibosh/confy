@@ -9,6 +9,8 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
+        req.team.users = Object.keys(req.team.users);
+
         app.utils.shield(req.team, ['_rev']);
         res.json(req.team);
       } else next();

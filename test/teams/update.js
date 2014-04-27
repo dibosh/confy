@@ -23,7 +23,7 @@ module.exports = function (macro) {
           assert.isUndefined(body.random);
         },
         'should return users array': function (err, res, body) {
-          assert.lengthOf(body.users, 1);
+          assert.deepEqual(body.users, ['jsmith']);
         },
         'should update team doc and it': macro.doc('orgs/firesize/teams/dev', {
           'should have updated description': function (err, body) {

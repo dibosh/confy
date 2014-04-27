@@ -34,7 +34,7 @@ module.exports = function (macro) {
           assert.equal(body.type, 'team');
         },
         'should return users array': function (err, res, body) {
-          assert.lengthOf(body.users, 3);
+          assert.deepEqual(body.users, ['pksunkara','whatupdave','vanstee']);
         }
       },
       'Retrieving team with owner': {
@@ -50,7 +50,7 @@ module.exports = function (macro) {
           assert.equal(body.type, 'team');
         },
         'should return users array': function (err, res, body) {
-          assert.lengthOf(body.users, 3);
+          assert.deepEqual(body.users, ['pksunkara','whatupdave','vanstee']);
         }
       }
     }

@@ -3,6 +3,15 @@ var assert = require('assert');
 module.exports = function (macro) {
   return {
     'Teams': {
+      'Deleting non-existent team': {
+        topic: function () {
+          macro.delete('/orgs/confy/teams/stuff', {}, {user: 'pksunkara', pass: 'password'}, this.callback);
+        },
+        'should return 404': macro.status(404),
+        'should return not found': function (err, res, body) {
+          assert.deepEqual(body, {message: 'Not found'});
+        }
+      },
       'Deleting the default team': {
         topic: function () {
           macro.delete('/orgs/confy/teams/all', {}, {user: 'pksunkara', pass: 'password'}, this.callback);

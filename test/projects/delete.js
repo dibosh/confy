@@ -3,6 +3,15 @@ var assert = require('assert');
 module.exports = function (macro) {
   return {
     'Projects': {
+      'Deleting non-existent project': {
+        topic: function () {
+          macro.delete('/orgs/confy/projects/stuff', {}, {user: 'pksunkara', pass: 'password'}, this.callback);
+        },
+        'should return 404': macro.status(404),
+        'should return not found': function (err, res, body) {
+          assert.deepEqual(body, {message: 'Not found'});
+        }
+      },
       'Deleting project with owner': {
         topic: function () {
           macro.delete('/orgs/confy/projects/urlshortener', {}, {user: 'pksunkara', pass: 'password'}, this.callback);

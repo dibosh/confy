@@ -20,7 +20,8 @@ module.exports = function (macro) {
         'should not return the project': function (err, res, body) {
           assert.isUndefined(body);
         },
-        'should delete project doc and it': macro.nodoc('orgs/confy/projects/urlshortener', 'deleted')
+        'should delete project doc and it': macro.nodoc('orgs/confy/projects/urlshortener', 'deleted'),
+        'should delete project config doc and it': macro.nodoc('orgs/confy/projects/urlshortener/config', 'deleted')
       },
       'Deleting project with member': {
         topic: function () {

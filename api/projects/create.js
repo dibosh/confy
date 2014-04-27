@@ -33,6 +33,10 @@ module.exports = function (app, db) {
       req.body.org = org;
       req.body._id = 'orgs/' + org + '/projects/' + project;
 
+      var config = {
+        '_id': req.body._id + '/config'
+      };
+
       // Get members from 'all' team
       db.get('orgs/' + org + '/teams/all', function (err, body) {
         if (err) return next(err);
@@ -42,16 +46,14 @@ module.exports = function (app, db) {
         });
 
         // Insert project
-        db.insert(req.body, req.body._id, function (err, body) {
+        db.bulk({docs: [req.body, config]}, {all_or_nothing: true}, function (err, body) {
           if (err) return next(err);
 
-          if (body.ok) {
-            req.body.teams = Object.keys(req.body.teams);
-            delete req.body.users;
+          req.body.teams = Object.keys(req.body.teams);
+          delete req.body.users;
 
-            res.status(201);
-            res.json(req.body);
-          } else next();
+          res.status(201);
+          res.json(req.body);
         });
       });
     });

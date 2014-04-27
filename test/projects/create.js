@@ -68,7 +68,8 @@ module.exports = function (macro) {
           'should have access for default team': function (err, body) {
             assert.deepEqual(body.teams, {all:true});
           }
-        })
+        }),
+        'should create project config doc and it': macro.doc('orgs/firesize/projects/main/config')
       }
     }
   };

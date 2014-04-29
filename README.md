@@ -16,10 +16,10 @@ Prerequisites are:
 ```bash
 $ git clone git://github.com/asm-products/confy && cd confy
 
-$ export MAILGUN_API_KEY="key-*************"
+$ export MAILGUN_API_KEY="key-ivd0lsd91b1bvw31mw7"
 $ export MAILGUN_DOMAIN="sample.mailgun.org"
 
-$ npm install && node seed.js
+$ npm install && node test/setup.js
 
 $ node app.js
 ```

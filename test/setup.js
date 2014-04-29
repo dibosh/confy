@@ -1,6 +1,6 @@
 var nano = require('nano')('http://localhost:5984')
 
-var seed = require('./test/seed');
+var seed = require('./seed');
 
 var seeding = function () {
   var db = nano.db.use('confy');

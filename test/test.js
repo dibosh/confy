@@ -3,9 +3,10 @@ var assert = require('assert')
   , vows = require('vows');
 
 process.env.CLOUDANT_DBNAME = 'confy-test';
+process.env.NODE_ENV = 'test';
 
 var seed = require('./seed')
-  , app = require('../api')
+  , app = require('../app')
   , macro = require('./macro');
 
 vows.describe('confy').addBatch({

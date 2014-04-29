@@ -1,30 +1,38 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('static-favicon');
-var logger = require('morgan');
+var express = require('express')
+  , nano = require('nano')
+  , bodyParser = require('body-parser')
+  , logger = require('morgan');
 
 var app = express();
-var api = require('./api');
 
 // Setup environment variables
-require('./api/utils/env')(app);
+require('./utils/env')(app);
 
 // Setup middleware
-app.use(favicon());
-app.use(logger('dev'));
+app.use(bodyParser());
 
-// Use subdomain for api in production
-if (app.get('env') === 'development') {
-  app.use('/api', api);
-} else {
-  app.use(vhost('api.confy.io', api));
+// Setup logger
+if (app.get('env') != 'test') {
+  app.use(logger('dev'));
 }
 
-// Static middleware
-app.use(express.static(path.join(__dirname, 'public')));
+// Setup database handler
+var db = nano(app.get('db')).use(app.get('dbname'));
+
+// Setup utility functions
+require('./utils/auth')(app, db);
+require('./utils/bulk')(app);
+require('./utils/hash')(app);
+require('./utils/mailer')(app);
+
+// Setup API
+require('./api/users')(app, db);
+require('./api/orgs')(app, db);
+require('./api/teams')(app, db);
+require('./api/projects')(app, db);
 
 // Error handling
-require('./api/utils/error')(app);
+require('./utils/error')(app);
 
 // Start Server
 var server = app.listen(app.get('port'), function () {

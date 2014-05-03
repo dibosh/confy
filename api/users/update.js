@@ -8,9 +8,9 @@ module.exports = function (app, db) {
 
     // If updating email, send verification email
     if (req.body.email) {
-      // TODO: Send verification email
       req.body.verified = false;
       req.body.verification_token = crypto.randomBytes(20).toString('hex');
+      req.body.verify_new_email = true;
     }
 
     app.utils.merge(req.user, req.body);
@@ -19,8 +19,13 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
-        app.utils.shield(req.user, ['password', 'verification_token', '_rev']);
-        res.json(req.user);
+        app.mail['verification'](req.user.email, req.user, function (err, data)
+        {
+          if (err) return next(err);
+
+          app.utils.shield(req.user, ['password', 'verification_token', '_rev']);
+          res.json(req.user);
+        });
       } else next();
     });
   });

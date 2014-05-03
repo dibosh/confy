@@ -48,7 +48,6 @@ module.exports = function (app, db) {
         req.body.type = 'user';
         req.body._id = 'users/' + req.body.username;
 
-        // TODO: Send verification email
         req.body.verified = false;
         req.body.verification_token = crypto.randomBytes(20).toString('hex');
 

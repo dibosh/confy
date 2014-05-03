@@ -1,6 +1,6 @@
 module.exports = function (app, db) {
 
-  // Project param
+  // Environment param
   app.param('env', function (req, res, next, env) {
     var id = 'orgs/' + req.org.name.toLowerCase() + '/projects/' + req.project.name.toLowerCase() + '/envs/' + env;
 

@@ -1,4 +1,4 @@
-module.exports = function (obj) {
+module.exports = function (app, user) {
 
   var body = {
     text: "",

@@ -1,3 +1,5 @@
+var crypto = require('crypto');
+
 module.exports = function (app, db) {
 
   // Update an user
@@ -8,6 +10,7 @@ module.exports = function (app, db) {
     if (req.body.email) {
       // TODO: Send verification email
       req.body.verified = false;
+      req.body.verification_token = crypto.randomBytes(20).toString('hex');
     }
 
     app.utils.merge(req.user, req.body);
@@ -16,7 +19,7 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
-        app.utils.shield(req.user, ['password', '_rev']);
+        app.utils.shield(req.user, ['password', 'verification_token', '_rev']);
         res.json(req.user);
       } else next();
     });

@@ -17,11 +17,11 @@ module.exports = function (app) {
     file = path.basename(file, '.js');
 
     app.mail[file] = function (email, obj, callback) {
-      var body = require('./mails/' + file)(obj);
+      var body = require('./mails/' + file)(app, obj);
 
-      body['from'] = 'no-reply@confy.io';
-      body['to'] = email;
-
+      body.from = 'Confy <no-reply@confy.io>';
+      body.to = email;
+      
       mail.messages().send(body, callback);
     };
   });

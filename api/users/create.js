@@ -1,4 +1,5 @@
 var bcrypt = require('bcrypt');
+var crypto = require('crypto');
 
 var cryptPass = function (password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -49,14 +50,20 @@ module.exports = function (app, db) {
 
         // TODO: Send verification email
         req.body.verified = false;
+        req.body.verification_token = crypto.randomBytes(20).toString('hex');
 
         // Insert user
         db.bulk(app.bulk.user(req.body), { all_or_nothing: true }, function (err, body) {
           if (err) return next(err);
+          
+          app.mail['verification'](req.body.email, req.body, function (err, data)
+          {
+            if (err) return next(err);
 
-          app.utils.shield(req.body, ['password']);
-          res.status(201);
-          res.json(req.body);
+            app.utils.shield(req.body, ['password', 'verification_token']);
+            res.status(201);
+            res.json(req.body);
+          });
         });
       });
     });

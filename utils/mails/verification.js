@@ -1,8 +1,8 @@
-module.exports = function (obj) {
+module.exports = function (app, user) {
 
   var body = {
-    text: "",
-    subject: ""
+    text: "Hi " + user.username + ",\n\nPlease verify your Confy account by clicking the following url: " + app.get('baseurl') + "/users/" + user.username + "/verify/" + user.verification_token + "\n\nThanks!\n\n- The Confy team",
+    subject: "Verify your Confy account"
   };
 
   return body;

@@ -10,7 +10,7 @@ module.exports = function (app, db) {
       }
 
       if (body) {
-        req.project = body;
+        req.env = body;
         return next();
       }
 

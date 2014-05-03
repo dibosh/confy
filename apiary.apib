@@ -357,7 +357,7 @@ Remove users from the given team. The __user__ in the request needs to be a stri
 
 # Group Projects
 
-Each project has __one__ configuration document which can have many keys and values.
+An organization can contain any number of projects.
 
 ## Projects [/orgs/{org}/projects]
 
@@ -467,7 +467,7 @@ Delete the given project. Authenticated user should be the owner of the organiza
 
 ## Access [/orgs/{org}/projects/{project}/access]
 
-Authenticated user should be the owner of the organization for the below endpoints.
+Default team __All__ will have access to every project. Authenticated user should be the owner of the organization for the below endpoints.
 
 + Parameters
 
@@ -476,7 +476,7 @@ Authenticated user should be the owner of the organization for the below endpoin
 
 ### Add a Team [POST]
 
-Give project access to the given teams. The __team__ in the request needs to be a string.
+Give project access to the given teams. The __team__ in the request needs to be a string. Cannot delete default team's access.
 
 + Request (application/json)
 
@@ -516,14 +516,120 @@ Remove project access for the given team. The __team__ in the request needs to b
           "type": "project"
         }
 
-## Configuration [/orgs/{org}/projects/{project}/config]
+# Group Environments
 
-Any member of the team which has access to the project can retrieve the configuration document or edit it.
+Every project has a default environment named __Production__. Each environment has __one__ configuration document which can have many keys and values.
+
+## Environments [/orgs/{org}/projects/{project}/envs]
 
 + Parameters
 
     + org (required, string) ... Name of the organization
     + project (required, string) ... Name of the project
+
+### List all Environments [GET]
+
+List all the environmens of the project which can be seen by the authenticated user.
+
++ Response 200 (application/json)
+
+        [{
+          "_id": "orgs/bigcompany/projects/main/envs/production",
+          "name": "Production",
+          "description": "Production environment",
+          "org": "bigcompany",
+          "project": "main",
+          "type": "env"
+        }, {
+          "_id": "orgs/bigcompany/projects/main/envs/staging",
+          "name": "Staging",
+          "description": "Office staging",
+          "org": "bigcompany",
+          "project": "main",
+          "type": "env"
+        }]
+
+### Create an Environment [POST]
+
+Create an environment. _Authenticated user should have access to the project_.
+
++ Request (application/json)
+
+        {
+          "name": "QA",
+          "description": "Quality Assurance guys"
+        }
+
++ Response 201 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/projects/main/envs/qa",
+          "name": "QA",
+          "description": "Quality Assurance guys"
+          "org": "bigcompany",
+          "project": "main",
+          "type": "env"
+        }
+
+## Environment [/orgs/{org}/projects/{project}/envs/{env}]
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+    + project (required, string) ... Name of the project
+    + env (required, string) ... Name of the environment
+
+### Retrieve an Environment [GET]
+
+Get a specific environment in a specific project. Works only if the authenticated user has access to the project.
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/projects/main/envs/qa",
+          "name": "QA",
+          "description": "Quality Assurance guys"
+          "org": "bigcompany",
+          "project": "main",
+          "type": "env"
+        }
+
+### Update an Environment [PATCH]
+
+Update a specific environment. __Description__ is the only thing which can be updated. Authenticated user should have access to the project.
+
++ Request (application/json)
+
+        {
+          "description": "The quality assurance testing server"
+        }
+
++ Response 200 (application/json)
+
+        {
+          "_id": "orgs/bigcompany/projects/main/envs/qa",
+          "name": "QA",
+          "description": "The quality assurance testing server"
+          "org": "bigcompany",
+          "project": "main",
+          "type": "env"
+        }
+
+### Delete an Environment [DELETE]
+
+Delete the given environment of the project. Authenticated user should have access to the project. Cannot delete the default environment.
+
++ Response 204
+
+## Configuration [/orgs/{org}/projects/{project}/envs/{env}/config]
+
+Any member of the team which has access to the project can retrieve any of it's environment's configuration document or edit it.
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+    + project (required, string) ... Name of the project
+    + env (required, string) ... Name of the environment
 
 ### Retrieve the configuration [GET]
 
@@ -532,7 +638,7 @@ Get the configuration document for the project.
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/projects/blog/config",
+          "_id": "orgs/bigcompany/projects/blog/envs/production/config",
           "port": 3000,
           "random": [1, 2, 3],
           "database": {
@@ -558,7 +664,7 @@ Update the configuration document for the project. We will patch the document re
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/projects/blog/config",
+          "_id": "orgs/bigcompany/projects/blog/envs/production/config",
           "port": 3000,
           "database": {
             "host": "http://couchvendor.com/bigcompany",

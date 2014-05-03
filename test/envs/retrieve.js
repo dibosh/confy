@@ -26,7 +26,7 @@ module.exports = function (macro) {
           macro.get('/orgs/confy/projects/knowledgebase/envs/production', {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
-        'should return the project': function (err, res, body) {
+        'should return the environment': function (err, res, body) {
           assert.equal(body._id, 'orgs/confy/projects/knowledgebase/envs/production');
           assert.equal(body.name, 'Production');
           assert.equal(body.description, 'Production environment');
@@ -35,12 +35,12 @@ module.exports = function (macro) {
           assert.equal(body.type, 'env');
         }
       },
-      'Retrieving project with owner': {
+      'Retrieving environment with owner': {
         topic: function () {
           macro.get('/orgs/confy/projects/knowledgebase/envs/production', {user: 'pksunkara', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
-        'should return the project': function (err, res, body) {
+        'should return the environment': function (err, res, body) {
           assert.equal(body._id, 'orgs/confy/projects/knowledgebase/envs/production');
           assert.equal(body.name, 'Production');
           assert.equal(body.description, 'Production environment');

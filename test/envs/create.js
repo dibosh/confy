@@ -36,7 +36,7 @@ module.exports = function (macro) {
           }, {user:'pksunkara', pass:'password'}, this.callback);
         },
         'should return 201': macro.status(201),
-        'should return project': function (err, res, body) {
+        'should return environment': function (err, res, body) {
           assert.equal(body._id, 'orgs/confy/projects/main/envs/joestaging');
           assert.equal(body.name, 'JoeStaging');
           assert.equal(body.description, 'Joe\'s staging');

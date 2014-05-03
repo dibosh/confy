@@ -1,8 +1,8 @@
 module.exports = function (app, db) {
 
   // Project param
-  app.param('project', function (req, res, next, project) {
-    var id = 'orgs/' + req.org.name.toLowerCase() + '/projects/' + project;
+  app.param('env', function (req, res, next, env) {
+    var id = 'orgs/' + req.org.name.toLowerCase() + '/projects/' + req.project.name.toLowerCase() + '/envs/' + env;
 
     db.get(id, function (err, body) {
       if (err && err.reason != 'missing') {
@@ -25,5 +25,5 @@ module.exports = function (app, db) {
   require('./update')(app, db);
   require('./delete')(app, db);
 
-  require('./access')(app, db);
+  require('./config')(app, db);
 };

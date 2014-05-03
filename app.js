@@ -30,6 +30,7 @@ require('./api/users')(app, db);
 require('./api/orgs')(app, db);
 require('./api/teams')(app, db);
 require('./api/projects')(app, db);
+require('./api/envs')(app, db);
 
 // Error handling
 require('./utils/error')(app);

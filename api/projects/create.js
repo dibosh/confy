@@ -33,8 +33,8 @@ module.exports = function (app, db) {
       req.body.org = org;
       req.body._id = 'orgs/' + org + '/projects/' + project;
 
-      var config = {
-        '_id': req.body._id + '/config'
+      var env = {
+        _id: req.body._id + '/envs/production'
       };
 
       // Get members from 'all' team
@@ -46,7 +46,7 @@ module.exports = function (app, db) {
         });
 
         // Insert project
-        db.bulk({docs: [req.body, config]}, {all_or_nothing: true}, function (err, body) {
+        db.bulk({docs: [req.body, env]}, {all_or_nothing: true}, function (err, body) {
           if (err) return next(err);
 
           req.body.teams = Object.keys(req.body.teams);

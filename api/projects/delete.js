@@ -5,12 +5,20 @@ module.exports = function (app, db) {
     var org = req.org.name.toLowerCase()
       , project = req.project.name.toLowerCase();
 
-    db.get('orgs/' + org + '/projects/' + project + '/config', function (err, body) {
+    db.view('envs', 'project', {keys:[org + '/' + project]}, function (err, body) {
+      var configs = [];
 
-      body._deleted = true;
+      var docs = body.rows.map(function (row) {
+        row.value._deleted = true;
+        return row.value;
+      });
+
+      // Update data
       req.project._deleted = true;
 
-      db.bulk({docs: [req.project, body]}, {all_or_nothing: true}, function (err, body) {
+      docs.push(req.project);
+
+      db.bulk({docs: docs}, {all_or_nothing: true}, function (err, body) {
         if (err) return next(err);
 
         res.send(204);

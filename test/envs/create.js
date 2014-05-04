@@ -47,8 +47,10 @@ module.exports = function (macro) {
         'should not save other keys': function (err, res, body) {
           assert.isUndefined(body.random);
         },
-        'should create environment doc and it': macro.doc('orgs/firesize/projects/main/envs/staging'),
-        'should create environment config doc and it': macro.doc('orgs/firesize/projects/main/envs/staging/config')
+        'should not return config': function (err, res, body) {
+          assert.isUndefined(body.config);
+        },
+        'should create environment doc and it': macro.doc('orgs/firesize/projects/main/envs/staging')
       }
     }
   };

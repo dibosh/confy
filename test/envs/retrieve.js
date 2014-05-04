@@ -33,6 +33,9 @@ module.exports = function (macro) {
           assert.equal(body.project, 'knowledgebase');
           assert.equal(body.org, 'confy');
           assert.equal(body.type, 'env');
+        },
+        'should not return config': function (err, res, body) {
+          assert.isUndefined(body.config);
         }
       },
       'Retrieving environment with owner': {
@@ -47,6 +50,9 @@ module.exports = function (macro) {
           assert.equal(body.project, 'knowledgebase');
           assert.equal(body.org, 'confy');
           assert.equal(body.type, 'env');
+        },
+        'should not return config': function (err, res, body) {
+          assert.isUndefined(body.config);
         }
       }
     }

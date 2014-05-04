@@ -9,7 +9,7 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
-        app.utils.shield(req.env, ['_rev']);
+        app.utils.shield(req.env, ['config', '_rev']);
         res.json(req.env);
       } else next();
     });

@@ -69,8 +69,7 @@ module.exports = function (macro) {
             assert.deepEqual(body.teams, {all:true});
           }
         }),
-        'should create project environment doc and it': macro.doc('orgs/firesize/projects/main/envs/production'),
-        'should create project environment config doc and it': macro.doc('orgs/firesize/projects/main/envs/production/config')
+        'should create project environment doc and it': macro.doc('orgs/firesize/projects/main/envs/production')
       }
     }
   };

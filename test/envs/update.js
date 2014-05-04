@@ -23,6 +23,9 @@ module.exports = function (macro) {
         'should not update random fields': function (err, res, body) {
           assert.isUndefined(body.random);
         },
+        'should not return config': function (err, res, body) {
+          assert.isUndefined(body.config);
+        },
         'should update environment doc and it': macro.doc('orgs/confy/projects/main/envs/production', {
           'should have updated description': function (err, body) {
             assert.equal(body.description, 'Main production environment');

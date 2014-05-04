@@ -32,16 +32,14 @@ module.exports = function (app, db) {
       req.body.project = project;
       req.body.org = org;
       req.body._id = 'orgs/' + org + '/projects/' + project + '/envs/' + env;
-
-      var config = {
-        _id: req.body._id + '/config'
-      };
+      req.body.config = {};
 
       // Insert project
-      db.bulk({docs: [req.body, config]}, {all_or_nothing: true}, function (err, body) {
+      db.bulk({docs: [req.body]}, {all_or_nothing: true}, function (err, body) {
         if (err) return next(err);
 
         res.status(201);
+        app.utils.shield(req.body, ['config']);
         res.json(req.body);
       });
     });

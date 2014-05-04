@@ -20,8 +20,7 @@ module.exports = function (macro) {
         'should not return the envrionment': function (err, res, body) {
           assert.isUndefined(body);
         },
-        'should delete envrionment doc and it': macro.nodoc('orgs/firesize/projects/main/envs/staging', 'deleted'),
-        'should delete envrionment config doc and it': macro.nodoc('orgs/firesize/projects/main/envs/staging/config', 'deleted')
+        'should delete envrionment doc and it': macro.nodoc('orgs/firesize/projects/main/envs/staging', 'deleted')
       },
       'Deleting envrionment with no access': {
         topic: function () {
@@ -31,8 +30,7 @@ module.exports = function (macro) {
         'should return not found': function (err, res, body) {
           assert.deepEqual(body, {message: 'Not found'});
         },
-        'should not delete envrionment doc and it': macro.doc('orgs/confy/projects/knowledgebase/envs/production'),
-        'should not delete envrionment config doc and it': macro.doc('orgs/confy/projects/knowledgebase/envs/production/config')
+        'should not delete envrionment doc and it': macro.doc('orgs/confy/projects/knowledgebase/envs/production')
       }
     }
   };

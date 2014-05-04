@@ -21,6 +21,7 @@ module.exports = function (macro) {
           assert.isUndefined(body);
         },
         'should delete project doc and it': macro.nodoc('orgs/confy/projects/urlshortener', 'deleted'),
+        'should delete project environment doc and it': macro.nodoc('orgs/confy/projects/urlshortener/envs/production', 'deleted')
       },
       'Deleting project with member': {
         topic: function () {
@@ -30,7 +31,8 @@ module.exports = function (macro) {
         'should return bad credentials': function (err, res, body) {
           assert.deepEqual(body, {message: 'Bad credentials'});
         },
-        'should not delete project doc and it': macro.doc('orgs/confy/projects/knowledgebase')
+        'should not delete project doc and it': macro.doc('orgs/confy/projects/knowledgebase'),
+        'should not delete project environment doc and it': macro.doc('orgs/confy/projects/knowledgebase/envs/production')
       },
       'Deleting project with no access': {
         topic: function () {
@@ -40,7 +42,8 @@ module.exports = function (macro) {
         'should return not found': function (err, res, body) {
           assert.deepEqual(body, {message: 'Not found'});
         },
-        'should not delete project doc and it': macro.doc('orgs/confy/projects/knowledgebase')
+        'should not delete project doc and it': macro.doc('orgs/confy/projects/knowledgebase'),
+        'should not delete project environment doc and it': macro.doc('orgs/confy/projects/knowledgebase/envs/production')
       }
     }
   };

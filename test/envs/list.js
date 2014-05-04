@@ -31,6 +31,9 @@ module.exports = function (macro) {
         },
         'should return environments of the project': function (err, res, body) {
           assert.equal(body[0]._id, 'orgs/confy/projects/knowledgebase/envs/production');
+        },
+        'should not return config': function (err, res, body) {
+          assert.isUndefined(body[0].config);
         }
       }
     }

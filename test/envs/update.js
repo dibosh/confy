@@ -31,7 +31,7 @@ module.exports = function (macro) {
       },
       'Updating environment with no access': {
         topic: function () {
-          macro.patch('/orgs/confy/projects/main/envs/production', {
+          macro.patch('/orgs/confy/projects/main/envs/staging', {
             description: 'Seriously!',
           }, {user: 'vanstee', pass: 'password'}, this.callback);
         },
@@ -39,9 +39,9 @@ module.exports = function (macro) {
         'should return not found': function (err, res, body) {
           assert.deepEqual(body, {message: 'Not found'});
         },
-        'should not update environment doc and it': macro.doc('orgs/confy/projects/main/envs/production', {
+        'should not update environment doc and it': macro.doc('orgs/confy/projects/main/envs/staging', {
           'should have old description': function (err, body) {
-            assert.equal(body.description, 'Production environment');
+            assert.equal(body.description, 'Staging environment');
           }
         })
       }

@@ -30,25 +30,25 @@ module.exports = function (macro) {
       },
       'Creating them': {
         topic: function () {
-          macro.post('/orgs/confy/projects/main/envs', {
-            name: 'JoeStaging', description: 'Joe\'s staging',
+          macro.post('/orgs/firesize/projects/main/envs', {
+            name: 'Staging', description: 'Staging',
             random: '1e3', org: 'firesize'
-          }, {user:'pksunkara', pass:'password'}, this.callback);
+          }, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 201': macro.status(201),
         'should return environment': function (err, res, body) {
-          assert.equal(body._id, 'orgs/confy/projects/main/envs/joestaging');
-          assert.equal(body.name, 'JoeStaging');
-          assert.equal(body.description, 'Joe\'s staging');
+          assert.equal(body._id, 'orgs/firesize/projects/main/envs/staging');
+          assert.equal(body.name, 'Staging');
+          assert.equal(body.description, 'Staging');
           assert.equal(body.project, 'main');
-          assert.equal(body.org, 'confy');
+          assert.equal(body.org, 'firesize');
           assert.equal(body.type, 'env');
         },
         'should not save other keys': function (err, res, body) {
           assert.isUndefined(body.random);
         },
-        'should create environment doc and it': macro.doc('orgs/confy/projects/main/envs/joestaging'),
-        'should create environment config doc and it': macro.doc('orgs/confy/projects/main/envs/joestaging/config')
+        'should create environment doc and it': macro.doc('orgs/firesize/projects/main/envs/staging'),
+        'should create environment config doc and it': macro.doc('orgs/firesize/projects/main/envs/staging/config')
       }
     }
   };

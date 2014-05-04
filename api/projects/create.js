@@ -34,7 +34,16 @@ module.exports = function (app, db) {
       req.body._id = 'orgs/' + org + '/projects/' + project;
 
       var env = {
-        _id: req.body._id + '/envs/production'
+        _id: req.body._id + '/envs/production',
+        name: 'Production',
+        description: 'Production environment',
+        project: project,
+        org: org,
+        type: 'env'
+      };
+
+      var env_config = {
+        _id: env._id + '/config'
       };
 
       // Get members from 'all' team
@@ -46,7 +55,7 @@ module.exports = function (app, db) {
         });
 
         // Insert project
-        db.bulk({docs: [req.body, env]}, {all_or_nothing: true}, function (err, body) {
+        db.bulk({docs: [req.body, env, env_config]}, {all_or_nothing: true}, function (err, body) {
           if (err) return next(err);
 
           req.body.teams = Object.keys(req.body.teams);

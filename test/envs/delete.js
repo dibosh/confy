@@ -12,6 +12,14 @@ module.exports = function (macro) {
           assert.deepEqual(body, {message: 'Not found'});
         }
       },
+      'Deleting the default envrionment': {
+        topic: function () {
+          macro.delete('/orgs/confy/projects/main/envs/production', {}, {user: 'pksunkara', pass: 'password'}, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1),
+        'should not delete envrionment doc': macro.doc('orgs/confy/projects/main/envs/production')
+      },
       'Deleting envrionment with member': {
         topic: function () {
           macro.delete('/orgs/firesize/projects/main/envs/staging', {}, {user: 'jsmith', pass: 'secret'}, this.callback);

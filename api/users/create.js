@@ -55,8 +55,7 @@ module.exports = function (app, db) {
         db.bulk(app.bulk.user(req.body), { all_or_nothing: true }, function (err, body) {
           if (err) return next(err);
           
-          app.mail['verification'](req.body.email, req.body, function (err, data)
-          {
+          app.mail.verification(req.body.email, req.body, function (err, data) {
             if (err) return next(err);
 
             app.utils.shield(req.body, ['password', 'verification_token']);

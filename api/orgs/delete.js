@@ -27,15 +27,25 @@ module.exports = function (app, db) {
           docs.push(row.value);
         });
 
-        // Update data
-        req.org._deleted = true;
-
-        docs.push(req.org);
-
-        db.bulk({docs: docs}, {all_or_nothing: true}, function (err, body) {
+        // Delete environments
+        db.view('envs', 'org', {keys:[org]}, function (err, body) {
           if (err) return next(err);
 
-          res.send(204);
+          body.rows.forEach(function (row) {
+            row.value._deleted = true;
+            docs.push(row.value);
+          });
+
+          // Update data
+          req.org._deleted = true;
+
+          docs.push(req.org);
+
+          db.bulk({docs: docs}, {all_or_nothing: true}, function (err, body) {
+            if (err) return next(err);
+
+            res.send(204);
+          });
         });
       });
     });

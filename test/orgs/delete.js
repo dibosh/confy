@@ -29,7 +29,8 @@ module.exports = function (macro) {
         },
         'should delete org doc and it': macro.nodoc('orgs/firesize', 'deleted'),
         'should delete project doc and it': macro.nodoc('orgs/firesize/projects/main', 'deleted'),
-        'should delete team doc and it': macro.nodoc('orgs/firesize/teams/dev', 'deleted')
+        'should delete team doc and it': macro.nodoc('orgs/firesize/teams/dev', 'deleted'),
+        'should delete environment doc and it': macro.nodoc('orgs/firesize/projects/main/envs/production', 'deleted')
       },
       'Deleting org with member': {
         topic: function () {

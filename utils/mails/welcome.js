@@ -1,8 +1,8 @@
-module.exports = function (obj) {
+module.exports = function (app, user) {
 
   var body = {
-    text: "",
-    subject: ""
+    text: "Welcome to Confy, " + user.username + "!",
+    subject: "Welcome to Confy!"
   };
 
   return body;

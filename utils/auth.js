@@ -19,7 +19,7 @@ module.exports = function (app, db) {
         return next(err);
       }
 
-      if (body && bcrypt.compareSync(password, body.password) && (body.verified || app.get('env') == 'test')) {
+      if (body && bcrypt.compareSync(password, body.password) && body.verified) {
         req.user = body;
         return next();
       }

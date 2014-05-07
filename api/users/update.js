@@ -19,11 +19,10 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
-        app.mail['verification'](req.user.email, req.user, function (err, data)
-        {
+        app.mail.verification(req.user.email, req.user, function (err, data) {
           if (err) return next(err);
 
-          app.utils.shield(req.user, ['password', 'verification_token', '_rev']);
+          app.utils.shield(req.user, ['password', 'verification_token', 'verify_new_email', '_rev']);
           res.json(req.user);
         });
       } else next();

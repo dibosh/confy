@@ -27,9 +27,9 @@ module.exports = {
     {"_id":"orgs/whatupdave/teams/all","name":"All","description":"Has access to all projects","users":{"whatupdave":true},"org":"whatupdave","type":"team"},
     {"_id":"orgs/zdenek","name":"zdenek","email":"z@apiary.io","owner":"zdenek","plan":"none","type":"org","users":{"zdenek":1}},
     {"_id":"orgs/zdenek/teams/all","name":"All","description":"Has access to all projects","users":{"zdenek":true},"org":"zdenek","type":"team"},
-    {"_id":"users/pksunkara","username":"pksunkara","email":"pavan.sss1991@gmail.com","password":"$2a$10$h.tbQoE/vDHq1eZuT0o0guXz1k/vh9ffQIHaJ0PTWUpnSziOFvcba","type":"user","verified":false},
-    {"_id":"users/vanstee","username":"vanstee","email":"patrick@vanstee.me","password":"$2a$10$5eJFpD749KIaUXHhK/LVHOH3uQW1fdyJkZV7VLKpEEccDKDzB.dq6","type":"user","verified":false},
-    {"_id":"users/whatupdave","username":"whatupdave","email":"dave@snappyco.de","password":"$2a$10$zLU2YvIuUH8EiGgqOc0g.exDZXobiXlfLy20yifWnuD/7xqvaxl3y","type":"user","verified":false},
-    {"_id":"users/zdenek","username":"zdenek","email":"z@apiary.io","password":"$2a$10$MLXwXjnxk1covLgEaAR8YeOQYQcO7INoHpfkIDi3.7pmwtsJbGw6.","type":"user","verified":false}
+    {"_id":"users/pksunkara","username":"pksunkara","email":"pavan.sss1991@gmail.com","password":"$2a$10$h.tbQoE/vDHq1eZuT0o0guXz1k/vh9ffQIHaJ0PTWUpnSziOFvcba","type":"user","verified":true},
+    {"_id":"users/vanstee","username":"vanstee","email":"patrick@vanstee.me","password":"$2a$10$5eJFpD749KIaUXHhK/LVHOH3uQW1fdyJkZV7VLKpEEccDKDzB.dq6","type":"user","verified":true},
+    {"_id":"users/whatupdave","username":"whatupdave","email":"dave@snappyco.de","password":"$2a$10$zLU2YvIuUH8EiGgqOc0g.exDZXobiXlfLy20yifWnuD/7xqvaxl3y","type":"user","verified":true},
+    {"_id":"users/zdenek","username":"zdenek","email":"z@apiary.io","password":"$2a$10$MLXwXjnxk1covLgEaAR8YeOQYQcO7INoHpfkIDi3.7pmwtsJbGw6.","type":"user","verified":true}
   ]
 };

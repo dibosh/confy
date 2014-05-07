@@ -21,7 +21,7 @@ module.exports = function (app) {
 
       body.from = 'Confy <no-reply@confy.io>';
       body.to = email;
-      
+
       if (app.get('env') != 'test') {
         mail.messages().send(body, callback);
       } else return callback(null, {});

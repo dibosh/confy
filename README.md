@@ -19,8 +19,10 @@ $ git clone git://github.com/asm-products/confy && cd confy
 $ export MAILGUN_API_KEY="key-ivd0lsd91b1bvw31mw7"
 $ export MAILGUN_DOMAIN="sample.mailgun.org"
 
+# Setup development requirements and seed development database
 $ npm install && node test/setup.js
 
+# Start the application
 $ node app.js
 ```
 

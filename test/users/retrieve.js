@@ -11,12 +11,16 @@ module.exports = function (macro) {
         'should return the user': function (err, res, body) {
           assert.equal(body._id, 'users/jsmith');
           assert.equal(body.username, 'jsmith');
-          assert.equal(body.email, 'johnsmith@gmail.com');
+          assert.equal(body.email, 'john.smith@gmail.com');
           assert.equal(body.type, 'user');
-          assert.isFalse(body.verified);
+          assert.isTrue(body.verified);
         },
         'should not retun password': function (err, res, body) {
           assert.isUndefined(body.password);
+        },
+        'should not retun verification token': function (err, res, body) {
+          assert.isUndefined(body.verification_token);
+          assert.isUndefined(body.verify_new_email);
         }
       },
       'Retrieving non-existent user': {

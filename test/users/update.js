@@ -26,9 +26,17 @@ module.exports = function (macro) {
         'should not retun password': function (err, res, body) {
           assert.isUndefined(body.password);
         },
+        'should not retun verification token': function (err, res, body) {
+          assert.isUndefined(body.verification_token);
+          assert.isUndefined(body.verify_new_email);
+        },
         'should update user doc and it': macro.doc('users/jsmith', {
           'should have updated email': function (err, body) {
             assert.equal(body.email, 'john.smith@gmail.com');
+          },
+          'should have verification token': function (err, body) {
+            assert.equal(body.verification_token.length, 40);
+            assert.isTrue(body.verify_new_email);
           }
         })
       }

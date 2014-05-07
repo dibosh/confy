@@ -53,7 +53,16 @@ module.exports = function (macro) {
         'should not save other keys': function (err, res, body) {
           assert.isUndefined(body.random);
         },
-        'should create user doc and it': macro.doc('users/jsmith'),
+        'should not retun verification token': function (err, res, body) {
+          assert.isUndefined(body.verification_token);
+          assert.isUndefined(body.verify_new_email);
+        },
+        'should create user doc and it': macro.doc('users/jsmith', {
+          'should have verification token': function (err, body) {
+            assert.equal(body.verification_token.length, 40);
+            assert.isUndefined(body.verify_new_email);
+          }
+        }),
         'should create default org doc and it': macro.doc('orgs/jsmith', {
           'should be default for user': function (err, body) {
             assert.equal(body.name, 'jsmith');

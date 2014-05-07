@@ -65,8 +65,10 @@ vows.describe('confy').addBatch({
     }
   }
 }).addBatch(require('./users/create')(macro))
-.addBatch(require('./users/retrieve')(macro))
+.addBatch(require('./users/verify')(macro))
 .addBatch(require('./users/update')(macro))
+.addBatch(require('./users/verify')(macro))
+.addBatch(require('./users/retrieve')(macro))
 .addBatch(require('./orgs/create')(macro))
 .addBatch(require('./orgs/retrieve')(macro))
 .addBatch(require('./orgs/update')(macro))

@@ -1,0 +1,17 @@
+{
+  "id": "confy",
+  "api": {
+    "config_vars": [ "CONFY_URL" ],
+    "regions": [ "us" ],
+    "password": "thisisasampleherokuaddonpassword",
+    "sso_salt": "thisisasampleherokuaddonsso_salt",
+    "production": {
+      "base_url": "https://api.confy.io/heroku/resources",
+      "sso_url": "https://api.confy.io/sso/login"
+    },
+    "test": {
+      "base_url": "http://localhost:3000/heroku/resources",
+      "sso_url": "http://localhost:3000/sso/login"
+    }
+  }
+}

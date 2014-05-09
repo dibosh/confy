@@ -24,6 +24,7 @@ require('./utils/auth')(app, db);
 require('./utils/bulk')(app);
 require('./utils/hash')(app);
 require('./utils/mailer')(app);
+require('./utils/cors')(app);
 
 // Setup API
 require('./api/users')(app, db);

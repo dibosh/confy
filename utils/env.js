@@ -1,7 +1,7 @@
 module.exports = function (app) {
 
   app.set('env', process.env.NODE_ENV || 'development');
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', process.env.PORT || 5000);
 
   app.set('db', process.env.CLOUDANT_URL || 'http://localhost:5984');
   app.set('dbname', process.env.CLOUDANT_DBNAME || 'confy');

@@ -5,7 +5,7 @@ var request = require('request')
 module.exports = {
   get: function (path, auth, callback) {
     request({
-      url: 'http://localhost:3000' + path,
+      url: 'http://localhost:5000' + path,
       method: 'GET',
       auth: auth,
       json: true
@@ -13,7 +13,7 @@ module.exports = {
   },
   post: function (path, body, auth, callback) {
     request({
-      url: 'http://localhost:3000' + path,
+      url: 'http://localhost:5000' + path,
       method: 'POST',
       body: body,
       auth: auth,
@@ -22,7 +22,7 @@ module.exports = {
   },
   patch: function (path, body, auth, callback) {
     request({
-      url: 'http://localhost:3000' + path,
+      url: 'http://localhost:5000' + path,
       method: 'PATCH',
       body: body,
       auth: auth,
@@ -31,7 +31,7 @@ module.exports = {
   },
   delete: function (path, body, auth, callback) {
     request({
-      url: 'http://localhost:3000' + path,
+      url: 'http://localhost:5000' + path,
       method: 'DELETE',
       body: body,
       auth: auth,

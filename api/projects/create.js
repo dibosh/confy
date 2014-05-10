@@ -28,7 +28,7 @@ module.exports = function (app, db) {
       }
 
       req.body.type = 'project';
-      req.body.teams = {'all': true};
+      req.body.teams = {'owners': true};
       req.body.users = {};
       req.body.org = org;
       req.body._id = 'orgs/' + org + '/projects/' + project;
@@ -46,8 +46,8 @@ module.exports = function (app, db) {
         _id: env._id + '/config'
       };
 
-      // Get members from 'all' team
-      db.get('orgs/' + org + '/teams/all', function (err, body) {
+      // Get members from 'owners' team
+      db.get('orgs/' + org + '/teams/owners', function (err, body) {
         if (err) return next(err);
 
         Object.keys(body.users).forEach(function (user) {

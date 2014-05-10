@@ -28,7 +28,7 @@ module.exports = function (macro) {
           assert.isUndefined(body.random);
         },
         'should return teams array': function (err, res, body) {
-          assert.deepEqual(body.teams, ['all', 'engineering']);
+          assert.deepEqual(body.teams, ['owners', 'engineering']);
         },
         'should not reutn users': function (err, res, body) {
           assert.isUndefined(body.users);
@@ -47,14 +47,14 @@ module.exports = function (macro) {
       'Removing default team from project': {
         topic: function () {
           macro.delete('/orgs/firesize/projects/main/access', {
-            team: 'all'
+            team: 'owners'
           }, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(1),
         'should not update the project doc and it': macro.doc('orgs/firesize/projects/main', {
           'should have default team in teams list': function (err, body) {
-            assert.isTrue(body.teams['all']);
+            assert.isTrue(body.teams['owners']);
           }
         }),
         'should not update the org doc and it': macro.doc('orgs/firesize', {
@@ -78,7 +78,7 @@ module.exports = function (macro) {
           assert.equal(body.type, 'project');
         },
         'should return teams array': function (err, res, body) {
-          assert.deepEqual(body.teams, ['all']);
+          assert.deepEqual(body.teams, ['owners']);
         },
         'should not reutn users': function (err, res, body) {
           assert.isUndefined(body.users);

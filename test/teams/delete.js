@@ -14,7 +14,7 @@ module.exports = function (macro) {
       },
       'Deleting the default team': {
         topic: function () {
-          macro.delete('/orgs/confy/teams/all', {}, {user: 'pksunkara', pass: 'password'}, this.callback);
+          macro.delete('/orgs/confy/teams/owners', {}, {user: 'pksunkara', pass: 'password'}, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(1)

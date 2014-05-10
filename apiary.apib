@@ -203,7 +203,7 @@ Subscribe the organization to a plan. This can also be used when upgrading or do
 
 # Group Teams
 
-Every organization will have a default team named __All__. Owner of the organization will be a default member for every team.
+Every organization will have a default team named __Owners__. Owner of the organization will be a default member for every team.
 
 ## Teams [/orgs/{org}/teams]
 
@@ -375,28 +375,28 @@ List all the projects of the organization which can be seen by the authenticated
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Service to be used by bots",
-          "teams": ["all", "sideprojects"],
+          "teams": ["owners", "sideprojects"],
           "org": "bigcompany",
           "type": "project"
         }, {
           "_id": "orgs/bigcompany/projects/main",
           "name": "Main",
           "description": "Main product",
-          "teams": ["all", "engineering"],
+          "teams": ["owners", "engineering"],
           "org": "bigcompany",
           "type": "project"
         }, {
           "_id": "orgs/bigcompany/projects/blog",
           "name": "Blog",
           "description": "Company's blog",
-          "teams": ["all", "engineering"],
+          "teams": ["owners", "engineering"],
           "org": "bigcompany",
           "type": "project"
         }]
 
 ### Create a Project [POST]
 
-Create a project. _Authenticated user should own the organization_. Only the __all__ team will be able to see the project initially.
+Create a project. _Authenticated user should own the organization_. Only the __owners__ team will be able to see the project initially.
 
 + Request (application/json)
 
@@ -411,7 +411,7 @@ Create a project. _Authenticated user should own the organization_. Only the __a
           "_id": "orgs/bigcompany/projects/knowledgebase",
           "name": "KnowledgeBase",
           "description": "Wiki and FAQ for support",
-          "teams": ["all"],
+          "teams": ["owners"],
           "org": "bigcompany",
           "type": "project"
         }
@@ -433,7 +433,7 @@ Get a specific project in a specific organization. Works only if the authenticat
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Service to be used by bots",
-          "teams": ["all", "sideprojects"],
+          "teams": ["owners", "sideprojects"],
           "org": "bigcompany",
           "type": "project"
         }
@@ -454,7 +454,7 @@ Update a specific project. __Description__ is the only thing which can be update
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Url shortening as a service",
-          "teams": ["all", "sideprojects"],
+          "teams": ["owners", "sideprojects"],
           "org": "bigcompany",
           "type": "project"
         }
@@ -467,7 +467,7 @@ Delete the given project. Authenticated user should be the owner of the organiza
 
 ## Access [/orgs/{org}/projects/{project}/access]
 
-Default team __All__ will have access to every project. Authenticated user should be the owner of the organization for the below endpoints.
+Default team __Owners__ will have access to every project. Authenticated user should be the owner of the organization for the below endpoints.
 
 + Parameters
 
@@ -490,7 +490,7 @@ Give project access to the given teams. The __team__ in the request needs to be 
           "_id": "orgs/bigcompany/projects/knowledgebase",
           "name": "KnowledgeBase",
           "description": "Wiki and FAQ for support",
-          "teams": ["all", "engineering"],
+          "teams": ["owners", "engineering"],
           "org": "bigcompany",
           "type": "project"
         }
@@ -511,7 +511,7 @@ Remove project access for the given team. The __team__ in the request needs to b
           "_id": "orgs/bigcompany/projects/urlshortener",
           "name": "UrlShortener",
           "description": "Url shortening as a service",
-          "teams": ["all"],
+          "teams": ["owners"],
           "org": "bigcompany",
           "type": "project"
         }

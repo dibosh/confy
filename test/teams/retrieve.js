@@ -14,7 +14,7 @@ module.exports = function (macro) {
       },
       'Retrieving team with no access': {
         topic: function () {
-          macro.get('/orgs/confy/teams/all', {user: 'vanstee', pass: 'password'}, this.callback);
+          macro.get('/orgs/confy/teams/owners', {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {

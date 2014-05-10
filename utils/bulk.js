@@ -6,8 +6,8 @@ module.exports = function (app) {
     org.users[user.username] = 1;
 
     var team = {
-      _id: 'orgs/' + org.name.toLowerCase() + '/teams/all',
-      name: 'All', description: 'Has access to all projects',
+      _id: 'orgs/' + org.name.toLowerCase() + '/teams/owners',
+      name: 'Owners', description: 'Has access to all projects',
       org: org.name.toLowerCase(), type: 'team'
     };
 

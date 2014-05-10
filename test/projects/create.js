@@ -56,17 +56,17 @@ module.exports = function (macro) {
           assert.isUndefined(body.random);
         },
         'should have access for default team': function (err, res, body) {
-          assert.deepEqual(body.teams, ['all']);
+          assert.deepEqual(body.teams, ['owners']);
         },
         'should not return users': function (err, res, body) {
           assert.isUndefined(body.users);
         },
         'should create project doc and it': macro.doc('orgs/firesize/projects/main', {
-          'should have users from "all" team': function (err, body) {
+          'should have users from "owners" team': function (err, body) {
             assert.deepEqual(body.users, {jsmith: 1});
           },
           'should have access for default team': function (err, body) {
-            assert.deepEqual(body.teams, {all:true});
+            assert.deepEqual(body.teams, {owners:true});
           }
         }),
         'should create project environment doc and it': macro.doc('orgs/firesize/projects/main/envs/production')

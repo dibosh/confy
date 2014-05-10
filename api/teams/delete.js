@@ -6,7 +6,7 @@ module.exports = function (app, db) {
       , team = req.team.name.toLowerCase();
 
     // If team is the default team
-    if (team == 'all') {
+    if (team == 'owners') {
       return app.errors.validation(res, [{ field: 'team', code: 'forbidden' }])
     }
 

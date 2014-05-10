@@ -15,7 +15,7 @@ module.exports = function (macro) {
           assert.equal(body[0]._id, 'orgs/confy/projects/knowledgebase');
         },
         'should return teams array for projects': function (err, res, body) {
-          assert.deepEqual(body[0].teams, ['all', 'consultants']);
+          assert.deepEqual(body[0].teams, ['owners', 'consultants']);
         },
         'should not return users': function (err, res, body) {
           assert.isUndefined(body[0].users);

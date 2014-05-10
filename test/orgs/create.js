@@ -49,9 +49,9 @@ module.exports = function (macro) {
             assert.equal(body.plan, 'none');
           }
         }),
-        'should create default team doc and it': macro.doc('orgs/firesize/teams/all', {
+        'should create default team doc and it': macro.doc('orgs/firesize/teams/owners', {
           'should be default for org': function (err, body) {
-            assert.equal(body.name, 'All');
+            assert.equal(body.name, 'Owners');
             assert.equal(body.type, 'team');
             assert.equal(body.description, 'Has access to all projects');
           },

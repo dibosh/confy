@@ -34,7 +34,7 @@ module.exports = function (macro) {
           assert.equal(body.type, 'project');
         },
         'should return teams array': function (err, res, body) {
-          assert.deepEqual(body.teams, ['all', 'consultants']);
+          assert.deepEqual(body.teams, ['owners', 'consultants']);
         },
         'should not return users': function (err, res, body) {
           assert.isUndefined(body.users);
@@ -53,7 +53,7 @@ module.exports = function (macro) {
           assert.equal(body.type, 'project');
         },
         'should return teams array': function (err, res, body) {
-          assert.deepEqual(body.teams, ['all', 'consultants']);
+          assert.deepEqual(body.teams, ['owners', 'consultants']);
         },
         'should not return users': function (err, res, body) {
           assert.isUndefined(body.users);

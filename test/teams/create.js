@@ -31,7 +31,7 @@ module.exports = function (macro) {
       'Creating them with existing name': {
         topic: function () {
           macro.post('/orgs/firesize/teams', {
-            name: 'All', description: 'Developers'
+            name: 'Owners', description: 'Developers'
           }, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 422': macro.status(422),

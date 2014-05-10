@@ -78,9 +78,9 @@ module.exports = function (macro) {
             assert.deepEqual(body.users, {jsmith: 1});
           }
         }),
-        'should create default team doc and it': macro.doc('orgs/jsmith/teams/all', {
+        'should create default team doc and it': macro.doc('orgs/jsmith/teams/owners', {
           'should be default for org': function (err, body) {
-            assert.equal(body.name, 'All');
+            assert.equal(body.name, 'Owners');
             assert.equal(body.type, 'team');
             assert.equal(body.description, 'Has access to all projects');
           },

@@ -23,7 +23,7 @@ module.exports = function (macro) {
           assert.isUndefined(body.random);
         },
         'should return teams array': function (err, res, body) {
-          assert.deepEqual(body.teams, ['all']);
+          assert.deepEqual(body.teams, ['owners']);
         },
         'should not return users array': function (err, res, body) {
           assert.isUndefined(body.users);

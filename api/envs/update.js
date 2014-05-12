@@ -1,7 +1,7 @@
 module.exports = function (app, db) {
 
   // Update an environment
-  app.patch('/orgs/:org/projects/:project/envs/:env', app.auth.project, function (req, res, next) {
+  app.patch('/orgs/:orgname/projects/:project/envs/:env', app.auth.project, function (req, res, next) {
     app.utils.permit(req, ['description']);
     app.utils.merge(req.env, req.body);
 

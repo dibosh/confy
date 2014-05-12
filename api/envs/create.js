@@ -1,7 +1,7 @@
 module.exports = function (app, db) {
 
   // Create an environment
-  app.post('/orgs/:org/projects/:project/envs', app.auth.project, function (req, res, next) {
+  app.post('/orgs/:orgname/projects/:project/envs', app.auth.project, function (req, res, next) {
     app.utils.permit(req, ['name', 'description']);
 
     // Check for required params

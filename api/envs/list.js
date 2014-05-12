@@ -1,7 +1,7 @@
 module.exports = function (app, db) {
 
   // List all environments of a project
-  app.get('/orgs/:org/projects/:project/envs', app.auth.project, function (req, res, next) {
+  app.get('/orgs/:orgname/projects/:project/envs', app.auth.project, function (req, res, next) {
     db.view('envs', 'project', {keys: [req.org.name.toLowerCase() + '/' + req.project.name.toLowerCase()]}, function (err, body) {
       if (err) return next(err);
 

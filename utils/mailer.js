@@ -28,4 +28,8 @@ module.exports = function (app) {
     };
   });
 
+  app.mail.dummy = function (email, obj, callback) {
+    return callback(null, {});
+  };
+
 };

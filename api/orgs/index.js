@@ -16,6 +16,12 @@ module.exports = function (app, db) {
     });
   });
 
+  // Org param when no db access needed
+  app.param('orgname', function (req, res, next, orgname) {
+    req.org = { name: orgname };
+    return next();
+  });
+
   require('./list')(app, db);
   require('./create')(app, db);
 

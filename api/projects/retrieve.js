@@ -1,7 +1,7 @@
 module.exports = function (app, db) {
 
   // Retrieve a project
-  app.get('/orgs/:org/projects/:project', app.auth.user, function (req, res, next) {
+  app.get('/orgs/:orgname/projects/:project', app.auth.user, function (req, res, next) {
     if (req.project.users[req.user.username] === undefined) {
       return app.errors.notfound(res);
     }

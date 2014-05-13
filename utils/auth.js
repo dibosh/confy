@@ -65,4 +65,16 @@ module.exports = function (app, db) {
       return next();
     });
   }
+
+  app.auth.heroku = function (req, res, next) {
+    app.auth.user(req, res, function (err) {
+      if (err) return next(err);
+
+      if (req.user.username != 'confy') {
+        return app.errors.auth(res);
+      }
+
+      return next();
+    });
+  }
 };

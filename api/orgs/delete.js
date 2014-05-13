@@ -1,25 +1,19 @@
 module.exports = function (app, db) {
 
-  // Delete an org
-  app.delete('/orgs/:org', app.auth.owner, function (req, res, next) {
-    var org = req.org.name.toLowerCase();
-
-    // If team is the default team
-    if (org == req.user.username) {
-      return app.errors.validation(res, [{ field: 'org', code: 'forbidden' }])
-    }
+  app.utils.deleteOrg = function (docs, org, next) {
+    var orgname = org.name.toLowerCase();
 
     // Delete projects
-    db.view('projects', 'org', {keys:[org]}, function (err, body) {
+    db.view('projects', 'org', {keys:[orgname]}, function (err, body) {
       if (err) return next(err);
 
-      var docs = body.rows.map(function (row) {
+      body.rows.map(function (row) {
         row.value._deleted = true;
-        return row.value;
+        docs.push(row.value);
       });
 
       // Delete teams
-      db.view('teams', 'org', {keys:[org]}, function (err, body) {
+      db.view('teams', 'org', {keys:[orgname]}, function (err, body) {
         if (err) return next(err);
 
         body.rows.forEach(function (row) {
@@ -28,7 +22,7 @@ module.exports = function (app, db) {
         });
 
         // Delete environments
-        db.view('envs', 'org', {keys:[org]}, function (err, body) {
+        db.view('envs', 'org', {keys:[orgname]}, function (err, body) {
           if (err) return next(err);
 
           body.rows.forEach(function (row) {
@@ -37,17 +31,29 @@ module.exports = function (app, db) {
           });
 
           // Update data
-          req.org._deleted = true;
+          org._deleted = true;
 
-          docs.push(req.org);
+          docs.push(org);
 
           db.bulk({docs: docs}, {all_or_nothing: true}, function (err, body) {
-            if (err) return next(err);
-
-            res.send(204);
+            return next(err);
           });
         });
       });
+    });
+  }
+
+  // Delete an org
+  app.delete('/orgs/:org', app.auth.owner, function (req, res, next) {
+    // If team is the default team
+    if (req.org.name.toLowerCase() == req.user.username) {
+      return app.errors.validation(res, [{ field: 'org', code: 'forbidden' }])
+    }
+
+    app.utils.deleteOrg([], req.org, function (err) {
+      if (err) return next(err);
+
+      res.send(204);
     });
   });
 };

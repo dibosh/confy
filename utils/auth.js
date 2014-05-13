@@ -71,14 +71,14 @@ module.exports = function (app, db) {
   }
 
   app.auth.heroku = function (req, res, next) {
-    app.auth.user(req, res, function (err) {
-      if (err) return next(err);
+    var auth = authBasic(req);
 
-      if (req.user.username != 'confy') {
-        return app.errors.auth(res);
-      }
+    if (auth === null || auth.username != 'confy') {
+      return app.errors.auth(res);
+    }
 
+    if (auth.password == app.get('addonkey')) {
       return next();
-    });
+    }
   }
 };

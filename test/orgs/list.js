@@ -16,7 +16,7 @@ module.exports = function (macro) {
           assert.equal(body[1].owner, 'vanstee');
         },
         'should return orgs with user as member': function (err, res, body) {
-          assert.equal(body[0]._id, 'orgs/confy');
+          assert.equal(body[0]._id, 'orgs/confyio');
           assert.equal(body[0].owner, 'pksunkara');
         },
         'should not return users field for orgs': function (err, res, body) {

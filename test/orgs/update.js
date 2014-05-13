@@ -34,7 +34,7 @@ module.exports = function (macro) {
       },
       'Updating org with member': {
         topic: function () {
-          macro.patch('/orgs/confy', {
+          macro.patch('/orgs/confyio', {
             email: 'no-reply@confy.io',
           }, {user: 'vanstee', pass: 'password'}, this.callback);
         },
@@ -42,7 +42,7 @@ module.exports = function (macro) {
         'should return bad credentials': function (err, res, body) {
           assert.deepEqual(body, {message: 'Bad credentials'});
         },
-        'should not update org doc and it': macro.doc('orgs/confy', {
+        'should not update org doc and it': macro.doc('orgs/confyio', {
           'should have old email': function (err, body) {
             assert.equal(body.email, 'admin@confy.io');
           }

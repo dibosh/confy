@@ -5,7 +5,7 @@ module.exports = function (macro) {
     'Environments': {
       'Deleting non-existent envrionment': {
         topic: function () {
-          macro.delete('/orgs/confy/projects/main/envs/stuff', {}, {user: 'pksunkara', pass: 'password'}, this.callback);
+          macro.delete('/orgs/confyio/projects/main/envs/stuff', {}, {user: 'pksunkara', pass: 'password'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {
@@ -14,11 +14,11 @@ module.exports = function (macro) {
       },
       'Deleting the default envrionment': {
         topic: function () {
-          macro.delete('/orgs/confy/projects/main/envs/production', {}, {user: 'pksunkara', pass: 'password'}, this.callback);
+          macro.delete('/orgs/confyio/projects/main/envs/production', {}, {user: 'pksunkara', pass: 'password'}, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(1),
-        'should not delete envrionment doc': macro.doc('orgs/confy/projects/main/envs/production')
+        'should not delete envrionment doc': macro.doc('orgs/confyio/projects/main/envs/production')
       },
       'Deleting envrionment with member': {
         topic: function () {
@@ -32,13 +32,13 @@ module.exports = function (macro) {
       },
       'Deleting envrionment with no access': {
         topic: function () {
-          macro.delete('/orgs/confy/projects/knowledgebase/envs/production', {}, {user: 'jsmith', pass: 'secret'}, this.callback);
+          macro.delete('/orgs/confyio/projects/knowledgebase/envs/production', {}, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {
           assert.deepEqual(body, {message: 'Not found'});
         },
-        'should not delete envrionment doc and it': macro.doc('orgs/confy/projects/knowledgebase/envs/production')
+        'should not delete envrionment doc and it': macro.doc('orgs/confyio/projects/knowledgebase/envs/production')
       }
     }
   };

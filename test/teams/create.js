@@ -5,7 +5,7 @@ module.exports = function (macro) {
     'Teams': {
       'Creating them using non-member': {
         topic: function () {
-          macro.post('/orgs/confy/teams', {}, {user:'jsmith', pass:'secret'}, this.callback);
+          macro.post('/orgs/confyio/teams', {}, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {
@@ -14,7 +14,7 @@ module.exports = function (macro) {
       },
       'Creating them using member': {
         topic: function () {
-          macro.post('/orgs/confy/teams', {}, {user:'vanstee', pass:'password'}, this.callback);
+          macro.post('/orgs/confyio/teams', {}, {user:'vanstee', pass:'password'}, this.callback);
         },
         'should return 401': macro.status(401),
         'should return bad credentials': function (err, res, body) {
@@ -41,7 +41,7 @@ module.exports = function (macro) {
         topic: function () {
           macro.post('/orgs/firesize/teams', {
             name: 'Dev', description: 'Developers',
-            random: '1e3', org: 'confy'
+            random: '1e3', org: 'confyio'
           }, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 201': macro.status(201),

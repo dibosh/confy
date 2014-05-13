@@ -14,7 +14,7 @@ module.exports = function (macro) {
       },
       'Retrieving project with no access': {
         topic: function () {
-          macro.get('/orgs/confy/projects/main', {user: 'vanstee', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/main', {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {
@@ -23,14 +23,14 @@ module.exports = function (macro) {
       },
       'Retrieving project with member': {
         topic: function () {
-          macro.get('/orgs/confy/projects/knowledgebase', {user: 'vanstee', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/knowledgebase', {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return the project': function (err, res, body) {
-          assert.equal(body._id, 'orgs/confy/projects/knowledgebase');
+          assert.equal(body._id, 'orgs/confyio/projects/knowledgebase');
           assert.equal(body.name, 'KnowledgeBase');
           assert.equal(body.description, 'Wiki & FAQ support');
-          assert.equal(body.org, 'confy');
+          assert.equal(body.org, 'confyio');
           assert.equal(body.type, 'project');
         },
         'should return teams array': function (err, res, body) {
@@ -42,14 +42,14 @@ module.exports = function (macro) {
       },
       'Retrieving project with owner': {
         topic: function () {
-          macro.get('/orgs/confy/projects/knowledgebase', {user: 'pksunkara', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/knowledgebase', {user: 'pksunkara', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return the project': function (err, res, body) {
-          assert.equal(body._id, 'orgs/confy/projects/knowledgebase');
+          assert.equal(body._id, 'orgs/confyio/projects/knowledgebase');
           assert.equal(body.name, 'KnowledgeBase');
           assert.equal(body.description, 'Wiki & FAQ support');
-          assert.equal(body.org, 'confy');
+          assert.equal(body.org, 'confyio');
           assert.equal(body.type, 'project');
         },
         'should return teams array': function (err, res, body) {

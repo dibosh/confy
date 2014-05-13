@@ -5,7 +5,7 @@ module.exports = function (macro) {
     'Environments': {
       'Listing non-existent project': {
         topic: function () {
-          macro.get('/orgs/confy/projects/eng/envs', {user: 'pksunkara', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/eng/envs', {user: 'pksunkara', pass: 'password'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {
@@ -14,7 +14,7 @@ module.exports = function (macro) {
       },
       'Listing environment with no access': {
         topic: function () {
-          macro.get('/orgs/confy/projects/main/envs', {user: 'vanstee', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/main/envs', {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {
@@ -23,14 +23,14 @@ module.exports = function (macro) {
       },
       'Listing them with member': {
         topic: function () {
-          macro.get('/orgs/confy/projects/knowledgebase/envs', {user:'vanstee', pass:'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/knowledgebase/envs', {user:'vanstee', pass:'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return array of environments': function (err, res, body) {
           assert.lengthOf(body, 1);
         },
         'should return environments of the project': function (err, res, body) {
-          assert.equal(body[0]._id, 'orgs/confy/projects/knowledgebase/envs/production');
+          assert.equal(body[0]._id, 'orgs/confyio/projects/knowledgebase/envs/production');
         },
         'should not return config': function (err, res, body) {
           assert.isUndefined(body[0].config);

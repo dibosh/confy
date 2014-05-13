@@ -5,14 +5,14 @@ module.exports = function (macro) {
     'Teams': {
       'Listing them': {
         topic: function () {
-          macro.get('/orgs/confy/teams', {user:'vanstee', pass:'password'}, this.callback);
+          macro.get('/orgs/confyio/teams', {user:'vanstee', pass:'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return array of teams': function (err, res, body) {
           assert.lengthOf(body, 1);
         },
         'should return teams with user as member': function (err, res, body) {
-          assert.equal(body[0]._id, 'orgs/confy/teams/consultants');
+          assert.equal(body[0]._id, 'orgs/confyio/teams/consultants');
         },
         'should return users array for teams': function (err, res, body) {
           assert.deepEqual(body[0].users, ['pksunkara','whatupdave','vanstee']);

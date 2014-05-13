@@ -5,7 +5,7 @@ module.exports = function (macro) {
     'Environments': {
       'Creating them using non-member': {
         topic: function () {
-          macro.post('/orgs/confy/projects/main/envs', {}, {user:'jsmith', pass:'secret'}, this.callback);
+          macro.post('/orgs/confyio/projects/main/envs', {}, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {
@@ -14,14 +14,14 @@ module.exports = function (macro) {
       },
       'Creating them with missing params by member': {
         topic: function () {
-          macro.post('/orgs/confy/projects/knowledgebase/envs', {}, {user:'vanstee', pass:'password'}, this.callback);
+          macro.post('/orgs/confyio/projects/knowledgebase/envs', {}, {user:'vanstee', pass:'password'}, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(3)
       },
       'Creating them with existing name': {
         topic: function () {
-          macro.post('/orgs/confy/projects/main/envs', {
+          macro.post('/orgs/confyio/projects/main/envs', {
             name: 'Production', description: 'Production'
           }, {user:'pksunkara', pass:'password'}, this.callback);
         },

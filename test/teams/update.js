@@ -33,7 +33,7 @@ module.exports = function (macro) {
       },
       'Updating team with member': {
         topic: function () {
-          macro.patch('/orgs/confy/teams/consultants', {
+          macro.patch('/orgs/confyio/teams/consultants', {
             description: 'Only consultants man!',
           }, {user: 'vanstee', pass: 'password'}, this.callback);
         },
@@ -41,7 +41,7 @@ module.exports = function (macro) {
         'should return bad credentials': function (err, res, body) {
           assert.deepEqual(body, {message: 'Bad credentials'});
         },
-        'should not update team doc and it': macro.doc('orgs/confy/teams/consultants', {
+        'should not update team doc and it': macro.doc('orgs/confyio/teams/consultants', {
           'should have old description': function (err, body) {
             assert.equal(body.description, 'Consultants will have restricted access to the projects');
           }
@@ -49,7 +49,7 @@ module.exports = function (macro) {
       },
       'Updating team with no access': {
         topic: function () {
-          macro.patch('/orgs/confy/teams/consultants', {
+          macro.patch('/orgs/confyio/teams/consultants', {
             description: 'Only consultants man!',
           }, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
@@ -57,7 +57,7 @@ module.exports = function (macro) {
         'should return not found': function (err, res, body) {
           assert.deepEqual(body, {message: 'Not found'});
         },
-        'should not update team doc and it': macro.doc('orgs/confy/teams/consultants', {
+        'should not update team doc and it': macro.doc('orgs/confyio/teams/consultants', {
           'should have old description': function (err, body) {
             assert.equal(body.description, 'Consultants will have restricted access to the projects');
           }

@@ -12,16 +12,16 @@ module.exports = function (macro) {
       },
       'Removing team from project': {
         topic: function () {
-          macro.delete('/orgs/confy/projects/main/access', {
+          macro.delete('/orgs/confyio/projects/main/access', {
             team: 'consultants', random: 'u2e83'
           }, {user: 'pksunkara', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return the project doc': function (err, res, body) {
-          assert.equal(body._id, 'orgs/confy/projects/main');
+          assert.equal(body._id, 'orgs/confyio/projects/main');
           assert.equal(body.name, 'Main');
           assert.equal(body.description, 'Main app');
-          assert.equal(body.org, 'confy');
+          assert.equal(body.org, 'confyio');
           assert.equal(body.type, 'project');
         },
         'should not return random fields': function (err, res, body) {
@@ -33,7 +33,7 @@ module.exports = function (macro) {
         'should not reutn users': function (err, res, body) {
           assert.isUndefined(body.users);
         },
-        'should update the project doc and it': macro.doc('orgs/confy/projects/main', {
+        'should update the project doc and it': macro.doc('orgs/confyio/projects/main', {
           'should not have team in teams list': function (err, body) {
             assert.isUndefined(body.teams['consultants']);
           },
@@ -91,7 +91,7 @@ module.exports = function (macro) {
       },
       'Removing team from project with member': {
         topic: function () {
-          macro.delete('/orgs/confy/projects/knowledgebase/access', {
+          macro.delete('/orgs/confyio/projects/knowledgebase/access', {
             team: 'consultants',
           }, {user: 'vanstee', pass: 'password'}, this.callback);
         },
@@ -99,7 +99,7 @@ module.exports = function (macro) {
         'should return bad credentials': function (err, res, body) {
           assert.deepEqual(body, {message: 'Bad credentials'});
         },
-        'should not update project doc and it': macro.doc('orgs/confy/projects/knowledgebase', {
+        'should not update project doc and it': macro.doc('orgs/confyio/projects/knowledgebase', {
           'should have old teams': function (err, body) {
             assert.lengthOf(Object.keys(body.teams), 2);
           }
@@ -107,7 +107,7 @@ module.exports = function (macro) {
       },
       'Removing team from project with no access': {
         topic: function () {
-          macro.delete('/orgs/confy/projects/knowledgebase/access', {
+          macro.delete('/orgs/confyio/projects/knowledgebase/access', {
             team: 'consultants',
           }, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
@@ -115,7 +115,7 @@ module.exports = function (macro) {
         'should return not found': function (err, res, body) {
           assert.deepEqual(body, {message: 'Not found'});
         },
-        'should not update project doc and it': macro.doc('orgs/confy/projects/knowledgebase', {
+        'should not update project doc and it': macro.doc('orgs/confyio/projects/knowledgebase', {
           'should have old teams': function (err, body) {
             assert.lengthOf(Object.keys(body.teams), 2);
           }

@@ -14,7 +14,7 @@ module.exports = function (macro) {
       },
       'Retrieving team with no access': {
         topic: function () {
-          macro.get('/orgs/confy/teams/owners', {user: 'vanstee', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio/teams/owners', {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {
@@ -23,14 +23,14 @@ module.exports = function (macro) {
       },
       'Retrieving team with member': {
         topic: function () {
-          macro.get('/orgs/confy/teams/consultants', {user: 'vanstee', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio/teams/consultants', {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return the team': function (err, res, body) {
-          assert.equal(body._id, 'orgs/confy/teams/consultants');
+          assert.equal(body._id, 'orgs/confyio/teams/consultants');
           assert.equal(body.name, 'Consultants');
           assert.equal(body.description, 'Consultants will have restricted access to the projects');
-          assert.equal(body.org, 'confy');
+          assert.equal(body.org, 'confyio');
           assert.equal(body.type, 'team');
         },
         'should return users array': function (err, res, body) {
@@ -39,14 +39,14 @@ module.exports = function (macro) {
       },
       'Retrieving team with owner': {
         topic: function () {
-          macro.get('/orgs/confy/teams/consultants', {user: 'pksunkara', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio/teams/consultants', {user: 'pksunkara', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return the team': function (err, res, body) {
-          assert.equal(body._id, 'orgs/confy/teams/consultants');
+          assert.equal(body._id, 'orgs/confyio/teams/consultants');
           assert.equal(body.name, 'Consultants');
           assert.equal(body.description, 'Consultants will have restricted access to the projects');
-          assert.equal(body.org, 'confy');
+          assert.equal(body.org, 'confyio');
           assert.equal(body.type, 'team');
         },
         'should return users array': function (err, res, body) {

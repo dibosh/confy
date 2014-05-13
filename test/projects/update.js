@@ -36,7 +36,7 @@ module.exports = function (macro) {
       },
       'Updating project with member': {
         topic: function () {
-          macro.patch('/orgs/confy/projects/knowledgebase', {
+          macro.patch('/orgs/confyio/projects/knowledgebase', {
             description: 'Seriously!',
           }, {user: 'vanstee', pass: 'password'}, this.callback);
         },
@@ -44,7 +44,7 @@ module.exports = function (macro) {
         'should return bad credentials': function (err, res, body) {
           assert.deepEqual(body, {message: 'Bad credentials'});
         },
-        'should not update project doc and it': macro.doc('orgs/confy/projects/knowledgebase', {
+        'should not update project doc and it': macro.doc('orgs/confyio/projects/knowledgebase', {
           'should have old description': function (err, body) {
             assert.equal(body.description, 'Wiki & FAQ support');
           }
@@ -52,7 +52,7 @@ module.exports = function (macro) {
       },
       'Updating project with no access': {
         topic: function () {
-          macro.patch('/orgs/confy/projects/knowledgebase', {
+          macro.patch('/orgs/confyio/projects/knowledgebase', {
             description: 'Seriously!',
           }, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
@@ -60,7 +60,7 @@ module.exports = function (macro) {
         'should return not found': function (err, res, body) {
           assert.deepEqual(body, {message: 'Not found'});
         },
-        'should not update project doc and it': macro.doc('orgs/confy/projects/knowledgebase', {
+        'should not update project doc and it': macro.doc('orgs/confyio/projects/knowledgebase', {
           'should have old description': function (err, body) {
             assert.equal(body.description, 'Wiki & FAQ support');
           }

@@ -26,7 +26,7 @@ nano.db.get(dbname, function (err) {
   }
 
   nano.db.destroy(dbname, function (err) {
-    if (err) return console.log("Error creating database");
+    if (err) return console.log("Error destroying database");
     return creating();
   });
 });

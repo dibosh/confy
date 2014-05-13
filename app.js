@@ -33,6 +33,9 @@ require('./api/teams')(app, db);
 require('./api/projects')(app, db);
 require('./api/envs')(app, db);
 
+// Heroku addon
+require('./api/heroku')(app, db);
+
 // Error handling
 require('./utils/error')(app);
 

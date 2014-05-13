@@ -1,25 +1,35 @@
 var bcrypt = require('bcrypt');
 
+var authBasic = function (req) {
+  if (req.headers.authorization === undefined) {
+    return null;
+  }
+
+  var auth = req.headers.authorization.substr(6);
+  auth = new Buffer(auth, 'base64').toString();
+
+  return {
+    username: auth.substr(0, auth.indexOf(':')),
+    password: auth.substr(auth.indexOf(':') + 1)
+  };
+}
+
 module.exports = function (app, db) {
   app.auth = {};
 
   app.auth.user = function (req, res, next) {
-    if (req.headers.authorization === undefined) {
+    var auth = authBasic(req);
+
+    if (auth === null) {
       return app.errors.auth(res);
     }
 
-    var auth = req.headers.authorization.substr(6);
-    auth = new Buffer(auth, 'base64').toString();
-
-    var username = auth.substr(0, auth.indexOf(':'));
-    var password = auth.substr(auth.indexOf(':') + 1);
-
-    db.get('users/' + username, function (err, body) {
+    db.get('users/' + auth.username, function (err, body) {
       if (err && err.reason != 'missing') {
         return next(err);
       }
 
-      if (body && bcrypt.compareSync(password, body.password) && body.verified) {
+      if (body && bcrypt.compareSync(auth.password, body.password) && body.verified) {
         req.user = body;
         return next();
       }

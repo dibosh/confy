@@ -21,16 +21,16 @@ module.exports = function (macro) {
       },
       'Adding member to team': {
         topic: function () {
-          macro.post('/orgs/confy/teams/engineering/member', {
+          macro.post('/orgs/confyio/teams/engineering/member', {
             user: 'zdenek', random: 'u2e83'
           }, {user: 'pksunkara', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return the team doc': function (err, res, body) {
-          assert.equal(body._id, 'orgs/confy/teams/engineering');
+          assert.equal(body._id, 'orgs/confyio/teams/engineering');
           assert.equal(body.name, 'Engineering');
           assert.equal(body.description, 'Engineers in the company');
-          assert.equal(body.org, 'confy');
+          assert.equal(body.org, 'confyio');
           assert.equal(body.type, 'team');
         },
         'should not return random fields': function (err, res, body) {
@@ -39,17 +39,17 @@ module.exports = function (macro) {
         'should return users array': function (err, res, body) {
           assert.deepEqual(body.users, ['pksunkara', 'zdenek']);
         },
-        'should update the team doc and it': macro.doc('orgs/confy/teams/engineering', {
+        'should update the team doc and it': macro.doc('orgs/confyio/teams/engineering', {
           'should have new user in users list': function (err, body) {
             assert.isTrue(body.users['zdenek']);
           }
         }),
-        'should update the org doc and it': macro.doc('orgs/confy', {
+        'should update the org doc and it': macro.doc('orgs/confyio', {
           'should increment the count for the user': function (err, body) {
             assert.equal(body.users['zdenek'], 1);
           }
         }),
-        'should update the project doc and it': macro.doc('orgs/confy/projects/main', {
+        'should update the project doc and it': macro.doc('orgs/confyio/projects/main', {
           'should increment the count for the user': function (err, body) {
             assert.equal(body.users['zdenek'], 1);
           }
@@ -77,7 +77,7 @@ module.exports = function (macro) {
       },
       'Adding member to team with member': {
         topic: function () {
-          macro.post('/orgs/confy/teams/consultants/member', {
+          macro.post('/orgs/confyio/teams/consultants/member', {
             user: 'zdenek',
           }, {user: 'vanstee', pass: 'password'}, this.callback);
         },
@@ -85,7 +85,7 @@ module.exports = function (macro) {
         'should return bad credentials': function (err, res, body) {
           assert.deepEqual(body, {message: 'Bad credentials'});
         },
-        'should not update team doc and it': macro.doc('orgs/confy/teams/consultants', {
+        'should not update team doc and it': macro.doc('orgs/confyio/teams/consultants', {
           'should have old users': function (err, body) {
             assert.lengthOf(Object.keys(body.users), 3);
           }
@@ -93,7 +93,7 @@ module.exports = function (macro) {
       },
       'Adding member to team with no access': {
         topic: function () {
-          macro.post('/orgs/confy/teams/consultants/member', {
+          macro.post('/orgs/confyio/teams/consultants/member', {
             user: 'zdenek',
           }, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
@@ -101,7 +101,7 @@ module.exports = function (macro) {
         'should return not found': function (err, res, body) {
           assert.deepEqual(body, {message: 'Not found'});
         },
-        'should not update team doc and it': macro.doc('orgs/confy/teams/consultants', {
+        'should not update team doc and it': macro.doc('orgs/confyio/teams/consultants', {
           'should have old users': function (err, body) {
             assert.lengthOf(Object.keys(body.users), 3);
           }

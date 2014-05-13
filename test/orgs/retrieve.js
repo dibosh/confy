@@ -14,7 +14,7 @@ module.exports = function (macro) {
       },
       'Retrieving org with no access': {
         topic: function () {
-          macro.get('/orgs/confy', {user: 'jsmith', pass: 'secret'}, this.callback);
+          macro.get('/orgs/confyio', {user: 'jsmith', pass: 'secret'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {
@@ -40,12 +40,12 @@ module.exports = function (macro) {
       },
       'Retrieving org with member': {
         topic: function () {
-          macro.get('/orgs/confy', {user: 'vanstee', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio', {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return the org': function (err, res, body) {
-          assert.equal(body._id, 'orgs/confy');
-          assert.equal(body.name, 'Confy');
+          assert.equal(body._id, 'orgs/confyio');
+          assert.equal(body.name, 'Confyio');
           assert.equal(body.email, 'admin@confy.io');
           assert.equal(body.owner, 'pksunkara');
           assert.equal(body.type, 'org');

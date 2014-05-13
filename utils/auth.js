@@ -29,7 +29,11 @@ module.exports = function (app, db) {
         return next(err);
       }
 
-      if (body && bcrypt.compareSync(auth.password, body.password) && body.verified) {
+      if (body && !body.verified) {
+        return app.errors.unverified(res);
+      }
+
+      if (body && bcrypt.compareSync(auth.password, body.password)) {
         req.user = body;
         return next();
       }

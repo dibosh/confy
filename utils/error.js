@@ -32,6 +32,12 @@ module.exports = function (app) {
     res.json({ message: 'Validation failed', errors: errs });
   }
 
+  // Unverified error
+  app.errors.unverified = function (res) {
+    res.status(401);
+    res.json({ message: 'Unverified email' });
+  }
+
   // Authentication error
   app.errors.auth = function (res) {
     res.status(401);

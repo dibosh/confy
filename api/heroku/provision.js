@@ -10,7 +10,10 @@ module.exports = function (app, db) {
     var appid = req.body.heroku_id.substr(0, req.body.heroku_id.indexOf('@'))
       , password = crypto.randomBytes(10).toString('hex');
 
-    var user = { username: appid, email: req.body.heroku_id, password: password };
+    var user = {
+      username: appid, email: req.body.heroku_id,
+      password: password, verified: true
+    };
 
     // Insert documents
     db.bulk(app.bulk.heroku(user), {all_or_nothing: true, new_edits: false}, function (err, body) {

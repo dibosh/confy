@@ -6,6 +6,8 @@ module.exports = function (app) {
   app.set('db', process.env.CLOUDANT_URL || 'http://localhost:5984');
   app.set('dbname', process.env.CLOUDANT_DBNAME || 'confy');
 
+  app.set('ssl', process.env.SSL || false);
+
   app.set('baseurl', process.env.BASE_URL || 'http://localhost:' + app.get('port'));
   app.set('weburl', process.env.WEB_URL || 'http://localhost:8000');
 

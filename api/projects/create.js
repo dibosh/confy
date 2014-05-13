@@ -16,38 +16,18 @@ module.exports = function (app, db) {
       return app.errors.validation(res, errs);
     }
 
-    var org = req.org.name.toLowerCase()
-      , project = name.toLowerCase();
-
     // Search for existing project name
-    db.view('projects', 'name', {keys: [org + '/' + project]}, function (err, body) {
+    db.view('projects', 'name', {keys: [req.org.name.toLowerCase() + '/' + name.toLowerCase()]}, function (err, body) {
       if (err) return next(err);
 
       if (body.rows.length > 0) {
         return app.errors.validation(res, [{ field: 'name', code: 'already_exists' }]);
       }
 
-      req.body.type = 'project';
-      req.body.teams = {'owners': true};
       req.body.users = {};
-      req.body.org = org;
-      req.body._id = 'orgs/' + org + '/projects/' + project;
-
-      var env = {
-        _id: req.body._id + '/envs/production',
-        name: 'Production',
-        description: 'Production environment',
-        project: project,
-        org: org,
-        type: 'env'
-      };
-
-      var env_config = {
-        _id: env._id + '/config'
-      };
 
       // Get members from 'owners' team
-      db.get('orgs/' + org + '/teams/owners', function (err, body) {
+      db.get(req.org._id + '/teams/owners', function (err, body) {
         if (err) return next(err);
 
         Object.keys(body.users).forEach(function (user) {
@@ -55,7 +35,7 @@ module.exports = function (app, db) {
         });
 
         // Insert project
-        db.bulk({docs: [req.body, env, env_config]}, {all_or_nothing: true}, function (err, body) {
+        db.bulk(app.bulk.project(req.body, req.org), {all_or_nothing: true}, function (err, body) {
           if (err) return next(err);
 
           req.body.teams = Object.keys(req.body.teams);

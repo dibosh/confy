@@ -16,20 +16,13 @@ module.exports = function (app, db) {
       return app.errors.validation(res, errs);
     }
 
-    var lowerName = name.toLowerCase();
-
     // Search for existing orgname
-    db.view('orgs', 'name', {keys: [lowerName]}, function (err, body) {
+    db.view('orgs', 'name', {keys: [name.toLowerCase()]}, function (err, body) {
       if (err) return next(err);
 
       if (body.rows.length > 0) {
         return app.errors.validation(res, [{ field: 'name', code: 'already_exists' }]);
       }
-
-      req.body.type = 'org';
-      req.body.plan = 'none';
-      req.body.owner = req.user.username;
-      req.body._id = 'orgs/' + lowerName;
 
       // Insert org
       db.bulk(app.bulk.org(req.body, req.user), { all_or_nothing: true }, function (err, body) {

@@ -1,9 +1,4 @@
-var bcrypt = require('bcrypt');
 var crypto = require('crypto');
-
-var cryptPass = function (password) {
-  return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-};
 
 module.exports = function (app, db) {
 
@@ -43,10 +38,7 @@ module.exports = function (app, db) {
           return app.errors.validation(res, [{ field: 'username', code: 'already_exists' }]);
         }
 
-        // Encrypt password
-        req.body.password = cryptPass(req.body.password);
-        req.body.type = 'user';
-        req.body._id = 'users/' + req.body.username;
+        // Encrypting password is done when inserting the document
 
         req.body.verified = false;
         req.body.verification_token = crypto.randomBytes(20).toString('hex');

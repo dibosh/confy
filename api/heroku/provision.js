@@ -13,7 +13,7 @@ module.exports = function (app, db) {
     var user = { username: appid, email: req.body.heroku_id, password: password };
 
     // Insert documents
-    db.bulk(app.bulk.heroku(user), { all_or_nothing: true }, function (err, body) {
+    db.bulk(app.bulk.heroku(user), {all_or_nothing: true, new_edits: false}, function (err, body) {
       if (err) return next(err);
 
       var host = app.get('baseurl');

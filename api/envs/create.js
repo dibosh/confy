@@ -35,7 +35,7 @@ module.exports = function (app, db) {
       req.body.config = {};
 
       // Insert project
-      db.bulk({docs: [req.body]}, {all_or_nothing: true}, function (err, body) {
+      db.bulk({docs: [req.body]}, {all_or_nothing: true, new_edits: false}, function (err, body) {
         if (err) return next(err);
 
         res.status(201);

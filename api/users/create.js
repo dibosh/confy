@@ -44,7 +44,7 @@ module.exports = function (app, db) {
         req.body.verification_token = crypto.randomBytes(20).toString('hex');
 
         // Insert user
-        db.bulk(app.bulk.user(req.body), { all_or_nothing: true }, function (err, body) {
+        db.bulk(app.bulk.user(req.body), {all_or_nothing: true, new_edits: false}, function (err, body) {
           if (err) return next(err);
 
           app.mail.verification(req.body.email, req.body, function (err, data) {

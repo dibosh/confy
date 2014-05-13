@@ -25,10 +25,11 @@ module.exports = function (app, db) {
       }
 
       // Insert org
-      db.bulk(app.bulk.org(req.body, req.user), {all_or_nothing: true, new_edits: false}, function (err, body) {
+      db.bulk(app.bulk.org(req.body, req.user), {all_or_nothing: true}, function (err, body) {
         if (err) return next(err);
 
         res.status(201);
+        app.utils.shield(req.body, ['users']);
         res.json(req.body);
       });
     });

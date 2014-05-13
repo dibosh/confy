@@ -36,7 +36,7 @@ module.exports = function (app, db) {
       req.org.users[req.org.owner]++;
 
       // Insert team
-      db.bulk({docs: [req.body, req.org]}, {all_or_nothing: true, new_edits: false}, function (err, body) {
+      db.bulk({docs: [req.body, req.org]}, {all_or_nothing: true}, function (err, body) {
         if (err) return next(err);
 
         req.body.users = Object.keys(req.body.users);

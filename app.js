@@ -1,5 +1,6 @@
 var express = require('express')
   , nano = require('nano')
+  , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
   , logger = require('morgan');
 
@@ -10,6 +11,7 @@ require('./utils/env')(app);
 
 // Setup middleware
 app.use(bodyParser());
+app.use(cookieParser(app.get('cookie')));
 
 // Setup logger
 if (app.get('env') != 'test') {

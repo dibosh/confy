@@ -35,7 +35,7 @@ module.exports = function (app, db) {
         });
 
         // Insert project
-        db.bulk(app.bulk.project(req.body, req.org), {all_or_nothing: true, new_edits: false}, function (err, body) {
+        db.bulk(app.bulk.project(req.body, req.org), {all_or_nothing: true}, function (err, body) {
           if (err) return next(err);
 
           req.body.teams = Object.keys(req.body.teams);

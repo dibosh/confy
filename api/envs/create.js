@@ -20,7 +20,7 @@ module.exports = function (app, db) {
       , project = req.project.name.toLowerCase()
       , env = name.toLowerCase();
 
-    // Search for existing project name
+    // Search for existing environment name
     db.view('envs', 'name', {keys: [org + '/' + project + '/' + env]}, function (err, body) {
       if (err) return next(err);
 
@@ -34,7 +34,7 @@ module.exports = function (app, db) {
       req.body._id = 'orgs/' + org + '/projects/' + project + '/envs/' + env;
       req.body.config = {};
 
-      // Insert project
+      // Insert environment
       db.bulk({docs: [req.body]}, {all_or_nothing: true, new_edits: false}, function (err, body) {
         if (err) return next(err);
 

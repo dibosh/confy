@@ -39,8 +39,28 @@ module.exports = function (app, db) {
   });
 
   // SSO a user
-  app.get('/user/sso', function (req, res, next) {
+  app.post('/user/sso', function (req, res, next) {
+    var token = req.body.id + ':' + app.get('addonsso') + ':' + req.body.timestamp
+      , hash = crypto.createHash('sha1').update(token).digest('hex');
 
+    if (req.body.token != hash || (Date.now()/1000 - 300) > parseInt(req.body.timestamp)) {
+      return res.send(403);
+    }
+
+    db.get('users/' + req.body.id, function (err, user) {
+      if (err) return next(err);
+
+      user.access_token = crypto.randomBytes(20).toString('hex');
+
+      db.insert(user, user._id, function (err, body) {
+        if (err) return next(err);
+
+        if (body.ok) {
+          res.cookie('token', user.access_token);
+          res.json(req.body['nav-data']);
+        } else next();
+      });
+    });
   });
 
 };

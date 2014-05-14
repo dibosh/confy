@@ -104,12 +104,10 @@ module.exports = function (app, db) {
   app.auth.heroku = function (req, res, next) {
     var auth = authBasic(req);
 
-    if (auth === null || auth.username != 'confy') {
+    if (auth === null || auth.username != 'confy' || auth.password != app.get('addonkey')) {
       return app.errors.auth(res);
     }
 
-    if (auth.password == app.get('addonkey')) {
-      return next();
-    }
+    return next();
   }
 };

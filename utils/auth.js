@@ -12,34 +12,65 @@ var authBasic = function (req) {
     username: auth.substr(0, auth.indexOf(':')),
     password: auth.substr(auth.indexOf(':') + 1)
   };
-}
+};
+
+var authToken = function (req) {
+  if (req.cookies.token === undefined) {
+    return null;
+  }
+
+  return req.cookies.token;
+};
 
 module.exports = function (app, db) {
   app.auth = {};
 
   app.auth.user = function (req, res, next) {
-    var auth = authBasic(req);
+    var basic = authBasic(req)
+      , token = authToken(req);
 
-    if (auth === null) {
-      return app.errors.auth(res);
+    if (basic !== null) {
+      // Fetching user with username
+      return db.get('users/' + basic.username, function (err, body) {
+        if (err && err.reason != 'missing') {
+          return next(err);
+        }
+
+        if (body && !body.verified) {
+          return app.errors.unverified(res);
+        }
+
+        // Comparing password
+        if (body && bcrypt.compareSync(basic.password, body.password)) {
+          req.user = body;
+          return next();
+        }
+
+        return app.errors.auth(res);
+      });
     }
 
-    db.get('users/' + auth.username, function (err, body) {
-      if (err && err.reason != 'missing') {
-        return next(err);
-      }
+    if (token !== null) {
+      // Fetching user with access token
+      return db.view('users', 'token', {keys: [token]}, function (err, body) {
+        if (err) return next(err);
 
-      if (body && !body.verified) {
-        return app.errors.unverified(res);
-      }
+        if (body.rows.length != 1) {
+          return app.errors.auth(res);
+        }
 
-      if (body && bcrypt.compareSync(auth.password, body.password)) {
-        req.user = body;
+        if (body.rows[0].value && !body.rows[0].value.verified) {
+          return app.errors.unverified(res);
+        }
+
+        req.user = body.rows[0].value;
+        req.access_token = token;
+
         return next();
-      }
+      });
+    }
 
-      return app.errors.auth(res);
-    });
+    return app.errors.auth(res);
   }
 
   app.auth.owner = function (req, res, next) {

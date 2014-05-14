@@ -26,7 +26,10 @@ module.exports = function (app, db) {
         app.mail[mail_template](req.user.email, req.user, function (err, data) {
           if (err) return next(err);
 
-          app.utils.shield(req.user, ['password', 'verification_token', 'verify_new_email', '_rev']);
+          app.utils.shield(req.user, [
+            'password', 'access_token', 'verification_token', 'verify_new_email', '_rev'
+          ]);
+
           res.json(req.user);
         });
       } else next();

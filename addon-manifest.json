@@ -7,11 +7,11 @@
     "sso_salt": "thisisasampleherokuaddonsso_salt",
     "production": {
       "base_url": "https://api.confy.io/heroku",
-      "sso_url": "https://api.confy.io/sso/login"
+      "sso_url": "https://api.confy.io/user/sso"
     },
     "test": {
       "base_url": "http://localhost:5000/heroku",
-      "sso_url": "http://localhost:5000/sso/login"
+      "sso_url": "http://localhost:5000/user/sso"
     }
   }
 }

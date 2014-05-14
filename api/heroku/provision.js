@@ -5,7 +5,7 @@ module.exports = function (app, db) {
   var ssl = (app.get('ssl') == true ? 8 : 7);
 
   // Provision for heroku
-  app.post('/heroku', app.auth.heroku, function (req, res, next) {
+  app.post('/heroku/resources', app.auth.heroku, function (req, res, next) {
     // Generate user
     var appid = req.body.heroku_id.substr(0, req.body.heroku_id.indexOf('@'))
       , password = crypto.randomBytes(10).toString('hex');

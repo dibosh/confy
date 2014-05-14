@@ -1,19 +1,19 @@
 module.exports = function (app, db) {
 
   // Deprovision for heroku
-  app.delete('/heroku/:heroku', app.auth.heroku, function (req, res, next) {
+  app.delete('/heroku/resources/:heroku', app.auth.heroku, function (req, res, next) {
 
     // Get heroku app user document
-    db.get('users/' + req.params.heroku, function (err, body) {
+    db.get('users/' + req.params.heroku, function (err, user) {
       if (err) return next(err);
 
-      var docs = [body];
+      user._deleted = true;
 
       // Get heroku app org document
       db.get('orgs/' + req.params.heroku, function (err, body) {
 
         // Delete the documents
-        app.utils.deleteOrg(docs, body, function (err) {
+        app.utils.deleteOrg([user], body, function (err) {
           if (err) return next(err);
 
           res.send(200);

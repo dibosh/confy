@@ -57,7 +57,7 @@ module.exports = function (app, db) {
 
         if (body.ok) {
           res.cookie('token', user.access_token);
-          res.json(req.body['nav-data']);
+          res.json({ heroku: req.body['nav-data'] });
         } else next();
       });
     });

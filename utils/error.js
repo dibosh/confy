@@ -49,4 +49,10 @@ module.exports = function (app) {
     res.status(404);
     res.json({ message: 'Not found' });
   }
+
+  // Forbidden error
+  app.errors.forbidden = function (res) {
+    res.status(403);
+    res.json({ message: 'Forbidden action' });
+  }
 };

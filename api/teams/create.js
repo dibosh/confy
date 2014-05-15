@@ -1,7 +1,7 @@
 module.exports = function (app, db) {
 
   // Create a team
-  app.post('/orgs/:org/teams', app.auth.owner, function (req, res, next) {
+  app.post('/orgs/:org/teams', app.auth.owner, app.auth.noHeroku, function (req, res, next) {
     app.utils.permit(req, ['name', 'description']);
 
     // Check for required params

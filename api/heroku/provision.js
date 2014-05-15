@@ -12,7 +12,7 @@ module.exports = function (app, db) {
 
     var user = {
       username: appid, email: req.body.heroku_id,
-      password: password, verified: true
+      password: password, verified: true, heroku: true
     };
 
     // Insert documents

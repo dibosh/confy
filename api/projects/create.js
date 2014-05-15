@@ -1,7 +1,7 @@
 module.exports = function (app, db) {
 
   // Create a project
-  app.post('/orgs/:org/projects', app.auth.owner, function (req, res, next) {
+  app.post('/orgs/:org/projects', app.auth.owner, app.auth.noHeroku, function (req, res, next) {
     app.utils.permit(req, ['name', 'description']);
 
     // Check for required params

@@ -64,7 +64,7 @@ module.exports = function (app) {
 
     var tmp = app.bulk.user(user);
 
-    tmp.docs[1].plan = 'personal';
+    tmp.docs[1].plan = 'heroku';
     tmp.docs = tmp.docs.concat(app.bulk.project(project, tmp.docs[1]).docs);
 
     return tmp;

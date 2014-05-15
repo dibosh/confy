@@ -44,7 +44,7 @@ module.exports = function (app, db) {
   }
 
   // Delete an org
-  app.delete('/orgs/:org', app.auth.owner, function (req, res, next) {
+  app.delete('/orgs/:org', app.auth.owner, app.auth.noHeroku, function (req, res, next) {
     // If team is the default team
     if (req.org.name.toLowerCase() == req.user.username) {
       return app.errors.validation(res, [{ field: 'org', code: 'forbidden' }])

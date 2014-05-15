@@ -1,7 +1,7 @@
 module.exports = function (app, db) {
 
   // Delete a project
-  app.delete('/orgs/:org/projects/:project', app.auth.owner, function (req, res, next) {
+  app.delete('/orgs/:org/projects/:project', app.auth.owner, app.auth.noHeroku, function (req, res, next) {
     var org = req.org.name.toLowerCase()
       , project = req.project.name.toLowerCase();
 

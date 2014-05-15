@@ -110,4 +110,12 @@ module.exports = function (app, db) {
 
     return next();
   }
+
+  app.auth.noHeroku = function (req, res, next) {
+    if (req.user.heroku !== undefined && req.user.heroku) {
+        return app.errors.forbidden(res);
+    }
+
+    return next();
+  }
 };

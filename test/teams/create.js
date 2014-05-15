@@ -37,6 +37,17 @@ module.exports = function (macro) {
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(1)
       },
+      'Creating them with heroku user': {
+        topic: function () {
+          macro.post('/orgs/app123/teams', {
+            name: 'Engineering', description: 'Developers'
+          }, {user:'app123', pass:'password'}, this.callback);
+        },
+        'should return 403': macro.status(403),
+        'should return forbidden': function (err, res, body) {
+          assert.deepEqual(body, {'message':'Forbidden action'});
+        }
+      },
       'Creating them': {
         topic: function () {
           macro.post('/orgs/firesize/teams', {

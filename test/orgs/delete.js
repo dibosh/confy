@@ -51,6 +51,15 @@ module.exports = function (macro) {
           assert.deepEqual(body, {message: 'Not found'});
         },
         'should not delete org doc and it': macro.doc('orgs/confyio')
+      },
+      'Deleting org with heroku user': {
+        topic: function () {
+          macro.delete('/orgs/app123', {}, {user: 'app123', pass: 'password'}, this.callback);
+        },
+        'should return 403': macro.status(403),
+        'should return forbidden': function (err, res, body) {
+          assert.deepEqual(body, {'message':'Forbidden action'});
+        }
       }
     }
   };

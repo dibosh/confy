@@ -44,6 +44,15 @@ module.exports = function (macro) {
         },
         'should not delete project doc and it': macro.doc('orgs/confyio/projects/knowledgebase'),
         'should not delete project environment doc and it': macro.doc('orgs/confyio/projects/knowledgebase/envs/production')
+      },
+      'Deleting project with heroku user': {
+        topic: function () {
+          macro.delete('/orgs/app123/projects/app', {}, {user: 'app123', pass: 'password'}, this.callback);
+        },
+        'should return 403': macro.status(403),
+        'should return forbidden': function (err, res, body) {
+          assert.deepEqual(body, {'message':'Forbidden action'});
+        }
       }
     }
   };

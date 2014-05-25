@@ -7,6 +7,7 @@
     "type": "git",
     "url": "git://github.com/asm-products/confy"
   },
+  "license": "BSD",
   "engines": {
     "node": "0.10.x"
   },

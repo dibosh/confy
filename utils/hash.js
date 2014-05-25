@@ -10,10 +10,8 @@ module.exports = function (app) {
 
   // Forbid certain keys
   app.utils.forbid = function (req, fields) {
-    req.oldBody = req.body;
-
     fields.forEach(function (field) {
-      delete req.body[field];
+      if(req.body[field]) delete req.body[field];
     });
   };
 

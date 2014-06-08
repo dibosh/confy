@@ -95,6 +95,8 @@ vows.describe('confy').addBatch({
 .addBatch(require('./projects/delete')(macro))
 .addBatch(require('./teams/delete')(macro))
 .addBatch(require('./orgs/delete')(macro))
+.addBatch(require('./heroku/provision')(macro))
+.addBatch(require('./heroku/deprovision')(macro))
 .addBatch({
   'Database': {
     topic: function () {

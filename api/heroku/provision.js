@@ -23,7 +23,7 @@ module.exports = function (app, db) {
       host = host.substr(0, ssl) + appid + ':' + password + '@' + host.substr(ssl);
 
       res.json({ id: appid, config: {
-        "CONFY_URL": host + '/orgs/' + appid + '/projects/app/envs/production/config'
+        "CONFY_URL": host + '/heroku/config'
       }});
     });
   });

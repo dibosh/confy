@@ -1,5 +1,6 @@
 {
   "id": "confy",
+  "name": "Confy",
   "api": {
     "config_vars": [ "CONFY_URL" ],
     "regions": [ "us" ],

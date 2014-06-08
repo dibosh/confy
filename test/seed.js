@@ -19,7 +19,7 @@ module.exports = {
     {"_id":"orgs/confyio/teams/engineering","name":"Engineering","description":"Engineers in the company","users":{"pksunkara":true},"org":"confyio","type":"team"},
     {"_id":"orgs/app123/projects/app","name":"App","description":"Heroku application","type":"project","teams":{"owners":true},"org":"app123","users":{"app123":1}},
     {"_id":"orgs/app123/projects/app/envs/production","name":"Production","description":"Production environment","org":"app123","project":"app","type":"env","config":{}},
-    {"_id":"orgs/app123","name":"app123","email":"app123@heroku.com","type":"org","owner":"app123","plan":"personal","users":{"app123":1}},
+    {"_id":"orgs/app123","name":"app123","email":"app123@heroku.com","type":"org","owner":"app123","plan":"heroku","users":{"app123":1}},
     {"_id":"orgs/app123/teams/owners","name":"Owners","description":"Has access to all projects","users":{"app123":true},"org":"app123","type":"team"},
     {"_id":"orgs/pksunkara","name":"pksunkara","email":"pavan.sss1991@gmail.com","type":"org","owner":"pksunkara","plan":"none","users":{"pksunkara":1}},
     {"_id":"orgs/pksunkara/teams/owners","name":"Owners","description":"Has access to all projects","users":{"pksunkara":true},"org":"pksunkara","type":"team"},

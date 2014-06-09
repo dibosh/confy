@@ -118,4 +118,25 @@ module.exports = function (app, db) {
 
     return next();
   }
+
+  app.auth.configHeroku = function (req, res, next) {
+    if (req.user.heroku === undefined || !req.user.heroku) {
+        return app.errors.forbidden(res);
+    }
+
+    var id = 'orgs/' + req.user.username + '/projects/app/envs/production';
+
+    db.get(id, function (err, body) {
+      if (err && err.reason != 'missing') {
+        return next(err);
+      }
+
+      if (body) {
+        req.env = body;
+        return next();
+      }
+
+      return app.errors.notfound(res);
+    });
+  }
 };

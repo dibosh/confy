@@ -1,12 +1,7 @@
 var deepExtend = require('deep-extend');
 
-module.exports = function (app, db) {
-
-  app.get('/orgs/:orgname/projects/:project/envs/:env/config', app.auth.project, function (req, res, next) {
-    res.json(req.env.config);
-  });
-
-  app.patch('/orgs/:orgname/projects/:project/envs/:env/config', app.auth.project, function (req, res, next) {
+var update = function (db) {
+  return function (req, res, next) {
     // Update the data
     req.env.config = deepExtend(req.env.config, req.body);
 
@@ -17,5 +12,16 @@ module.exports = function (app, db) {
         res.json(req.env.config);
       } else return next();
     });
+  };
+}
+
+module.exports = function (app, db) {
+
+  app.get('/orgs/:orgname/projects/:project/envs/:env/config', app.auth.project, function (req, res, next) {
+    res.json(req.env.config);
   });
+
+  app.patch('/orgs/:orgname/projects/:project/envs/:env/config', app.auth.project, update(db));
 };
+
+module.exports.update = update;

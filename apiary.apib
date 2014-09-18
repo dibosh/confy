@@ -304,6 +304,35 @@ Delete the given team. Cannot delete the default team in the organization. Authe
 
 + Response 204
 
+## Projects [/orgs/{org}/teams/{team}/projects]
+
++ Parameters
+
+    + org (required, string) ... Name of the organization
+    + team (required, string) ... Name of the team
+
+### List Projects [GET]
+
+List projects of the organization the given team has access to. Access only if the authenticated user is a member of the team or the owner of the org.
+
++ Response 200 (application/json)
+
+        [{
+          "_id": "orgs/bigcompany/projects/main",
+          "name": "Main",
+          "description": "Main product",
+          "teams": ["owners", "engineering"],
+          "org": "bigcompany",
+          "type": "project"
+        }, {
+          "_id": "orgs/bigcompany/projects/blog",
+          "name": "Blog",
+          "description": "Company's blog",
+          "teams": ["owners", "engineering"],
+          "org": "bigcompany",
+          "type": "project"
+        }]
+
 ## Members [/orgs/{org}/teams/{team}/member]
 
 Teams contain a list of users. The Authenticated user should be the owner of the organization.

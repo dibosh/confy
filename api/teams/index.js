@@ -25,5 +25,6 @@ module.exports = function (app, db) {
   require('./update')(app, db);
   require('./delete')(app, db);
 
+  require('./projects')(app, db);
   require('./members')(app, db);
 };

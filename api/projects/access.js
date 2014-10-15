@@ -31,6 +31,32 @@ module.exports = function (app, db) {
     });
   }
 
+  app.get('/orgs/:orgname/projects/:project/access', app.auth.project, function (req, res, next) {
+    var org = req.org.name.toLowerCase();
+
+    var keys = req.project.teams.map(function (team) {
+      return org + '/' + team;
+    });
+
+    db.view('teams', 'name', {keys: keys}, function (err, body) {
+      if (err) return next(err);
+
+      if (body.rows) {
+        body = body.rows.map(function (row) {
+          if (!row.value.users[req.user.username]) {
+            return;
+          }
+
+          app.utils.shield(row.value, ['_rev']);
+          row.value.users = Object.keys(row.value.users);
+          return row.value;
+        });
+
+        res.json(body);
+      } else next();
+    });
+  });
+
   app.delete('/orgs/:org/projects/:project/access', app.auth.owner, function (req, res, next) {
     if (check(req, res)) return;
 

@@ -342,6 +342,22 @@ Teams contain a list of users. The Authenticated user should be the owner of the
     + org (required, string) ... Name of the organization
     + team (required, string) ... Name of the team
 
+### List Members [GET]
+
+List all the members in the given team. Authenticated user should be a member of the team.
+
++ Response 200 (application/json)
+
+        [
+          {
+            "_id": "users/jsmith",
+            "username": "jsmith",
+            "email": "johnsmith@gmail.com",
+            "verified": true,
+            "type": "user"
+          }
+        ]
+
 ### Add a Member [POST]
 
 Add the user to the given team. The __user__ in the request needs to be a string.

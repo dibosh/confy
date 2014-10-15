@@ -34,7 +34,7 @@ module.exports = function (app, db) {
   app.get('/orgs/:orgname/projects/:project/access', app.auth.project, function (req, res, next) {
     var org = req.org.name.toLowerCase();
 
-    var keys = req.project.teams.map(function (team) {
+    var keys = Object.keys(req.project.teams).map(function (team) {
       return org + '/' + team;
     });
 
@@ -51,6 +51,8 @@ module.exports = function (app, db) {
           row.value.users = Object.keys(row.value.users);
           return row.value;
         });
+
+        body = app.utils.compact(body);
 
         res.json(body);
       } else next();

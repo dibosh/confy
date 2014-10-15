@@ -1,6 +1,19 @@
 module.exports = function (app) {
   app.utils = {};
 
+  // Remove nulls from an array
+  app.utils.compact = function (oldArr) {
+    var newArr = [];
+
+    oldArr.forEach(function (element) {
+      if (element) {
+        newArr.push(element);
+      }
+    });
+
+    return newArr;
+  }
+
   // Merge two hashes
   app.utils.merge = function (oldBody, newBody) {
     Object.keys(newBody).forEach(function (key) {

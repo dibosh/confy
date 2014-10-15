@@ -101,6 +101,18 @@ module.exports = function (app, db) {
     });
   }
 
+  app.auth.team = function (req, res, next) {
+    app.auth.user(req, res, function (err) {
+      if (err) return next(err);
+
+      if (req.team.users[req.user.username] === undefined) {
+        return app.errors.notfound(res);
+      }
+
+      return next();
+    })
+  }
+
   app.auth.heroku = function (req, res, next) {
     var auth = authBasic(req);
 

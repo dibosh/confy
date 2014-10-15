@@ -1,11 +1,7 @@
 module.exports = function (app, db) {
 
   // List all projects the team has access to
-  app.get('/orgs/:orgname/teams/:team/projects', app.auth.user, function (req, res, next) {
-    if (req.team.users[req.user.username] === undefined) {
-      return app.errors.notfound(res);
-    }
-
+  app.get('/orgs/:orgname/teams/:team/projects', app.auth.team, function (req, res, next) {
     var org = req.org.name.toLowerCase()
       , team = req.team.name.toLowerCase();
 

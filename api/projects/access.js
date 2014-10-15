@@ -43,7 +43,7 @@ module.exports = function (app, db) {
 
       if (body.rows) {
         body = body.rows.map(function (row) {
-          if (!row.value.users[req.user.username]) {
+          if (row.value.users[req.user.username] === undefined) {
             return;
           }
 

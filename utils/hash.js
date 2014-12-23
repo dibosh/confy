@@ -45,7 +45,7 @@ module.exports = function (app) {
     var errs = [];
 
     fields.forEach(function (field) {
-      if (req.body[field] === undefined) {
+      if (req.body[field] === undefined || req.body[field] === '') {
         errs.push({ field: field, code: 'missing' });
       }
     });

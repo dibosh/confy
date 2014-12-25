@@ -1,37 +1,41 @@
 var bcrypt = require('bcrypt');
 
-var authBasic = function (req) {
-  if (req.headers.authorization === undefined) {
-    return null;
-  }
-
-  var auth = req.headers.authorization.substr(6);
-  auth = new Buffer(auth, 'base64').toString();
-
-  return {
-    username: auth.substr(0, auth.indexOf(':')),
-    password: auth.substr(auth.indexOf(':') + 1)
+var authorization = function (req) {
+  var result = {
+    basic: null,
+    token: null
   };
-};
 
-var authToken = function (req) {
-  if (req.cookies.token === undefined) {
-    return null;
+  if (req.headers.authorization === undefined) {
+    return result;
   }
 
-  return req.cookies.token;
+  var auth = req.headers.authorization.substr(6).trim()
+    , type = req.headers.authorization.substr(0, 5);
+
+  if (type.toLowerCase() == 'basic') {
+    auth = new Buffer(auth, 'base64').toString();
+
+    result.basic = {
+      username: auth.substr(0, auth.indexOf(':')),
+      password: auth.substr(auth.indexOf(':') + 1)
+    };
+  } else if (type.toLowerCase() == 'token') {
+    result.token = auth;
+  }
+
+  return result;
 };
 
 module.exports = function (app, db) {
   app.auth = {};
 
   app.auth.user = function (req, res, next) {
-    var basic = authBasic(req)
-      , token = authToken(req);
+    var auth = authorization(req);
 
-    if (basic !== null) {
+    if (auth.basic !== null) {
       // Fetching user with username
-      return db.get('users/' + basic.username, function (err, body) {
+      return db.get('users/' + auth.basic.username, function (err, body) {
         if (err && err.reason != 'missing') {
           return next(err);
         }
@@ -41,7 +45,7 @@ module.exports = function (app, db) {
         }
 
         // Comparing password
-        if (body && bcrypt.compareSync(basic.password, body.password)) {
+        if (body && bcrypt.compareSync(auth.basic.password, body.password)) {
           req.user = body;
           return next();
         }
@@ -50,9 +54,9 @@ module.exports = function (app, db) {
       });
     }
 
-    if (token !== null) {
+    if (auth.token !== null) {
       // Fetching user with access token
-      return db.view('users', 'token', {keys: [token]}, function (err, body) {
+      return db.view('users', 'token', {keys: [auth.token]}, function (err, body) {
         if (err) return next(err);
 
         if (body.rows.length != 1) {
@@ -64,7 +68,7 @@ module.exports = function (app, db) {
         }
 
         req.user = body.rows[0].value;
-        req.access_token = token;
+        req.access_token = auth.token;
 
         return next();
       });
@@ -114,9 +118,9 @@ module.exports = function (app, db) {
   }
 
   app.auth.heroku = function (req, res, next) {
-    var auth = authBasic(req);
+    var auth = authorization(req);
 
-    if (auth === null || auth.username != 'confy' || auth.password != app.get('addonkey')) {
+    if (auth.basic === null || auth.basic.username != 'confy' || auth.basic.password != app.get('addonkey')) {
       return app.errors.auth(res);
     }
 

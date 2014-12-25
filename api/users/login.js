@@ -14,8 +14,8 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
-        res.cookie('token', req.user.access_token);
-        res.send(204);
+        res.status(201);
+        res.json({token: req.user.access_token});
       } else next();
     });
   });
@@ -32,7 +32,6 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
-        res.clearCookie('token');
         res.send(204);
       } else next();
     });
@@ -56,8 +55,11 @@ module.exports = function (app, db) {
         if (err) return next(err);
 
         if (body.ok) {
-          res.cookie('token', user.access_token);
-          res.json({ heroku: req.body['nav-data'] });
+          res.status(201);
+          res.json({
+            heroku: req.body['nav-data'],
+            token: user.access_token
+          });
         } else next();
       });
     });

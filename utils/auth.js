@@ -6,7 +6,12 @@ var authorization = function (req) {
     token: null
   };
 
-  if (req.headers.authorization === undefined) {
+  if (typeof req.query.access_token == 'string') {
+    result.token = req.query.access_token;
+    return result;
+  }
+
+  if (typeof req.headers.authorization != 'string') {
     return result;
   }
 

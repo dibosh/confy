@@ -1,8 +1,7 @@
 var express = require('express')
   , nano = require('nano')
   , cookieParser = require('cookie-parser')
-  , bodyParser = require('body-parser')
-  , logger = require('morgan');
+  , bodyParser = require('body-parser');
 
 var app = express();
 
@@ -14,9 +13,7 @@ app.use(bodyParser());
 app.use(cookieParser(app.get('cookie')));
 
 // Setup logger
-if (app.get('env') != 'test') {
-  app.use(logger('dev'));
-}
+require('./utils/logger')(app);
 
 // Setup database handler
 var db = nano(app.get('db')).use(app.get('dbname'));

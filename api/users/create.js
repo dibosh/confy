@@ -15,7 +15,7 @@ module.exports = function (app, db) {
     }
 
     if (typeof req.body.password != 'string' || req.body.password.length < 6) {
-      errs.push({ field: 'password', code: 'invalid' });
+      errs.push({ field: 'password', code: 'insecure' });
     }
 
     // TODO: Validate email

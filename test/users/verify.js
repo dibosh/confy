@@ -13,6 +13,10 @@ module.exports = function (macro) {
           assert.equal(body.username, 'jsmith');
           assert.equal(body.type, 'user');
         },
+        'should return access token': function (err, res, body) {
+          assert.isUndefined(body.access_token);
+          assert.isString(body.token);
+        },
         'should be verified': function (err, res, body) {
           assert.isTrue(body.verified);
         },
@@ -30,6 +34,9 @@ module.exports = function (macro) {
           'should have no verification token': function (err, body) {
             assert.isUndefined(body.verification_token);
             assert.isUndefined(body.verify_new_email);
+          },
+          'should have access token': function (err, body) {
+            assert.isString(body.access_token);
           }
         })
       }

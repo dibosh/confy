@@ -8,7 +8,7 @@ module.exports = function (macro) {
           macro.post('/user', {}, null, this.callback);
         },
         'should return 422': macro.status(422),
-        'should return validation errors': macro.validation(4)
+        'should return validation errors': macro.validation(5)
       },
       'Creating them with existing email': {
         topic: function () {

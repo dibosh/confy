@@ -17,4 +17,6 @@ module.exports = function (app) {
 
   app.set('mailgun-key', process.env.MAILGUN_API_KEY);
   app.set('mailgun-domain', process.env.MAILGUN_DOMAIN);
+
+  app.set('sentry', process.env.SENTRY_URL || false);
 };

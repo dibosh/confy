@@ -1,5 +1,10 @@
+var raven = require('raven');
+
 module.exports = function (app) {
   app.errors = {};
+
+  var sentry = new raven.Client(app.get('sentry'));
+  sentry.patchGlobal();
 
   // Catch 404
   app.use(function (req, res, next) {
@@ -19,10 +24,11 @@ module.exports = function (app) {
 
   // Production error handler no stacktraces leaked to user
   app.use(function(err, req, res, next) {
+    sentry.captureError(err);
+
     res.status(err.status || 500);
     res.json({
       message: err.message,
-      error: {}
     });
   });
 

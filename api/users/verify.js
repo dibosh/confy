@@ -25,14 +25,13 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
-        app.mail[mail_template](req.user.email, req.user, function (err, data) {
-          if (err) return next(err);
+        req.user.token = req.user.access_token;
 
-          req.user.token = req.user.access_token;
+        app.utils.shield(req.user, ['access_token', 'password', '_rev']);
+        res.json(req.user);
 
-          app.utils.shield(req.user, ['access_token', 'password', '_rev']);
-          res.json(req.user);
-        });
+        app.mail[mail_template](req.user.email, req.user, app.errors.capture());
+        app.analytics.track({ userId: req.body.username, event: 'Verified Email' });
       } else next();
     });
   });

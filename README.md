@@ -1,10 +1,10 @@
 # Confy [![Build Status](https://travis-ci.org/asm-products/confy.svg)](https://travis-ci.org/asm-products/confy)
 
-_Helping developers seperate config from code_
+_Software Credentials Management System_
 
-This is a product being built by the Assembly community. You can help push this idea forward by visiting [https://assemblymade.com/confy](https://assemblymade.com/confy).
+This is a product being built by the Assembly community. You can help push this idea forward by visiting [https://assembly.com/confy](https://assembly.com/confy).
 
-A good web app stores config in env vars. As the amount of config variables is high, developers can use "Confy" to pull their config from the cloud using a single env var.
+A good web app stores it's credentials in environment vars. As the number of credentials is high, developers can use "Confy" to pull them from the cloud using a single environment var.
 
 ## Development
 
@@ -28,7 +28,7 @@ $ node app.js
 
 ## Idea
 
-**Confy** is a **SaaS** product where web app developers can store their application config in the cloud and retrieve it when starting up their app.
+**Confy** is a **SaaS** product where web app developers can store their application credentials (also known as application config) in the cloud and retrieve it when starting up their app.
 
 An app’s **config** is everything that is likely to vary between deploys (staging, production, developer environments, etc). This includes:
 
@@ -52,4 +52,4 @@ _(A few of the above quotes are taken directly from [12factor.net](http://12fact
 
 Assembly products are like open-source and made with contributions from the community. Assembly handles the boring stuff like hosting, support, financing, legal, etc. Once the product launches we collect the revenue and split the profits amongst the contributors.
 
-Visit [https://assemblymade.com](https://assemblymade.com) to learn more.
+Visit [https://assembly.com](https://assembly.com) to learn more.

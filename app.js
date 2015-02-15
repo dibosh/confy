@@ -1,12 +1,21 @@
 var express = require('express')
   , nano = require('nano')
   , cookieParser = require('cookie-parser')
-  , bodyParser = require('body-parser');
+  , bodyParser = require('body-parser')
+  , segment = require('analytics-node')
+  , raven = require('raven');
 
 var app = express();
 
 // Setup environment variables
 require('./utils/env')(app);
+
+// Setup Segment analytics
+app.analytics = new segment(app.get('segment'));
+
+// Setup Sentry
+app.sentry = new raven.Client(app.get('sentry'));
+app.sentry.patchGlobal();
 
 // Setup middleware
 app.use(bodyParser());

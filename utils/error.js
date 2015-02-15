@@ -1,10 +1,5 @@
-var raven = require('raven');
-
 module.exports = function (app) {
   app.errors = {};
-
-  var sentry = new raven.Client(app.get('sentry'));
-  sentry.patchGlobal();
 
   // Catch 404
   app.use(function (req, res, next) {
@@ -24,7 +19,7 @@ module.exports = function (app) {
 
   // Production error handler no stacktraces leaked to user
   app.use(function(err, req, res, next) {
-    sentry.captureError(err);
+    app.sentry.captureError(err);
 
     res.status(err.status || 500);
     res.json({
@@ -60,5 +55,17 @@ module.exports = function (app) {
   app.errors.forbidden = function (res) {
     res.status(403);
     res.json({ message: 'Forbidden action' });
+  }
+
+  // Capture error to sentry directly from callbacks
+  app.errors.capture = function (callback) {
+    if (callback && typeof callback != 'function') {
+      callback = null;
+    }
+
+    return function (err, data) {
+      if (err) app.sentry.captureError(err);
+      if (callback) callback(err, data);
+    }
   }
 };

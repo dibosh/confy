@@ -19,4 +19,5 @@ module.exports = function (app) {
   app.set('mailgun-domain', process.env.MAILGUN_DOMAIN);
 
   app.set('sentry', process.env.SENTRY_URL || false);
+  app.set('segment', process.env.SEGMENT_KEY || 'aY0rT1xmTtolsdEQ6JWRPYMCFAcQA4C3');
 };

@@ -4,11 +4,13 @@ module.exports = function (app, db) {
 
   // Create an user
   app.post('/user', function (req, res, next) {
-    app.utils.permit(req, ['username', 'email', 'password']);
+    var news = req.body.news || false;
+
+    app.utils.permit(req, ['username', 'email', 'password', 'fullname']);
 
     // Check for required params
     var errs = app.utils.need(req, ['username', 'email', 'password'])
-    var user = req.body.username;
+      , user = req.body.username;
 
     if (typeof user != 'string' || user.match(/[a-z0-9]*/i)[0] != user) {
       errs.push({ field: 'username', code: 'invalid' });
@@ -55,6 +57,7 @@ module.exports = function (app, db) {
           res.status(201);
           res.json(req.body);
 
+          // TODO: Insert into 'news' mailing list
           app.mail.verification(req.body.email, req.body, app.errors.capture());
           app.analytics.track({ userId: req.body.username, event: 'Registered' });
         });

@@ -34,6 +34,7 @@ module.exports = function (macro) {
         topic: function () {
           macro.post('/user', {
             username: 'jsmith',
+            fullname: 'John Smith',
             password: 'secret',
             email: 'johnsmith@gmail.com',
             random: '123xyz'
@@ -43,6 +44,7 @@ module.exports = function (macro) {
         'should return user': function (err, res, body) {
           assert.equal(body._id, 'users/jsmith');
           assert.equal(body.username, 'jsmith');
+          assert.equal(body.fullname, 'John Smith');
           assert.equal(body.email, 'johnsmith@gmail.com');
           assert.equal(body.type, 'user');
           assert.isFalse(body.verified);

@@ -11,6 +11,7 @@ module.exports = function (macro) {
         'should return the user': function (err, res, body) {
           assert.equal(body._id, 'users/jsmith');
           assert.equal(body.username, 'jsmith');
+          assert.equal(body.fullname, 'John Kay Smith');
           assert.equal(body.email, 'john.smith@gmail.com');
           assert.equal(body.type, 'user');
           assert.isTrue(body.verified);

@@ -4,7 +4,7 @@ module.exports = function (app, db) {
 
   // Update an user
   app.patch('/user', app.auth.user, function (req, res, next) {
-    app.utils.permit(req, ['email']);
+    app.utils.permit(req, ['email', 'fullname']);
 
     var mail_template = 'dummy';
 
@@ -30,7 +30,7 @@ module.exports = function (app, db) {
         res.json(req.user);
 
         app.mail[mail_template](req.user.email, req.user, app.errors.capture());
-        app.analytics.track({ userId: req.body.username, event: 'Updated Profile' });
+        app.analytics.track({ userId: req.user.username, event: 'Updated Profile' });
       } else next();
     });
   });

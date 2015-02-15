@@ -19,7 +19,7 @@ module.exports = function (app) {
 
   // Production error handler no stacktraces leaked to user
   app.use(function(err, req, res, next) {
-    app.sentry.captureError(err);
+    if (err) app.sentry.captureError(err);
 
     res.status(err.status || 500);
     res.json({

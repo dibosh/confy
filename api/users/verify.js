@@ -31,7 +31,7 @@ module.exports = function (app, db) {
         res.json(req.user);
 
         app.mail[mail_template](req.user.email, req.user, app.errors.capture());
-        app.analytics.track({ userId: req.body.username, event: 'Verified Email' });
+        app.analytics.track({ userId: req.user.username, event: 'Verified Email' });
       } else next();
     });
   });

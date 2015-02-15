@@ -7,6 +7,7 @@ module.exports = function (macro) {
         topic: function () {
           macro.patch('/user', {
             email: 'john.smith@gmail.com',
+            fullname: 'John Kay Smith',
             random: 'eu9fh7e98f', username: 'hacked'
           }, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
@@ -14,6 +15,7 @@ module.exports = function (macro) {
         'should return the user': function (err, res, body) {
           assert.equal(body._id, 'users/jsmith');
           assert.equal(body.username, 'jsmith');
+          assert.equal(body.fullname, 'John Kay Smith');
           assert.equal(body.type, 'user');
           assert.isFalse(body.verified);
         },
@@ -33,6 +35,9 @@ module.exports = function (macro) {
         'should update user doc and it': macro.doc('users/jsmith', {
           'should have updated email': function (err, body) {
             assert.equal(body.email, 'john.smith@gmail.com');
+          },
+          'should have updated fullname': function (err, body) {
+            assert.equal(body.fullname, 'John Kay Smith');
           },
           'should have verification token': function (err, body) {
             assert.equal(body.verification_token.length, 40);

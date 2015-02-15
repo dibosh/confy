@@ -17,7 +17,7 @@ module.exports = function (app, db) {
         res.status(201);
         res.json({token: req.user.access_token});
 
-        app.analytics.track({ userId: req.body.username, event: 'Logged on Backend' });
+        app.analytics.track({ userId: req.user.username, event: 'Logged on Backend' });
       } else next();
     });
   });

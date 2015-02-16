@@ -15,7 +15,10 @@ app.analytics = new segment(app.get('segment'));
 
 // Setup Sentry
 app.sentry = new raven.Client(app.get('sentry'));
-app.sentry.patchGlobal();
+
+if (app.get('env') === 'production') {
+  app.sentry.patchGlobal();
+}
 
 // Setup middleware
 app.use(bodyParser());

@@ -90,6 +90,30 @@ module.exports = function (macro) {
             assert.deepEqual(body.users, {jsmith: true});
           }
         })
+      },
+      'Creating them with empty fullname': {
+        topic: function () {
+          macro.post('/user', {
+            username: 'pkumar',
+            password: 'secret',
+            email: 'pkumar@cse.iitm.ac.in'
+          }, null, this.callback);
+        },
+        'should return 201': macro.status(201),
+        'should return user': function (err, res, body) {
+          assert.equal(body._id, 'users/pkumar');
+          assert.equal(body.username, 'pkumar');
+          assert.equal(body.fullname, 'pkumar');
+          assert.equal(body.email, 'pkumar@cse.iitm.ac.in');
+          assert.equal(body.type, 'user');
+          assert.isFalse(body.verified);
+        },
+        'should create default org doc and it': macro.doc('orgs/pkumar', {
+          'should be default for user': function (err, body) {
+            assert.equal(body.name, 'pkumar');
+            assert.equal(body.type, 'org');
+          }
+        })
       }
     }
   };

@@ -46,6 +46,10 @@ module.exports = function (app, db) {
 
         // Encrypting password is done when inserting the document
 
+        if (!req.body.fullname) {
+          req.body.fullname = req.body.username;
+        }
+
         req.body.verified = false;
         req.body.verification_token = crypto.randomBytes(20).toString('hex');
 

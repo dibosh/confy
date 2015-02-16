@@ -20,6 +20,7 @@ Get authenticated user's profile.
         {
           "_id": "users/jsmith",
           "username": "jsmith",
+          "fullname": "John Smith",
           "email": "johnsmith@gmail.com",
           "verified": true,
           "type": "user"
@@ -27,14 +28,16 @@ Get authenticated user's profile.
 
 ### Create an User [POST]
 
-Register an user. __Restricted to web interface__.
+Register an user.
 
 + Request (application/json)
 
         {
           "username": "jsmith",
+          "fullname": "John Smith",
           "email": "johnsmith@gmail.com",
-          "password": "secret"
+          "password": "secret",
+          "news": true
         }
 
 + Response 201 (application/json)
@@ -42,6 +45,7 @@ Register an user. __Restricted to web interface__.
         {
           "_id": "users/jsmith",
           "username": "jsmith",
+          "fullname": "John Smith",
           "email": "johnsmith@gmail.com",
           "verified": false,
           "type": "user"
@@ -49,11 +53,12 @@ Register an user. __Restricted to web interface__.
 
 ### Update an User [PATCH]
 
-Update the authenticated user's profile. An __email__ is the only thing which can be updated.
+Update the authenticated user's profile. _Cannot update passwords yet_.
 
 + Request (application/json)
 
         {
+          "fullname": "John Kay Smith",
           "email": "john.smith@gmail.com"
         }
 
@@ -62,6 +67,7 @@ Update the authenticated user's profile. An __email__ is the only thing which ca
         {
           "_id": "users/jsmith",
           "username": "jsmith",
+          "fullname": "John kay Smith",
           "email": "john.smith@gmail.com",
           "verified": false,
           "type": "user"
@@ -80,22 +86,22 @@ List all organizations the authenticated user is a member of.
 + Response 200 (application/json)
 
         [{
-          "_id": "orgs/bigcompany",
-          "name": "BigCompany",
+          "_id": "orgs/big-company",
+          "name": "Big Company",
           "owner": "bobmarley",
           "email": "contact@bigcompany.com",
           "plan": "silver",
           "type": "org"
         }, {
-          "_id": "orgs/mystartup",
-          "name": "MyStartup",
+          "_id": "orgs/my-startup",
+          "name": "My Startup",
           "owner": "jsmith",
           "email": "johnsmith@gmail.com",
           "plan": "bronze",
           "type": "org"
         }, {
           "_id": "orgs/jsmith",
-          "name": "jsmith",
+          "name": "John Smith",
           "owner": "jsmith",
           "email": "johnsmith@gmail.com",
           "plan": "personal",
@@ -109,15 +115,15 @@ Create an organization with a name and the email for billing. _You have to use w
 + Request (application/json)
 
         {
-          "name": "OpenSourceProject"
+          "name": "Open Source Project",
           "email": "admin@opensourceproject.com",
         }
 
 + Response 201 (application/json)
 
         {
-          "_id": "orgs/opensourceproject",
-          "name": "OpenSourceProject",
+          "_id": "orgs/open-source-project",
+          "name": "Open Source Project",
           "owner": "jsmith",
           "email": "admin@opensourceproject.com",
           "plan": "none",
@@ -128,17 +134,17 @@ Create an organization with a name and the email for billing. _You have to use w
 
 + Parameters
 
-    + org (required, string) ... Name of the organization
+    + org (required, string, `big-company`) ... Slug of the organization
 
 ### Retrieve an Organization [GET]
 
-Get the organization specified by the given name if the authenticated user is a member.
+Get the organization specified by the given slug if the authenticated user is a member.
 
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany",
-          "name": "BigCompany",
+          "_id": "orgs/big-company",
+          "name": "Big Company",
           "owner": "bobmarley",
           "email": "contact@bigcompany.com",
           "plan": "silver",
@@ -147,7 +153,7 @@ Get the organization specified by the given name if the authenticated user is a 
 
 ### Update an Organization [PATCH]
 
-Update the given organization if the authenticated user is the owner. An __email__ is the only thing which can be updated.
+Update the given organization if the authenticated user is the owner. __Email__ is the only thing which can be updated.
 
 + Request (application/json)
 
@@ -158,8 +164,8 @@ Update the given organization if the authenticated user is the owner. An __email
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/mystartup",
-          "name": "MyStartup",
+          "_id": "orgs/my-startup",
+          "name": "My Startup",
           "owner": "jsmith",
           "email": "john.smith@gmail.com",
           "plan": "personal",
@@ -168,7 +174,7 @@ Update the given organization if the authenticated user is the owner. An __email
 
 ### Delete an Organization [DELETE]
 
-Delete the given organization if the authenticated user is the owner. Cannot delete the default organization. __Restricted to web interface__.
+Delete the given organization if the authenticated user is the owner. Cannot delete the default organization.
 
 + Response 204
 
@@ -178,7 +184,7 @@ Authenticated user needs to be the owner of the organization.
 
 + Parameters
 
-    + org (required, string) ... Name of the organization
+    + org (required, string, `my-startup`) ... Slug of the organization
 
 ### Subscribe to a Plan [POST]
 
@@ -194,11 +200,12 @@ Subscribe the organization to a plan. This can also be used when upgrading or do
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/mystartup",
-          "name": "MyStartup",
+          "_id": "orgs/my-startup",
+          "name": "My Startup",
           "owner": "jsmith",
           "email": "john.smith@gmail.com",
-          "plan": "gold"
+          "plan": "gold",
+          "type": "org"
         }
 
 # Group Teams
@@ -209,7 +216,7 @@ Every organization will have a default team named __Owners__. Owner of the organ
 
 + Parameters
 
-    + org (required, string) ... Name of the organization
+    + org (required, string, `big-company`) ... Slug of the organization
 
 ### List Teams [GET]
 
@@ -218,18 +225,18 @@ List teams of the given organization authenticated user is a member of.
 + Response 200 (application/json)
 
         [{
-          "_id": "orgs/bigcompany/teams/engineering",
+          "_id": "orgs/big-company/teams/engineering",
           "name": "Engineering",
           "description": "The engineering guys",
           "users": ["bobmarley", "jenny", "laura", "jsmith"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "team"
         }, {
-          "_id": "orgs/bigcompany/teams/sideprojects",
-          "name": "SideProjects",
+          "_id": "orgs/big-company/teams/side-projects",
+          "name": "Side Projects",
           "description": "Team managing side projects",
           "users": ["bobmarley", "jsmith", "willy"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "team"
         }]
 
@@ -251,7 +258,7 @@ Create a team for the given organization. __You will have to add a team member a
           "name": "Consultants",
           "description": "Consultants will have restricted access",
           "users": ["bobmarley"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "team"
         }
 
@@ -259,8 +266,8 @@ Create a team for the given organization. __You will have to add a team member a
 
 + Parameters
 
-    + org (required, string) ... Name of the organization
-    + team (required, string) ... Name of the team
+    + org (required, string, `big-company`) ... Slug of the organization
+    + team (required, string, `consultants`) ... Slug of the team
 
 ### Retrieve a Team [GET]
 
@@ -269,11 +276,11 @@ Get a specific team in a specific organization. Access only if the authenticated
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/teams/sideprojects",
-          "name": "SideProjects",
-          "description": "Team managing side projects",
-          "users": ["bobmarley", "jsmith", "willy"],
-          "org": "bigcompany",
+          "_id": "orgs/big-company/teams/consultants",
+          "name": "Consultants",
+          "description": "Consultants will have restricted access",
+          "users": ["bobmarley", "eric"],
+          "org": "big-company",
           "type": "team"
         }
 
@@ -308,8 +315,8 @@ Delete the given team. Cannot delete the default team in the organization. Authe
 
 + Parameters
 
-    + org (required, string) ... Name of the organization
-    + team (required, string) ... Name of the team
+    + org (required, string, `big-company`) ... Slug of the organization
+    + team (required, string, `engineering`) ... Slug of the team
 
 ### List Projects [GET]
 
@@ -318,33 +325,31 @@ List projects of the organization the given team has access to. Access only if t
 + Response 200 (application/json)
 
         [{
-          "_id": "orgs/bigcompany/projects/main",
+          "_id": "orgs/big-company/projects/main",
           "name": "Main",
           "description": "Main product",
           "teams": ["owners", "engineering"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "project"
         }, {
-          "_id": "orgs/bigcompany/projects/blog",
+          "_id": "orgs/big-company/projects/blog",
           "name": "Blog",
           "description": "Company's blog",
           "teams": ["owners", "engineering"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "project"
         }]
 
 ## Members [/orgs/{org}/teams/{team}/member]
 
-Teams contain a list of users. The Authenticated user should be the owner of the organization.
-
 + Parameters
 
-    + org (required, string) ... Name of the organization
-    + team (required, string) ... Name of the team
+    + org (required, string, `big-company`) ... Slug of the organization
+    + team (required, string, `consultants`) ... Slug of the team
 
 ### List Members [GET]
 
-List all the members in the given team. Authenticated user should be a member of the team.
+List all the members in the given team. Authenticated user should be a member of the team or the owner of the org.
 
 + Response 200 (application/json)
 
@@ -352,6 +357,7 @@ List all the members in the given team. Authenticated user should be a member of
           {
             "_id": "users/jsmith",
             "username": "jsmith",
+            "fullname": "John Kay Smith",
             "email": "johnsmith@gmail.com",
             "verified": true,
             "type": "user"
@@ -360,7 +366,7 @@ List all the members in the given team. Authenticated user should be a member of
 
 ### Add a Member [POST]
 
-Add the user to the given team. The __user__ in the request needs to be a string.
+Add the user to the given team. The __user__ in the request needs to be a string and be the username of a valid user.  The Authenticated user should be the owner of the organization.
 
 + Request (application/json)
 
@@ -371,17 +377,17 @@ Add the user to the given team. The __user__ in the request needs to be a string
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/teams/consultants",
+          "_id": "orgs/big-company/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
           "users": ["bobmarley", "eric", "ben"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "team"
         }
 
 ### Remove a Member [DELETE]
 
-Remove users from the given team. The __user__ in the request needs to be a string. Cannot delete the default member in a team.
+Remove users from the given team. The __user__ in the request needs to be a string and be the username of a valid user. Cannot delete the default member in a team.  The Authenticated user should be the owner of the organization.
 
 + Request (application/json)
 
@@ -392,11 +398,11 @@ Remove users from the given team. The __user__ in the request needs to be a stri
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/teams/consultants",
+          "_id": "orgs/big-company/teams/consultants",
           "name": "Consultants",
           "description": "Consultants will be restricted",
           "users": ["bobmarley", "eric"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "team"
         }
 
@@ -408,56 +414,56 @@ An organization can contain any number of projects.
 
 + Parameters
 
-    + org (required, string) ... Name of the organization
+    + org (required, string, `big-company`) ... Slug of the organization
 
 ### List all Projects [GET]
 
-List all the projects of the organization which can be seen by the authenticated user.
+List all the projects of the organization which can be accessed by the authenticated user.
 
 + Response 200 (application/json)
 
         [{
-          "_id": "orgs/bigcompany/projects/urlshortener",
-          "name": "UrlShortener",
+          "_id": "orgs/big-company/projects/url-shortener",
+          "name": "Url Shortener",
           "description": "Service to be used by bots",
           "teams": ["owners", "sideprojects"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "project"
         }, {
-          "_id": "orgs/bigcompany/projects/main",
+          "_id": "orgs/big-company/projects/main",
           "name": "Main",
           "description": "Main product",
           "teams": ["owners", "engineering"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "project"
         }, {
-          "_id": "orgs/bigcompany/projects/blog",
+          "_id": "orgs/big-company/projects/blog",
           "name": "Blog",
           "description": "Company's blog",
           "teams": ["owners", "engineering"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "project"
         }]
 
 ### Create a Project [POST]
 
-Create a project. _Authenticated user should own the organization_. Only the __owners__ team will be able to see the project initially.
+Create a project if the authenticated user is the owner of the organization. Only the __owners__ team will be able to see the project initially.
 
 + Request (application/json)
 
         {
-          "name": "KnowledgeBase",
+          "name": "Knowledge Base",
           "description": "Wiki and FAQ for support"
         }
 
 + Response 201 (application/json)
 
         {
-          "_id": "orgs/bigcompany/projects/knowledgebase",
-          "name": "KnowledgeBase",
+          "_id": "orgs/big-company/projects/knowledge-base",
+          "name": "Knowledge Base",
           "description": "Wiki and FAQ for support",
           "teams": ["owners"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "project"
         }
 
@@ -465,8 +471,8 @@ Create a project. _Authenticated user should own the organization_. Only the __o
 
 + Parameters
 
-    + org (required, string) ... Name of the organization
-    + project (required, string) ... Name of the project
+    + org (required, string, `big-company`) ... Slug of the organization
+    + project (required, string, `url-shortener`) ... Slug of the project
 
 ### Retrieve a Project [GET]
 
@@ -475,11 +481,11 @@ Get a specific project in a specific organization. Works only if the authenticat
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/projects/urlshortener",
-          "name": "UrlShortener",
+          "_id": "orgs/big-company/projects/url-shortener",
+          "name": "Url Shortener",
           "description": "Service to be used by bots",
-          "teams": ["owners", "sideprojects"],
-          "org": "bigcompany",
+          "teams": ["owners", "side-projects"],
+          "org": "big-company",
           "type": "project"
         }
 
@@ -496,11 +502,11 @@ Update a specific project. __Description__ is the only thing which can be update
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/projects/urlshortener",
-          "name": "UrlShortener",
+          "_id": "orgs/big-company/projects/url-shortener",
+          "name": "Url Shortener",
           "description": "Url shortening as a service",
-          "teams": ["owners", "sideprojects"],
-          "org": "bigcompany",
+          "teams": ["owners", "side-projects"],
+          "org": "big-company",
           "type": "project"
         }
 
@@ -512,7 +518,7 @@ Delete the given project. Authenticated user should be the owner of the organiza
 
 ## Access [/orgs/{org}/projects/{project}/access]
 
-Default team __Owners__ will have access to every project. Authenticated user should be the owner of the organization for the below endpoints.
+Default team __Owners__ will have access to every project.
 
 + Parameters
 
@@ -526,60 +532,60 @@ Retrieve a list of teams which have access to the given project. Authenticated u
 + Response 200 (application/json)
 
         [{
-          "_id": "orgs/bigcompany/teams/engineering",
+          "_id": "orgs/big-company/teams/engineering",
           "name": "Engineering",
           "description": "The engineering guys",
           "users": ["bobmarley", "jenny", "laura", "jsmith"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "team"
         }, {
-          "_id": "orgs/bigcompany/teams/sideprojects",
-          "name": "SideProjects",
+          "_id": "orgs/big-company/teams/side-projects",
+          "name": "Side Projects",
           "description": "Team managing side projects",
           "users": ["bobmarley", "jsmith", "willy"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "team"
         }]
 
 ### Add a Team [POST]
 
-Give the team access to the given project. The __team__ in the request needs to be a string.
+Give the team access to the given project. The __team__ in the request needs to be a string and should be the name of a valid team. Authenticated user should be the owner of the organization for the below endpoints.
 
 + Request (application/json)
 
         {
-          "team": "engineering"
+          "team": "Engineering"
         }
 
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/projects/knowledgebase",
-          "name": "KnowledgeBase",
+          "_id": "orgs/big-company/projects/knowledge-base",
+          "name": "Knowledge Base",
           "description": "Wiki and FAQ for support",
           "teams": ["owners", "engineering"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "project"
         }
 
 ### Remove a Team [DELETE]
 
-Remove project access for the given team. The __team__ in the request needs to be a string. Can't delete default team's access.
+Remove project access for the given team. The __team__ in the request needs to be a string and should be the name of a valid team. Can't delete default team's access. Authenticated user should be the owner of the organization for the below endpoints.
 
 + Request (application/json)
 
         {
-          "team": "sideprojects"
+          "team": "Side Projects"
         }
 
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/projects/urlshortener",
-          "name": "UrlShortener",
+          "_id": "orgs/big-company/projects/url-shortener",
+          "name": "Url Shortener",
           "description": "Url shortening as a service",
           "teams": ["owners"],
-          "org": "bigcompany",
+          "org": "big-company",
           "type": "project"
         }
 
@@ -591,49 +597,49 @@ Every project has a default environment named __Production__. Each environment h
 
 + Parameters
 
-    + org (required, string) ... Name of the organization
-    + project (required, string) ... Name of the project
+    + org (required, string, `big-company`) ... Slug of the organization
+    + project (required, string, `main`) ... Slug of the project
 
 ### List all Environments [GET]
 
-List all the environmens of the project which can be seen by the authenticated user.
+List all the environmens of the project. The authenticated user should have access to the project.
 
 + Response 200 (application/json)
 
         [{
-          "_id": "orgs/bigcompany/projects/main/envs/production",
+          "_id": "orgs/big-company/projects/main/envs/production",
           "name": "Production",
           "description": "Production environment",
-          "org": "bigcompany",
+          "org": "big-company",
           "project": "main",
           "type": "env"
         }, {
-          "_id": "orgs/bigcompany/projects/main/envs/staging",
+          "_id": "orgs/big-company/projects/main/envs/staging",
           "name": "Staging",
           "description": "Office staging",
-          "org": "bigcompany",
+          "org": "big-company",
           "project": "main",
           "type": "env"
         }]
 
 ### Create an Environment [POST]
 
-Create an environment. _Authenticated user should have access to the project_.
+Create an environment. The authenticated user should have access to the project.
 
 + Request (application/json)
 
         {
-          "name": "QA",
+          "name": "Quality Assurance",
           "description": "Quality Assurance guys server"
         }
 
 + Response 201 (application/json)
 
         {
-          "_id": "orgs/bigcompany/projects/main/envs/qa",
-          "name": "QA",
+          "_id": "orgs/big-company/projects/main/envs/quality-assurance",
+          "name": "Quality Assurance",
           "description": "Quality Assurance guys server"
-          "org": "bigcompany",
+          "org": "big-company",
           "project": "main",
           "type": "env"
         }
@@ -642,21 +648,21 @@ Create an environment. _Authenticated user should have access to the project_.
 
 + Parameters
 
-    + org (required, string) ... Name of the organization
-    + project (required, string) ... Name of the project
-    + env (required, string) ... Name of the environment
+    + org (required, string, `big-company`) ... Slug of the organization
+    + project (required, string, `main`) ... Slug of the project
+    + env (required, string, `quality-assurance`) ... Slug of the environment
 
 ### Retrieve an Environment [GET]
 
-Get a specific environment in a specific project. Works only if the authenticated user has access to the project.
+Get a specific environment in a specific project. The authenticated user should have access to the project.
 
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/projects/main/envs/qa",
-          "name": "QA",
+          "_id": "orgs/big-company/projects/main/envs/quality-assurance",
+          "name": "Quality Assurance",
           "description": "Quality Assurance guys server"
-          "org": "bigcompany",
+          "org": "big-company",
           "project": "main",
           "type": "env"
         }
@@ -674,10 +680,10 @@ Update a specific environment. __Description__ is the only thing which can be up
 + Response 200 (application/json)
 
         {
-          "_id": "orgs/bigcompany/projects/main/envs/qa",
-          "name": "QA",
+          "_id": "orgs/big-company/projects/main/envs/quality-assurance",
+          "name": "Quality Assurance",
           "description": "The quality assurance testing server"
-          "org": "bigcompany",
+          "org": "big-company",
           "project": "main",
           "type": "env"
         }
@@ -694,9 +700,9 @@ Any member of the team which has access to the project can retrieve any of it's 
 
 + Parameters
 
-    + org (required, string) ... Name of the organization
-    + project (required, string) ... Name of the project
-    + env (required, string) ... Name of the environment
+    + org (required, string, `big-company`) ... Name of the organization
+    + project (required, string, `main`) ... Name of the project
+    + env (required, string, `production`) ... Name of the environment
 
 ### Retrieve the configuration [GET]
 

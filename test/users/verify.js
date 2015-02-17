@@ -1,4 +1,5 @@
-var assert = require('assert');
+var assert = require('assert')
+  , redis = require('redis').createClient();
 
 module.exports = function (macro) {
   return {
@@ -8,24 +9,20 @@ module.exports = function (macro) {
           macro.get('/users/jsmith/verify/' + body.verification_token, null, this.callback);
         },
         'should return 200': macro.status(200),
+        'should return the token': function (err, res, body) {
+          assert.isString(body.token);
+        },
         'should return the user': function (err, res, body) {
           assert.equal(body._id, 'users/jsmith');
           assert.equal(body.username, 'jsmith');
           assert.equal(body.type, 'user');
-        },
-        'should return access token': function (err, res, body) {
-          assert.isUndefined(body.access_token);
-          assert.isString(body.token);
-        },
-        'should be verified': function (err, res, body) {
           assert.isTrue(body.verified);
         },
-        'should not retun password': function (err, res, body) {
+        'should not return password': function (err, res, body) {
           assert.isUndefined(body.password);
         },
-        'should not retun verification token': function (err, res, body) {
-          assert.isUndefined(body.verification_token);
-          assert.isUndefined(body.verify_new_email);
+        'should not return access token': function (err, res, body) {
+          assert.isUndefined(body.access_token);
         },
         'should update user doc and it': macro.doc('users/jsmith', {
           'should have verified': function (err, body) {
@@ -35,10 +32,20 @@ module.exports = function (macro) {
             assert.isUndefined(body.verification_token);
             assert.isUndefined(body.verify_new_email);
           },
-          'should have access token': function (err, body) {
-            assert.isString(body.access_token);
+        }),
+        'should have the access token in redis': {
+          topic: function (res, body) {
+            redis.get('confy_' + body.token, this.callback);
+          },
+          'and it should return the user': function (err, body) {
+            body = JSON.parse(body);
+
+            assert.equal(body._id, 'users/jsmith');
+            assert.equal(body.username, 'jsmith');
+            assert.equal(body.type, 'user');
+            assert.isTrue(body.verified);
           }
-        })
+        },
       }
     })
   };

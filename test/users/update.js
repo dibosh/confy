@@ -1,4 +1,5 @@
-var assert = require('assert');
+var assert = require('assert')
+  , redis = require('redis').createClient();
 
 module.exports = function (macro) {
   return {
@@ -15,12 +16,17 @@ module.exports = function (macro) {
         'should return the user': function (err, res, body) {
           assert.equal(body._id, 'users/jsmith');
           assert.equal(body.username, 'jsmith');
-          assert.equal(body.fullname, 'John Kay Smith');
           assert.equal(body.type, 'user');
           assert.isFalse(body.verified);
         },
+        'should update the fullname': function (err, res, body) {
+          assert.equal(body.fullname, 'John Kay Smith');
+        },
         'should update the email': function (err, res, body) {
           assert.equal(body.email, 'john.smith@gmail.com');
+        },
+        'should not return the token': function (err, res, body) {
+          assert.isUndefined(body.token);
         },
         'should not update random fields': function (err, res, body) {
           assert.isUndefined(body.random);
@@ -44,6 +50,74 @@ module.exports = function (macro) {
             assert.isTrue(body.verify_new_email);
           }
         })
+      },
+      'Updating logged in user': {
+        topic: function () {
+          macro.patch('/user?access_token=43fb9585328895005ca74bb33a1c46db5b835f2d', {
+            fullname: 'Pavan Sunkara'
+          }, null, this.callback);
+        },
+        'should return 401': macro.status(401),
+        'should return bad credentials': function (err, res, body) {
+          assert.deepEqual(body, {message: 'Bad credentials'});
+        },
+        'should not update user doc and it': macro.doc('users/pksunkara', {
+          'should have old fullname': function (err, body) {
+            assert.equal(body.fullname, 'Pavan Kumar Sunkara');
+          }
+        })
+      },
+      'Updating authenticated user excluding email': {
+        topic: function () {
+          macro.patch('/user', {
+            fullname: 'Patrick van Stee',
+          }, {user: 'vanstee', pass: 'password'}, this.callback);
+        },
+        'should return 200': macro.status(200),
+        'should return the user': function (err, res, body) {
+          assert.equal(body._id, 'users/vanstee');
+          assert.equal(body.username, 'vanstee');
+          assert.equal(body.email, 'patrick@vanstee.me');
+          assert.equal(body.type, 'user');
+          assert.isTrue(body.verified);
+        },
+        'should update the fullname': function (err, res, body) {
+          assert.equal(body.fullname, 'Patrick van Stee');
+        },
+        'should return the token': function (err, res, body) {
+          assert.isString(body.token);
+        },
+        'should not retun password': function (err, res, body) {
+          assert.isUndefined(body.password);
+        },
+        'should not return access token': function (err, res, body) {
+          assert.isUndefined(body.access_token);
+        },
+        'should update user doc and it': macro.doc('users/vanstee', {
+          'should have updated fullname': function (err, body) {
+            assert.equal(body.fullname, 'Patrick van Stee');
+          },
+          'should not have verification token': function (err, body) {
+            assert.isUndefined(body.verification_token);
+            assert.isUndefined(body.verify_new_email);
+          }
+        }),
+        'should have the access token in redis': {
+          topic: function (res, body) {
+            redis.get('confy_' + body.token, this.callback);
+          },
+          'and it should return the user': function (err, body) {
+            body = JSON.parse(body);
+
+            assert.equal(body._id, 'users/vanstee');
+            assert.equal(body.username, 'vanstee');
+            assert.equal(body.fullname, 'Patrick van Stee');
+            assert.equal(body.email, 'patrick@vanstee.me');
+            assert.equal(body.type, 'user');
+            assert.isTrue(body.verified);
+          }
+        },
+        'and counting redis keys': macro.redis(4, 'four')
       }
     }
   }

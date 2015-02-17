@@ -1,6 +1,7 @@
 var request = require('request')
   , assert = require('assert')
-  , nano = require('nano')('http://localhost:5984').db.use('confy-test');
+  , nano = require('nano')('http://localhost:5984').db.use('confy-test')
+  , redis = require('redis').createClient();
 
 module.exports = {
   get: function (path, auth, callback) {
@@ -83,5 +84,19 @@ module.exports = {
       assert.equal(body.message, 'Validation failed');
       assert.lengthOf(body.errors, number);
     }
+  },
+  redis: function (count, text) {
+    var ret = {
+      topic: function () {
+        redis.keys('*', this.callback);
+      }
+    };
+
+    ret['should result in ' + text + ' keys'] = function (err, body) {
+      assert.isNull(err);
+      assert.equal(body.length, count);
+    };
+
+    return ret;
   }
 }

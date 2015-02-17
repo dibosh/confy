@@ -1,5 +1,6 @@
 var assert = require('assert')
   , nano = require('nano')('http://localhost:5984')
+  , redis = require('redis').createClient()
   , vows = require('vows');
 
 process.env.CLOUDANT_DBNAME = 'confy-test';
@@ -47,6 +48,23 @@ vows.describe('confy').addBatch({
     }
   }
 }).addBatch({
+  'Redis': {
+    topic: function () {
+      var self = this;
+
+      redis.flushall(function () {
+        redis.mset([
+          'confy_43fb9585328895005ca74bb33a1c46db5b835f2d', '{"_id":"users/pksunkara","username":"pksunkara","fullname":"Pavan Kumar Sunkara","email":"pavan.sss1991@gmail.com","type":"user","verified":true}',
+          'confy_fad47f775369e976bcee4cdd1a6b263c3b7d1ade', '{"_id":"users/zdenek","username":"zdenek","fullname":"Zdenek Nemec","email":"z@apiary.io","type":"user","verified":true}'
+        ], self.callback);
+      });
+    },
+    'should be seeded': function (err, body) {
+      assert.isNull(err);
+    },
+    'counting its keys': macro.redis(2, 'two')
+  }
+}).addBatch({
   'API Server': {
     topic: function () {
       app.listen(app.get('port'), this.callback);
@@ -65,6 +83,8 @@ vows.describe('confy').addBatch({
     }
   }
 }).addBatch(require('./users/create')(macro))
+.addBatch(require('./users/login')(macro))
+.addBatch(require('./users/logout')(macro))
 .addBatch(require('./users/verify')(macro))
 .addBatch(require('./users/update')(macro))
 .addBatch(require('./users/verify')(macro))

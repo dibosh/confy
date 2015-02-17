@@ -13,8 +13,10 @@ var login = function (app, remember, req, res, next, callback) {
     if (err) return next(err);
 
     if (body === 'OK') {
-      res.status(201);
-      res.json({token: access_token});
+      app.utils.merge(req.user, {token: access_token});
+
+      res.status(200);
+      res.json(req.user);
 
       if (callback) return callback();
     } else next();

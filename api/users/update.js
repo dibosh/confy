@@ -1,9 +1,14 @@
-var crypto = require('crypto');
+var crypto = require('crypto')
+  , login = require('./login').login;
 
 module.exports = function (app, db) {
 
   // Update an user
   app.patch('/user', app.auth.user, function (req, res, next) {
+    if (req.access_token !== undefined) {
+      return app.errors.auth(res);
+    }
+
     app.utils.permit(req, ['email', 'fullname']);
 
     var mail_template = 'dummy';
@@ -23,6 +28,13 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
+
+        if (req.user.verified) {
+          return login(app, false, req, res, next, function () {
+            app.analytics.track({ userId: req.user.username, event: 'Updated Profile' });
+          });
+        }
+
         app.utils.shield(req.user, [
           'password', 'access_token', 'verification_token', 'verify_new_email', '_rev'
         ]);

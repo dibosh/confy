@@ -5,7 +5,7 @@ module.exports = function (macro) {
     'Orgs': {
       'Updating org with owner': {
         topic: function () {
-          macro.patch('/orgs/firesize', {
+          macro.patch('/orgs/fire-size', {
             email: 'admin@firesize.io',
             random: '1i3je738ujf',
             owner: 'hacked'
@@ -13,8 +13,8 @@ module.exports = function (macro) {
         },
         'should return 200': macro.status(200),
         'should return the org': function (err, res, body) {
-          assert.equal(body._id, 'orgs/firesize');
-          assert.equal(body.name, 'FireSize');
+          assert.equal(body._id, 'orgs/fire-size');
+          assert.equal(body.name, 'Fire Size');
           assert.equal(body.email, 'admin@firesize.io');
           assert.equal(body.owner, 'jsmith');
           assert.equal(body.type, 'org');
@@ -26,7 +26,7 @@ module.exports = function (macro) {
         'should not return users list': function (err, res, body) {
           assert.isUndefined(body.users);
         },
-        'should update org doc and it': macro.doc('orgs/firesize', {
+        'should update org doc and it': macro.doc('orgs/fire-size', {
           'should have updated email': function (err, body) {
             assert.equal(body.email, 'admin@firesize.io');
           }

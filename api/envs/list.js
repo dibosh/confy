@@ -2,7 +2,7 @@ module.exports = function (app, db) {
 
   // List all environments of a project
   app.get('/orgs/:orgname/projects/:project/envs', app.auth.project, function (req, res, next) {
-    db.view('envs', 'project', {keys: [req.org.name.toLowerCase() + '/' + req.project.name.toLowerCase()]}, function (err, body) {
+    db.view('envs', 'project', {keys: [app.utils.slug(req.org) + '/' + app.utils.idify(req.project.name)]}, function (err, body) {
       if (err) return next(err);
 
       if (body.rows) {

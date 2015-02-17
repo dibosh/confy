@@ -21,16 +21,16 @@ module.exports = function (macro) {
       },
       'Deleting org with owner': {
         topic: function () {
-          macro.delete('/orgs/firesize', {}, {user: 'jsmith', pass: 'secret'}, this.callback);
+          macro.delete('/orgs/fire-size', {}, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
         'should return 204': macro.status(204),
         'should not return the org': function (err, res, body) {
           assert.isUndefined(body);
         },
-        'should delete org doc and it': macro.nodoc('orgs/firesize', 'deleted'),
-        'should delete project doc and it': macro.nodoc('orgs/firesize/projects/main', 'deleted'),
-        'should delete team doc and it': macro.nodoc('orgs/firesize/teams/dev', 'deleted'),
-        'should delete environment doc and it': macro.nodoc('orgs/firesize/projects/main/envs/production', 'deleted')
+        'should delete org doc and it': macro.nodoc('orgs/fire-size', 'deleted'),
+        'should delete project doc and it': macro.nodoc('orgs/fire-size/projects/main-app', 'deleted'),
+        'should delete team doc and it': macro.nodoc('orgs/fire-size/teams/dev-gods', 'deleted'),
+        'should delete environment doc and it': macro.nodoc('orgs/fire-size/projects/main-app/envs/production', 'deleted')
       },
       'Deleting org with member': {
         topic: function () {

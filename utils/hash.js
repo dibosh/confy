@@ -59,4 +59,14 @@ module.exports = function (app) {
       if (body[field]) delete body[field];
     });
   }
+
+  // Idify a name
+  app.utils.idify = function (name) {
+    return name.toLowerCase().replace(/\ /g, '-');
+  }
+
+  // Get slug from the id
+  app.utils.slug = function (object) {
+    return object._id.split('/').slice(-1)[0];
+  }
 };

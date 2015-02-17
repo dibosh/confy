@@ -9,13 +9,13 @@ module.exports = function (app) {
 
   app.bulk.project = function (project, org) {
     project.type = 'project';
-    project.org = org.name.toLowerCase();
+    project.org = app.utils.slug(org);
     project.teams = {'owners': true};
-    project._id = org._id + '/projects/' + project.name.toLowerCase();
+    project._id = org._id + '/projects/' + app.utils.idify(project.name);
 
     var env = {
       _id: project._id + '/envs/production', name: 'Production', description: 'Production environment',
-      type: 'env', project: project.name.toLowerCase(), org: project.org, config: {}
+      type: 'env', project: app.utils.idify(project.name), org: project.org, config: {}
     };
 
     return { docs: [project, env] };
@@ -25,14 +25,17 @@ module.exports = function (app) {
     org.plan = 'none';
     org.type = 'org';
     org.owner = user.username;
-    org._id = 'orgs/' + org.name.toLowerCase();
+
+    if (!org._id) {
+      org._id = 'orgs/' + app.utils.idify(org.name);
+    }
 
     org.users = {};
     org.users[user.username] = 1;
 
     var team = {
       _id: org._id + '/teams/owners', name: 'Owners', description: 'Has access to all projects',
-      type: 'team', org: org.name.toLowerCase(), users: {}
+      type: 'team', org: app.utils.slug(org), users: {}
     };
 
     team.users[user.username] = true;
@@ -46,7 +49,7 @@ module.exports = function (app) {
     user._id = 'users/' + user.username;
 
     var org = {
-      name: user.username, email: user.email
+      _id: 'orgs/' + user.username, name: user.fullname, email: user.email
     };
 
     var tmp = app.bulk.org(org, user);

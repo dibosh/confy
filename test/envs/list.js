@@ -23,14 +23,14 @@ module.exports = function (macro) {
       },
       'Listing them with member': {
         topic: function () {
-          macro.get('/orgs/confyio/projects/knowledgebase/envs', {user:'vanstee', pass:'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/knowledge-base/envs', {user:'vanstee', pass:'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return array of environments': function (err, res, body) {
           assert.lengthOf(body, 1);
         },
         'should return environments of the project': function (err, res, body) {
-          assert.equal(body[0]._id, 'orgs/confyio/projects/knowledgebase/envs/production');
+          assert.equal(body[0]._id, 'orgs/confyio/projects/knowledge-base/envs/production');
         },
         'should not return config': function (err, res, body) {
           assert.isUndefined(body[0].config);

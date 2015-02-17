@@ -2,7 +2,7 @@ module.exports = function (app, db) {
 
   // Environment param
   app.param('env', function (req, res, next, env) {
-    var id = 'orgs/' + req.org.name.toLowerCase() + '/projects/' + req.project.name.toLowerCase() + '/envs/' + env;
+    var id = 'orgs/' + app.utils.slug(req.org) + '/projects/' + app.utils.idify(req.project.name) + '/envs/' + env;
 
     db.get(id, function (err, body) {
       if (err && err.reason != 'missing' && err.reason != 'deleted') {

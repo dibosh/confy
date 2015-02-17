@@ -23,7 +23,7 @@ module.exports = function (macro) {
       },
       'Creating them with missing params': {
         topic: function () {
-          macro.post('/orgs/firesize/projects', {}, {user:'jsmith', pass:'secret'}, this.callback);
+          macro.post('/orgs/fire-size/projects', {}, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(3)
@@ -50,17 +50,17 @@ module.exports = function (macro) {
       },
       'Creating them': {
         topic: function () {
-          macro.post('/orgs/firesize/projects', {
-            name: 'Main', description: 'Main web application',
+          macro.post('/orgs/fire-size/projects', {
+            name: 'Main App', description: 'Main web application',
             random: '1e3', org: 'confyio'
           }, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 201': macro.status(201),
         'should return project': function (err, res, body) {
-          assert.equal(body._id, 'orgs/firesize/projects/main');
-          assert.equal(body.name, 'Main');
+          assert.equal(body._id, 'orgs/fire-size/projects/main-app');
+          assert.equal(body.name, 'Main App');
           assert.equal(body.description, 'Main web application');
-          assert.equal(body.org, 'firesize');
+          assert.equal(body.org, 'fire-size');
           assert.equal(body.type, 'project');
         },
         'should not save other keys': function (err, res, body) {
@@ -72,7 +72,7 @@ module.exports = function (macro) {
         'should not return users': function (err, res, body) {
           assert.isUndefined(body.users);
         },
-        'should create project doc and it': macro.doc('orgs/firesize/projects/main', {
+        'should create project doc and it': macro.doc('orgs/fire-size/projects/main-app', {
           'should have users from "owners" team': function (err, body) {
             assert.deepEqual(body.users, {jsmith: 1});
           },
@@ -80,7 +80,7 @@ module.exports = function (macro) {
             assert.deepEqual(body.teams, {owners:true});
           }
         }),
-        'should create project environment doc and it': macro.doc('orgs/firesize/projects/main/envs/production')
+        'should create project environment doc and it': macro.doc('orgs/fire-size/projects/main-app/envs/production')
       }
     }
   };

@@ -8,7 +8,7 @@ module.exports = function (app, db) {
     var errs = app.utils.need(req, ['name', 'description']);
     var name = req.body.name;
 
-    if (typeof name != 'string' || name.match(/[a-z0-9]*/i)[0] != name) {
+    if (typeof name != 'string' || name.match(/[a-z0-9][a-z0-9\ ]*[a-z0-9]/i)[0] != name) {
       errs.push({ field: 'name', code: 'invalid' });
     }
 
@@ -16,8 +16,8 @@ module.exports = function (app, db) {
       return app.errors.validation(res, errs);
     }
 
-    var org = req.org.name.toLowerCase()
-      , team = name.toLowerCase();
+    var org = app.utils.slug(req.org)
+      , team = app.utils.idify(name);
 
     // Search for existing team name
     db.view('teams', 'name', {keys: [org + '/' + team]}, function (err, body) {

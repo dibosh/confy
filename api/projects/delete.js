@@ -2,8 +2,8 @@ module.exports = function (app, db) {
 
   // Delete a project
   app.delete('/orgs/:org/projects/:project', app.auth.owner, app.auth.noHeroku, function (req, res, next) {
-    var org = req.org.name.toLowerCase()
-      , project = req.project.name.toLowerCase();
+    var org = app.utils.slug(req.org)
+      , project = app.utils.idify(req.project.name);
 
     db.view('envs', 'project', {keys:[org + '/' + project]}, function (err, body) {
       var configs = [];

@@ -53,8 +53,8 @@ module.exports = function (app, db) {
   app.delete('/orgs/:org/teams/:team/member', app.auth.owner, function (req, res, next) {
     if (check(req, res)) return;
 
-    var org = req.org.name.toLowerCase()
-      , team = req.team.name.toLowerCase()
+    var org = app.utils.slug(req.org)
+      , team = app.utils.idify(req.team.name)
       , user = req.body.user.toLowerCase();
 
     // If user is the default user
@@ -97,8 +97,8 @@ module.exports = function (app, db) {
   app.post('/orgs/:org/teams/:team/member', app.auth.owner, function (req, res, next) {
     if (check(req, res)) return;
 
-    var org = req.org.name.toLowerCase()
-      , team = req.team.name.toLowerCase()
+    var org = app.utils.slug(req.org)
+      , team = app.utils.idify(req.team.name)
       , user = req.body.user.toLowerCase();
 
     // Check if user exists

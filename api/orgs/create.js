@@ -8,7 +8,7 @@ module.exports = function (app, db) {
     var errs = app.utils.need(req, ['name', 'email']);
     var name = req.body.name;
 
-    if (typeof name != 'string' || name.match(/[a-z0-9]*/i)[0] != name) {
+    if (typeof name != 'string' || name.match(/[a-z0-9][a-z0-9\ ]*[a-z0-9]/i)[0] != name) {
       errs.push({ field: 'name', code: 'invalid' });
     }
 
@@ -17,7 +17,7 @@ module.exports = function (app, db) {
     }
 
     // Search for existing orgname
-    db.view('orgs', 'name', {keys: [name.toLowerCase()]}, function (err, body) {
+    db.view('orgs', 'name', {keys: [app.utils.idify(name)]}, function (err, body) {
       if (err) return next(err);
 
       if (body.rows.length > 0) {

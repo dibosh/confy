@@ -5,14 +5,14 @@ module.exports = function (macro) {
     'Teams': {
       'Adding member to team with missing params': {
         topic: function () {
-          macro.post('/orgs/firesize/teams/dev/member', {}, {user: 'jsmith', pass: 'secret'}, this.callback);
+          macro.post('/orgs/fire-size/teams/dev-gods/member', {}, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(2)
       },
       'Adding member to team with non-existent user': {
         topic: function () {
-          macro.post('/orgs/firesize/teams/dev/member', {
+          macro.post('/orgs/fire-size/teams/dev-gods/member', {
             user: 'sunkara'
           }, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
@@ -57,19 +57,19 @@ module.exports = function (macro) {
       },
       'Adding already member to team': {
         topic: function () {
-          macro.post('/orgs/firesize/teams/dev/member', {
+          macro.post('/orgs/fire-size/teams/dev-gods/member', {
             user: 'jsmith', random: 'u2e83'
           }, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return the team doc': function (err, res, body) {
-          assert.equal(body._id, 'orgs/firesize/teams/dev');
-          assert.equal(body.name, 'Dev');
+          assert.equal(body._id, 'orgs/fire-size/teams/dev-gods');
+          assert.equal(body.name, 'Dev Gods');
           assert.equal(body.description, 'Main product developers');
-          assert.equal(body.org, 'firesize');
+          assert.equal(body.org, 'fire-size');
           assert.equal(body.type, 'team');
         },
-        'should not update the org doc and it': macro.doc('orgs/firesize', {
+        'should not update the org doc and it': macro.doc('orgs/fire-size', {
           'should not increment the count for the user': function (err, body) {
             assert.equal(body.users['jsmith'], 2);
           }

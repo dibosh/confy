@@ -28,7 +28,7 @@ module.exports = function (macro) {
         'should return 200': macro.status(200),
         'should return the org': function (err, res, body) {
           assert.equal(body._id, 'orgs/jsmith');
-          assert.equal(body.name, 'jsmith');
+          assert.equal(body.name, 'John Smith');
           assert.equal(body.email, 'johnsmith@gmail.com');
           assert.equal(body.owner, 'jsmith');
           assert.equal(body.type, 'org');

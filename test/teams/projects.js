@@ -12,7 +12,7 @@ module.exports = function (macro) {
           assert.lengthOf(body, 1);
         },
         'should return projects with access by team': function (err, res, body) {
-          assert.equal(body[0]._id, 'orgs/confyio/projects/knowledgebase');
+          assert.equal(body[0]._id, 'orgs/confyio/projects/knowledge-base');
         },
         'should return teams array for projects': function (err, res, body) {
           assert.deepEqual(body[0].teams, ['owners','consultants']);

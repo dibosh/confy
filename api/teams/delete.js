@@ -2,8 +2,8 @@ module.exports = function (app, db) {
 
   // Delete a team
   app.delete('/orgs/:org/teams/:team', app.auth.owner, app.auth.noHeroku, function (req, res, next) {
-    var org = req.org.name.toLowerCase()
-      , team = req.team.name.toLowerCase();
+    var org = app.utils.slug(req.org)
+      , team = app.utils.idify(req.team.name);
 
     // If team is the default team
     if (team == 'owners') {

@@ -2,7 +2,7 @@ module.exports = function (app, db) {
 
   // Team param
   app.param('team', function (req, res, next, team) {
-    var id = 'orgs/' + req.org.name.toLowerCase() + '/teams/' + team;
+    var id = 'orgs/' + app.utils.slug(req.org) + '/teams/' + team;
 
     db.get(id, function (err, body) {
       if (err && err.reason != 'missing' && err.reason != 'deleted') {

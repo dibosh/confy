@@ -2,7 +2,7 @@ module.exports = function (app, db) {
 
   // List all projects the user has access to
   app.get('/orgs/:org/projects', app.auth.user, function (req, res, next) {
-    db.view('projects', 'user', {keys: [req.org.name.toLowerCase() + '/' + req.user.username]}, function (err, body) {
+    db.view('projects', 'user', {keys: [app.utils.slug(req.org) + '/' + req.user.username]}, function (err, body) {
       if (err) return next(err);
 
       if (body.rows) {

@@ -5,7 +5,7 @@ module.exports = function (macro) {
     'Projects': {
       'Listing teams it has given access to by member': {
         topic: function () {
-          macro.get('/orgs/confyio/projects/knowledgebase/access', {user:'vanstee', pass:'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/knowledge-base/access', {user:'vanstee', pass:'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return array of teams': function (err, res, body) {
@@ -20,7 +20,7 @@ module.exports = function (macro) {
       },
       'Listing teams it has given access to by non-member': {
         topic: function () {
-          macro.get('/orgs/confyio/projects/urlshortener/access', {user:'vanstee', pass:'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/url-shortener/access', {user:'vanstee', pass:'password'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {

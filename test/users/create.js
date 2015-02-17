@@ -67,7 +67,7 @@ module.exports = function (macro) {
         }),
         'should create default org doc and it': macro.doc('orgs/jsmith', {
           'should be default for user': function (err, body) {
-            assert.equal(body.name, 'jsmith');
+            assert.equal(body.name, 'John Smith');
             assert.equal(body.type, 'org');
           },
           'should have user as owner': function (err, body) {

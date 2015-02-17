@@ -33,14 +33,14 @@ module.exports = function (macro) {
       'Creating them': {
         topic: function () {
           macro.post('/orgs', {
-            name: 'FireSize', email: 'johnsmith@gmail.com',
+            name: 'Fire Size', email: 'johnsmith@gmail.com',
             random: '123xyz', owner: 'stuff'
           }, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 201': macro.status(201),
         'should return org': function (err, res, body) {
-          assert.equal(body._id, 'orgs/firesize');
-          assert.equal(body.name, 'FireSize');
+          assert.equal(body._id, 'orgs/fire-size');
+          assert.equal(body.name, 'Fire Size');
           assert.equal(body.email, 'johnsmith@gmail.com');
           assert.equal(body.owner, 'jsmith');
           assert.equal(body.type, 'org');
@@ -49,7 +49,7 @@ module.exports = function (macro) {
         'should not save other keys': function (err, res, body) {
           assert.isUndefined(body.random);
         },
-        'should create org doc and it': macro.doc('orgs/firesize', {
+        'should create org doc and it': macro.doc('orgs/fire-size', {
           'should have user as owner': function (err, body) {
             assert.equal(body.owner, 'jsmith');
           },
@@ -60,11 +60,12 @@ module.exports = function (macro) {
             assert.equal(body.plan, 'none');
           }
         }),
-        'should create default team doc and it': macro.doc('orgs/firesize/teams/owners', {
+        'should create default team doc and it': macro.doc('orgs/fire-size/teams/owners', {
           'should be default for org': function (err, body) {
             assert.equal(body.name, 'Owners');
             assert.equal(body.type, 'team');
             assert.equal(body.description, 'Has access to all projects');
+            assert.equal(body.org, 'fire-size');
           },
           'should have user in list of users': function (err, body) {
             assert.deepEqual(body.users, {jsmith: true});

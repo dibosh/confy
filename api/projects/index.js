@@ -2,7 +2,7 @@ module.exports = function (app, db) {
 
   // Project param
   app.param('project', function (req, res, next, project) {
-    var id = 'orgs/' + req.org.name.toLowerCase() + '/projects/' + project;
+    var id = 'orgs/' + app.utils.slug(req.org) + '/projects/' + project;
 
     db.get(id, function (err, body) {
       if (err && err.reason != 'missing' && err.reason != 'deleted') {

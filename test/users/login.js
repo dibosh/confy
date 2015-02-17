@@ -85,7 +85,6 @@ module.exports = function (macro) {
         },
         'should have the access token in redis': {
           topic: function (res, body) {
-            console.log(body.token);
             redis.get('confy_' + body.token, this.callback);
           },
           'and it should return the user': function (err, body) {

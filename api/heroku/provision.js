@@ -11,7 +11,7 @@ module.exports = function (app, db) {
       , password = crypto.randomBytes(10).toString('hex');
 
     var user = {
-      username: appid, email: req.body.heroku_id,
+      username: appid, fullname: appid, email: req.body.heroku_id,
       password: password, verified: true, heroku: true
     };
 

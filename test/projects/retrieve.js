@@ -23,12 +23,12 @@ module.exports = function (macro) {
       },
       'Retrieving project with member': {
         topic: function () {
-          macro.get('/orgs/confyio/projects/knowledgebase', {user: 'vanstee', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/knowledge-base', {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return the project': function (err, res, body) {
-          assert.equal(body._id, 'orgs/confyio/projects/knowledgebase');
-          assert.equal(body.name, 'KnowledgeBase');
+          assert.equal(body._id, 'orgs/confyio/projects/knowledge-base');
+          assert.equal(body.name, 'Knowledge Base');
           assert.equal(body.description, 'Wiki & FAQ support');
           assert.equal(body.org, 'confyio');
           assert.equal(body.type, 'project');
@@ -42,12 +42,12 @@ module.exports = function (macro) {
       },
       'Retrieving project with owner': {
         topic: function () {
-          macro.get('/orgs/confyio/projects/knowledgebase', {user: 'pksunkara', pass: 'password'}, this.callback);
+          macro.get('/orgs/confyio/projects/knowledge-base', {user: 'pksunkara', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),
         'should return the project': function (err, res, body) {
-          assert.equal(body._id, 'orgs/confyio/projects/knowledgebase');
-          assert.equal(body.name, 'KnowledgeBase');
+          assert.equal(body._id, 'orgs/confyio/projects/knowledge-base');
+          assert.equal(body.name, 'Knowledge Base');
           assert.equal(body.description, 'Wiki & FAQ support');
           assert.equal(body.org, 'confyio');
           assert.equal(body.type, 'project');

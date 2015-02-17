@@ -7,7 +7,7 @@ module.exports = function (app, db) {
     var errs = app.utils.need(req, ['team']);
     var team = req.body.team;
 
-    if (typeof team != 'string' || team.match(/[a-z0-9]*/i)[0] != team) {
+    if (typeof team != 'string' || team.match(/[a-z0-9][a-z0-9-]*[a-z0-9]/i)[0] != team) {
       errs.push({ field: 'team', code: 'invalid' });
     }
 
@@ -32,7 +32,7 @@ module.exports = function (app, db) {
   }
 
   app.get('/orgs/:orgname/projects/:project/access', app.auth.project, function (req, res, next) {
-    var org = req.org.name.toLowerCase();
+    var org = app.utils.slug(req.org);
 
     var keys = Object.keys(req.project.teams).map(function (team) {
       return org + '/' + team;
@@ -62,8 +62,8 @@ module.exports = function (app, db) {
   app.delete('/orgs/:org/projects/:project/access', app.auth.owner, function (req, res, next) {
     if (check(req, res)) return;
 
-    var org = req.org.name.toLowerCase()
-      , team = req.body.team.toLowerCase();
+    var org = app.utils.slug(req.org)
+      , team = app.utils.idify(req.body.team);
 
     // If team is the default team
     if (team == 'owners') {
@@ -98,8 +98,8 @@ module.exports = function (app, db) {
   app.post('/orgs/:org/projects/:project/access', app.auth.owner, function (req, res, next) {
     if (check(req, res)) return;
 
-    var org = req.org.name.toLowerCase()
-      , team = req.body.team.toLowerCase();
+    var org = app.utils.slug(req.org)
+      , team = app.utils.idify(req.body.team);
 
     // Check if team exists
     db.get('orgs/' + org + '/teams/' + team, function (err, body) {

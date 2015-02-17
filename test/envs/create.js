@@ -14,7 +14,7 @@ module.exports = function (macro) {
       },
       'Creating them with missing params by member': {
         topic: function () {
-          macro.post('/orgs/confyio/projects/knowledgebase/envs', {}, {user:'vanstee', pass:'password'}, this.callback);
+          macro.post('/orgs/confyio/projects/knowledge-base/envs', {}, {user:'vanstee', pass:'password'}, this.callback);
         },
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(3)
@@ -30,18 +30,18 @@ module.exports = function (macro) {
       },
       'Creating them': {
         topic: function () {
-          macro.post('/orgs/firesize/projects/main/envs', {
-            name: 'Staging', description: 'Staging',
-            random: '1e3', org: 'firesize'
+          macro.post('/orgs/fire-size/projects/main-app/envs', {
+            name: 'Staging Beta', description: 'Staging',
+            random: '1e3', org: 'fire-size'
           }, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 201': macro.status(201),
         'should return environment': function (err, res, body) {
-          assert.equal(body._id, 'orgs/firesize/projects/main/envs/staging');
-          assert.equal(body.name, 'Staging');
+          assert.equal(body._id, 'orgs/fire-size/projects/main-app/envs/staging-beta');
+          assert.equal(body.name, 'Staging Beta');
           assert.equal(body.description, 'Staging');
-          assert.equal(body.project, 'main');
-          assert.equal(body.org, 'firesize');
+          assert.equal(body.project, 'main-app');
+          assert.equal(body.org, 'fire-size');
           assert.equal(body.type, 'env');
         },
         'should not save other keys': function (err, res, body) {
@@ -50,7 +50,7 @@ module.exports = function (macro) {
         'should not return config': function (err, res, body) {
           assert.isUndefined(body.config);
         },
-        'should create environment doc and it': macro.doc('orgs/firesize/projects/main/envs/staging')
+        'should create environment doc and it': macro.doc('orgs/fire-size/projects/main-app/envs/staging-beta')
       }
     }
   };

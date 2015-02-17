@@ -3,7 +3,9 @@ var express = require('express')
   , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
   , segment = require('analytics-node')
-  , raven = require('raven');
+  , raven = require('raven')
+  , redis = require('redis')
+  , url = require('url');
 
 var app = express();
 
@@ -29,6 +31,15 @@ require('./utils/logger')(app);
 
 // Setup database handler
 var db = nano(app.get('db')).use(app.get('dbname'));
+
+// Setup redis
+var redisUrl = url.parse(app.get('redis'));
+
+app.redis = redis.createClient(redisUrl.port, redisUrl.hostname, {enable_offline_queue: false});
+
+if (redisUrl.auth) {
+  app.redis.auth(redisUrl.auth.split(':')[1]);
+}
 
 // Setup utility functions
 require('./utils/auth')(app, db);

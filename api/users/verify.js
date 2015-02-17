@@ -1,4 +1,5 @@
-var crypto = require('crypto');
+var crypto = require('crypto')
+  , login = require('./login').login;
 
 module.exports = function (app, db) {
 
@@ -19,19 +20,14 @@ module.exports = function (app, db) {
       mail_template = 'new_email';
     }
 
-    req.user.access_token = crypto.randomBytes(20).toString('hex');
-
     db.insert(req.user, req.user._id, function (err, body) {
       if (err) return next(err);
 
       if (body.ok) {
-        req.user.token = req.user.access_token;
-
-        app.utils.shield(req.user, ['access_token', 'password', '_rev']);
-        res.json(req.user);
-
-        app.mail[mail_template](req.user.email, req.user, app.errors.capture());
-        app.analytics.track({ userId: req.user.username, event: 'Verified Email' });
+        login(app, false, req, res, next, function () {
+          app.mail[mail_template](req.user.email, req.user, app.errors.capture());
+          app.analytics.track({ userId: req.user.username, event: 'Verified Email' });
+        });
       } else next();
     });
   });

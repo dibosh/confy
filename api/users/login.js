@@ -1,24 +1,36 @@
 var crypto = require('crypto');
 
+var login = function (app, remember, req, res, next, callback) {
+
+  var expire = (remember ? 14 : 1)*24*3600
+    , access_token = crypto.randomBytes(20).toString('hex');
+
+  app.utils.shield(req.user, [
+    'password', 'access_token', 'verification_token', 'verify_new_email', '_rev'
+  ]);
+
+  app.redis.setex('confy_' + access_token, expire, JSON.stringify(req.user), function (err, body) {
+    if (err) return next(err);
+
+    if (body === 'OK') {
+      res.status(201);
+      res.json({token: access_token});
+
+      if (callback) return callback();
+    } else next();
+  });
+}
+
 module.exports = function (app, db) {
 
   // Login a user
-  app.get('/user/login', app.auth.user, function (req, res, next) {
+  app.post('/user/login', app.auth.user, function (req, res, next) {
     if (req.access_token !== undefined) {
       return app.errors.auth(res);
     }
 
-    req.user.access_token = crypto.randomBytes(20).toString('hex');
-
-    db.insert(req.user, req.user._id, function (err, body) {
-      if (err) return next(err);
-
-      if (body.ok) {
-        res.status(201);
-        res.json({token: req.user.access_token});
-
-        app.analytics.track({ userId: req.user.username, event: 'Logged on Backend' });
-      } else next();
+    login(app, req.body.remember, req, res, next, function () {
+      app.analytics.track({ userId: req.user.username, event: 'Logged on Backend' });
     });
   });
 
@@ -28,13 +40,12 @@ module.exports = function (app, db) {
       return res.send(204);
     }
 
-    delete req.user.access_token;
-
-    db.insert(req.user, req.user._id, function (err, body) {
+    app.redis.del('confy_' + req.access_token, function (err, body) {
       if (err) return next(err);
 
-      if (body.ok) {
+      if (body) {
         res.send(204);
+        app.analytics.track({ userId: req.user.username, event: 'Logged out' });
       } else next();
     });
   });
@@ -53,6 +64,7 @@ module.exports = function (app, db) {
 
       user.access_token = crypto.randomBytes(20).toString('hex');
 
+      // TODO: Use redis
       db.insert(user, user._id, function (err, body) {
         if (err) return next(err);
 
@@ -68,3 +80,5 @@ module.exports = function (app, db) {
   });
 
 };
+
+module.exports.login = login;

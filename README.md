@@ -12,6 +12,7 @@ Prerequisites are:
 
  * Node.js __v0.10.x__
  * CouchDB __v1.2.x__ [dbname: confy]
+ * Redis __v2.8.x__
 
 ```bash
 $ git clone git://github.com/asm-products/confy && cd confy

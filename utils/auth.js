@@ -61,21 +61,36 @@ module.exports = function (app, db) {
 
     if (auth.token !== null) {
       // Fetching user with access token
-      return db.view('users', 'token', {keys: [auth.token]}, function (err, body) {
+      return app.redis.get('confy_' + auth.token, function (err, body) {
         if (err) return next(err);
 
-        if (body.rows.length != 1) {
-          return app.errors.auth(res);
+        if (body) {
+          try {
+            req.user = JSON.parse(body);
+            req.access_token = auth.token;
+
+            return next();
+          } catch (err) {
+            app.sentry.captureError(err);
+          }
         }
 
-        if (body.rows[0].value && !body.rows[0].value.verified) {
-          return app.errors.unverified(res);
-        }
+        db.view('users', 'token', {keys: [auth.token]}, function (err, body) {
+          if (err) return next(err);
 
-        req.user = body.rows[0].value;
-        req.access_token = auth.token;
+          if (body.rows.length != 1) {
+            return app.errors.auth(res);
+          }
 
-        return next();
+          if (body.rows[0].value && !body.rows[0].value.verified) {
+            return app.errors.unverified(res);
+          }
+
+          req.user = body.rows[0].value;
+          req.access_token = auth.token;
+
+          return next();
+        });
       });
     }
 

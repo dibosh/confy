@@ -123,6 +123,16 @@ vows.describe('confy').addBatch({
 .addBatch(require('./heroku/retrieve')(macro))
 .addBatch(require('./heroku/update')(macro))
 .addBatch({
+  'Redis': {
+    topic: function () {
+      redis.flushall(this.callback);
+    },
+    'should be flushed': function (err, body) {
+      assert.isNull(err);
+    },
+    'counting its keys': macro.redis(0, 'zero')
+  }
+}).addBatch({
   'Database': {
     topic: function () {
       var callback = this.callback;

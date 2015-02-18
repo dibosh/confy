@@ -57,13 +57,16 @@ module.exports = function (app, db) {
         db.bulk(app.bulk.user(req.body), {all_or_nothing: true, new_edits: false}, function (err, body) {
           if (err) return next(err);
 
+          if (news) {
+            app.mail.list('news', req.body, app.errors.capture());
+          }
+
+          app.mail.verification(req.body.email, req.body, app.errors.capture());
+          app.analytics.track({ userId: req.body.username, event: 'Registered' });
+
           app.utils.shield(req.body, ['password', 'verification_token']);
           res.status(201);
           res.json(req.body);
-
-          // TODO: Insert into 'news' mailing list
-          app.mail.verification(req.body.email, req.body, app.errors.capture());
-          app.analytics.track({ userId: req.body.username, event: 'Registered' });
         });
       });
     });

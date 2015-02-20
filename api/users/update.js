@@ -14,7 +14,7 @@ module.exports = function (app, db) {
     var mail_template = 'dummy';
 
     // If updating email, send verification email
-    if (req.body.email) {
+    if (req.body.email && req.body.email != req.user.email) {
       mail_template = 'verification';
 
       req.body.verified = false;

@@ -54,7 +54,8 @@ module.exports = function (macro) {
       'Updating logged in user': {
         topic: function () {
           macro.patch('/user?access_token=43fb9585328895005ca74bb33a1c46db5b835f2d', {
-            fullname: 'Pavan Sunkara'
+            fullname: 'Pavan Sunkara',
+            email: 'pavan.sss1991@gmail.com'
           }, null, this.callback);
         },
         'should return 401': macro.status(401),
@@ -71,6 +72,7 @@ module.exports = function (macro) {
         topic: function () {
           macro.patch('/user', {
             fullname: 'Patrick van Stee',
+            email: 'patrick@vanstee.me'
           }, {user: 'vanstee', pass: 'password'}, this.callback);
         },
         'should return 200': macro.status(200),

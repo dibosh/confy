@@ -1,22 +1,15 @@
 var bcrypt = require('bcrypt');
 
 var authorization = function (req) {
-  var result = {
+  var auth = '', type = '', result = {
     basic: null,
     token: null
   };
 
-  if (typeof req.query.access_token == 'string') {
-    result.token = req.query.access_token;
-    return result;
+  if (typeof req.headers.authorization == 'string') {
+    auth = req.headers.authorization.substr(6).trim()
+    type = req.headers.authorization.substr(0, 5);
   }
-
-  if (typeof req.headers.authorization != 'string') {
-    return result;
-  }
-
-  var auth = req.headers.authorization.substr(6).trim()
-    , type = req.headers.authorization.substr(0, 5);
 
   if (type.toLowerCase() == 'basic') {
     auth = new Buffer(auth, 'base64').toString();
@@ -27,6 +20,10 @@ var authorization = function (req) {
     };
   } else if (type.toLowerCase() == 'token') {
     result.token = auth;
+  }
+
+  if (typeof req.query.access_token == 'string') {
+    result.token = req.query.access_token;
   }
 
   return result;

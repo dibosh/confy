@@ -3,21 +3,7 @@ var crypto = require('crypto')
 
 module.exports = function (app, db) {
 
-  // Update an user
-  app.patch('/user', app.auth.user, function (req, res, next) {
-    if (req.access_token !== undefined) {
-      return app.errors.auth(res);
-    }
-
-    app.utils.permit(req, ['email', 'fullname']);
-
-    // If updating email, send verification email
-    if (req.body.email && req.body.email != req.user.email) {
-      req.body.verified = false;
-      req.body.verification_token = crypto.randomBytes(20).toString('hex');
-      req.body.verify_new_email = true;
-    }
-
+  var update = function (req, res, next) {
     app.utils.merge(req.user, req.body);
 
     db.insert(req.user, req.user._id, function (err, body) {
@@ -38,6 +24,35 @@ module.exports = function (app, db) {
 
         res.json(req.user);
       } else next();
+    });
+  }
+
+  // Update an user
+  app.patch('/user', app.auth.user, function (req, res, next) {
+    if (req.access_token !== undefined) {
+      return app.errors.auth(res);
+    }
+
+    app.utils.permit(req, ['email', 'fullname']);
+
+    // If updating email, send verification email
+    if (req.body.email && req.body.email != req.user.email) {
+      req.body.verified = false;
+      req.body.verification_token = crypto.randomBytes(20).toString('hex');
+      req.body.verify_new_email = true;
+    } else {
+      return update(req, res, next);
+    }
+
+    // Search for existing email
+    db.view('users', 'email', {keys: [req.body.email]}, function (err, body) {
+      if (err) return next(err);
+
+      if (body.rows.length > 0) {
+        return app.errors.validation(res, [{ field: 'email', code: 'already_exists' }]);
+      }
+
+      update(req, res, next);
     });
   });
 };

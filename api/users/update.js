@@ -11,12 +11,8 @@ module.exports = function (app, db) {
 
     app.utils.permit(req, ['email', 'fullname']);
 
-    var mail_template = 'dummy';
-
     // If updating email, send verification email
     if (req.body.email && req.body.email != req.user.email) {
-      mail_template = 'verification';
-
       req.body.verified = false;
       req.body.verification_token = crypto.randomBytes(20).toString('hex');
       req.body.verify_new_email = true;
@@ -28,21 +24,19 @@ module.exports = function (app, db) {
       if (err) return next(err);
 
       if (body.ok) {
+        app.analytics.track({ userId: req.user.username, event: 'Updated Profile' });
 
         if (req.user.verified) {
-          return login(app, false, req, res, next, function () {
-            app.analytics.track({ userId: req.user.username, event: 'Updated Profile' });
-          });
+          return login(app, false, req, res, next);
         }
+
+        app.mail.verification(req.user.email, req.user, app.errors.capture());
 
         app.utils.shield(req.user, [
           'password', 'access_token', 'verification_token', 'verify_new_email', '_rev'
         ]);
 
         res.json(req.user);
-
-        app.mail[mail_template](req.user.email, req.user, app.errors.capture());
-        app.analytics.track({ userId: req.user.username, event: 'Updated Profile' });
       } else next();
     });
   });

@@ -19,6 +19,24 @@ module.exports = function (macro) {
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(1)
       },
+      'Creating them with too short name': {
+        topic: function () {
+          macro.post('/orgs', {
+            name: 'O', email: 'minlength@confytest.io'
+          }, {user:'jsmith', pass:'secret'}, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1)
+      },
+      'Creating them with too lengthy name': {
+        topic: function () {
+          macro.post('/orgs', {
+            name: 'Organization Management', email: 'maxlength@confytest.io'
+          }, {user:'jsmith', pass:'secret'}, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1)
+      },
       'Creating them with heroku user': {
         topic: function () {
           macro.post('/orgs', {

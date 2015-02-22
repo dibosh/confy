@@ -30,6 +30,26 @@ module.exports = function (macro) {
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(1)
       },
+      'Creating them with too short username': {
+        topic: function () {
+          macro.post('/user', {
+            username: 'u', password: 'tooshort',
+            email: 'tooshort@confytest.com'
+          }, null, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1)
+      },
+      'Creating them with too lengthy username': {
+        topic: function () {
+          macro.post('/user', {
+            username: 'iamtoolengthyusername', password: 'toolengthy',
+            email: 'toolengthy@confytest.com'
+          }, null, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1)
+      },
       'Creating them': {
         topic: function () {
           macro.post('/user', {

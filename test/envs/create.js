@@ -28,6 +28,24 @@ module.exports = function (macro) {
         'should return 422': macro.status(422),
         'should return validation errors': macro.validation(1)
       },
+      'Creating them with too short name': {
+        topic: function () {
+          macro.post('/orgs/confyio/projects/main/envs', {
+            name: 'E', description: 'Short Name'
+          }, {user:'pksunkara', pass:'password'}, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1)
+      },
+      'Creating them with too lengthy name': {
+        topic: function () {
+          macro.post('/orgs/confyio/projects/main/envs', {
+            name: 'Environment Management', description: 'Lengthy Name'
+          }, {user:'pksunkara', pass:'password'}, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1)
+      },
       'Creating them': {
         topic: function () {
           macro.post('/orgs/fire-size/projects/main-app/envs', {

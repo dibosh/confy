@@ -61,6 +61,15 @@ module.exports = function (app, db) {
             app.mail.list('news', req.body, app.errors.capture());
           }
 
+          app.analytics.identify({
+            userId: req.body.username,
+            traits: {
+              name: req.body.fullname,
+              username: req.body.username,
+              email: req.body.email
+            }
+          });
+
           app.mail.verification(req.body.email, req.body, app.errors.capture());
           app.analytics.track({ userId: req.body.username, event: 'Registered' });
 

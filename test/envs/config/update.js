@@ -5,7 +5,7 @@ module.exports = function (macro) {
     'Environment Configuration': {
       'Updating them with non-member': {
         topic: function () {
-          macro.patch('/orgs/confyio/projects/main/envs/production/config', {}, {user: 'jsmith', pass: 'secret'}, this.callback);
+          macro.put('/orgs/confyio/projects/main/envs/production/config', {}, {user: 'jsmith', pass: 'secret'}, this.callback);
         },
         'should return 404': macro.status(404),
         'should return not found': function (err, res, body) {
@@ -14,7 +14,7 @@ module.exports = function (macro) {
       },
       'Updating them with member': {
         topic: function () {
-          macro.patch('/orgs/confyio/projects/main/envs/production/config', {
+          macro.put('/orgs/confyio/projects/main/envs/production/config', {
             _deleted: true, _id: 'hacked', name: null,
             port: 3000, database: { port: 6984 }
           }, {user: 'pksunkara', pass: 'password'}, this.callback);
@@ -26,16 +26,16 @@ module.exports = function (macro) {
           assert.equal(body.port, 3000);
           assert.isNull(body.name);
         },
-        'should recursively update': function (err, res, body) {
+        'should not recursively update': function (err, res, body) {
           assert.equal(body.database.port, 6984);
-          assert.equal(body.database.pass, 'secret');
+          assert.isUndefined(body.database.pass);
         },
         'should update the environment doc and it': macro.doc('orgs/confyio/projects/main/envs/production', {
-          'should be recursively updated': function (err, body) {
+          'should be replaced': function (err, body) {
             assert.equal(body.config.port, 3000);
             assert.isNull(body.config.name);
             assert.equal(body.config.database.port, 6984);
-            assert.equal(body.config.database.pass, 'secret');
+            assert.isUndefined(body.config.database.pass);
           }
         })
       }

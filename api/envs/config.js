@@ -1,9 +1,7 @@
-var deepExtend = require('deep-extend');
-
 var update = function (db) {
   return function (req, res, next) {
     // Update the data
-    req.env.config = deepExtend(req.env.config, req.body);
+    req.env.config = req.body;
 
     db.insert(req.env, req.env._id, function (err, body) {
       if (err) return next(err);
@@ -21,7 +19,7 @@ module.exports = function (app, db) {
     res.json(req.env.config);
   });
 
-  app.patch('/orgs/:orgname/projects/:project/envs/:env/config', app.auth.project, update(db));
+  app.put('/orgs/:orgname/projects/:project/envs/:env/config', app.auth.project, update(db));
 };
 
 module.exports.update = update;

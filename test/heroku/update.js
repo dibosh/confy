@@ -5,7 +5,7 @@ module.exports = function (macro) {
     'Heroku': {
       'Updating config with non-heroku user': {
         topic: function () {
-          macro.patch('/heroku/config', {}, {user:'jsmith', pass:'secret'}, this.callback);
+          macro.put('/heroku/config', {}, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 403': macro.status(403),
         'should return forbidden': function (err, res, body) {
@@ -14,7 +14,7 @@ module.exports = function (macro) {
       },
       'Updating config with heroku user': {
         topic: function () {
-          macro.patch('/heroku/config', {
+          macro.put('/heroku/config', {
             port: null, db: 'pavan'
           }, {user:'app123', pass:'password'}, this.callback);
         },

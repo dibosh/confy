@@ -30,6 +30,15 @@ module.exports = {
       json: true
     }, callback);
   },
+  put: function (path, body, auth, callback) {
+    request({
+      url: 'http://localhost:5000' + path,
+      method: 'PUT',
+      body: body,
+      auth: auth,
+      json: true
+    }, callback);
+  },
   delete: function (path, body, auth, callback) {
     request({
       url: 'http://localhost:5000' + path,

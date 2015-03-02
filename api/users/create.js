@@ -1,4 +1,5 @@
-var crypto = require('crypto');
+var crypto = require('crypto')
+  , validator = require('validator');
 
 module.exports = function (app, db) {
 
@@ -20,7 +21,9 @@ module.exports = function (app, db) {
       errs.push({ field: 'password', code: 'insecure' });
     }
 
-    // TODO: Validate email
+    if (!validator.isEmail(req.body.email)) {
+      errs.push({ field: 'email', code: 'invalid' });
+    };
 
     if (errs.length > 0) {
       return app.errors.validation(res, errs);

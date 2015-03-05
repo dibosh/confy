@@ -22,9 +22,11 @@ module.exports = function (macro) {
         'should return 200': macro.status(200),
         'should return updated config': function (err, res, body) {
           assert.equal(body._deleted, true);
-          assert.equal(body._id, 'hacked');
           assert.equal(body.port, 3000);
           assert.isNull(body.name);
+        },
+        'should not have _id': function (err, res, body) {
+          assert.isUndefined(body._id);
         },
         'should not recursively update': function (err, res, body) {
           assert.equal(body.database.port, 6984);
@@ -32,10 +34,12 @@ module.exports = function (macro) {
         },
         'should update the environment doc and it': macro.doc('orgs/confyio/projects/main/envs/production', {
           'should be replaced': function (err, body) {
+            assert.equal(body.config._deleted, true);
             assert.equal(body.config.port, 3000);
             assert.isNull(body.config.name);
             assert.equal(body.config.database.port, 6984);
             assert.isUndefined(body.config.database.pass);
+            assert.isUndefined(body.config._id);
           }
         })
       }

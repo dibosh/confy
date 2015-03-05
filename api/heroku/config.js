@@ -8,5 +8,5 @@ module.exports = function (app, db) {
   });
 
   // Update config for heroku
-  app.put('/heroku/config', app.auth.user, app.auth.configHeroku, update(db));
+  app.put('/heroku/config', app.auth.user, app.auth.configHeroku, update(app, db));
 };

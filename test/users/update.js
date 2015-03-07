@@ -82,6 +82,20 @@ module.exports = function (macro) {
           }
         })
       },
+      'Updating user with invalid email': {
+        topic: function () {
+          macro.patch('/user', {
+            email: 'invalid@email'
+          }, {user: 'whatupdave', pass: 'password'}, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1),
+        'should not update user doc and it': macro.doc('users/whatupdave', {
+          'should have old email': function (err, body) {
+            assert.equal(body.email, 'dave@snappyco.de');
+          }
+        })
+      },
       'Updating authenticated user excluding email': {
         topic: function () {
           macro.patch('/user', {

@@ -8,7 +8,7 @@ module.exports = function (macro) {
           macro.post('/orgs', {}, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 422': macro.status(422),
-        'should return validation errors': macro.validation(3)
+        'should return validation errors': macro.validation(4)
       },
       'Creating them with existing name': {
         topic: function () {
@@ -32,6 +32,15 @@ module.exports = function (macro) {
         topic: function () {
           macro.post('/orgs', {
             name: 'Organization Management', email: 'maxlength@confytest.io'
+          }, {user:'jsmith', pass:'secret'}, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1)
+      },
+      'Creating them with invalid email': {
+        topic: function () {
+          macro.post('/orgs', {
+            name: 'John Smith', email: 'johnsmith@invalidemail'
           }, {user:'jsmith', pass:'secret'}, this.callback);
         },
         'should return 422': macro.status(422),

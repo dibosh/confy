@@ -1,5 +1,6 @@
 var crypto = require('crypto')
-  , login = require('./login').login;
+  , login = require('./login').login
+  , validator = require('validator');
 
 module.exports = function (app, db) {
 
@@ -34,6 +35,10 @@ module.exports = function (app, db) {
     }
 
     app.utils.permit(req, ['email', 'fullname']);
+
+    if (!validator.isEmail(req.body.email)) {
+      return app.errors.validation(res, [{ field: 'email', code: 'invalid' }]);
+    };
 
     // If updating email, send verification email
     if (req.body.email && req.body.email != req.user.email) {

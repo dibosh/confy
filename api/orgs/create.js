@@ -1,3 +1,5 @@
+var validator = require('validator');
+
 module.exports = function (app, db) {
 
   // Create an org
@@ -11,6 +13,10 @@ module.exports = function (app, db) {
     if (typeof name != 'string' || name.length < 3 || name.length > 15 || name.match(/[a-z0-9][a-z0-9\ ]*[a-z0-9]/i)[0] != name) {
       errs.push({ field: 'name', code: 'invalid' });
     }
+
+    if (!validator.isEmail(req.body.email)) {
+      errs.push({ field: 'email', code: 'invalid' });
+    };
 
     if (errs.length > 0) {
       return app.errors.validation(res, errs);

@@ -8,7 +8,7 @@ module.exports = function (macro) {
           macro.post('/user', {}, null, this.callback);
         },
         'should return 422': macro.status(422),
-        'should return validation errors': macro.validation(5)
+        'should return validation errors': macro.validation(6)
       },
       'Creating them with existing email': {
         topic: function () {
@@ -45,6 +45,16 @@ module.exports = function (macro) {
           macro.post('/user', {
             username: 'iamtoolengthyusername', password: 'toolengthy',
             email: 'toolengthy@confytest.com'
+          }, null, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1)
+      },
+      'Creating them with invalid email': {
+        topic: function () {
+          macro.post('/user', {
+            username: 'jsmith', password: 'invalidemail',
+            email: 'invalid@email'
           }, null, this.callback);
         },
         'should return 422': macro.status(422),

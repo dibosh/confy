@@ -47,7 +47,23 @@ module.exports = function (macro) {
             assert.equal(body.email, 'admin@confy.io');
           }
         })
-      }
+      },
+      'Updating org with invalid email': {
+        topic: function () {
+          macro.patch('/orgs/fire-size', {
+            email: 'invalid@email',
+            random: '1i3je738ujf',
+            owner: 'hacked'
+          }, {user: 'jsmith', pass: 'secret'}, this.callback);
+        },
+        'should return 422': macro.status(422),
+        'should return validation errors': macro.validation(1),
+        'should not update org doc and it': macro.doc('orgs/confyio', {
+          'should have old email': function (err, body) {
+            assert.equal(body.email, 'admin@confy.io');
+          }
+        })
+      },
     }
   };
 }

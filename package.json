@@ -21,7 +21,8 @@
     "redis": "0.12.x",
     "mailgun-js": "~0.4.5",
     "raven": "~0.7.2",
-    "analytics-node": "1.1.x"
+    "analytics-node": "1.1.x",
+    "validator": "3.x.x"
   },
   "devDependencies": {
     "vows": "~0.7.0",

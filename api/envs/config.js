@@ -2,6 +2,10 @@ var update = function (app, db) {
   return function (req, res, next) {
     app.utils.forbid(req, ['_id']);
 
+    if (req.body._encrypted) {
+      req.body = req.body._encrypted;
+    }
+
     // Update data
     req.env.config = req.body;
 

@@ -22,7 +22,7 @@
     "mailgun-js": "~0.4.5",
     "raven": "~0.7.2",
     "analytics-node": "1.1.x",
-    "validator": "3.x.x"
+    "validator": "3.34.x"
   },
   "devDependencies": {
     "vows": "~0.7.0",

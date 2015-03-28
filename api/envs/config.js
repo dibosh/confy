@@ -9,6 +9,15 @@ var update = function (app, db) {
     // Update data
     req.env.config = req.body;
 
+    // Update versions
+    req.env.versions.push({
+      config: req.body, time: Date.now()
+    });
+
+    if (req.env.versions.length > 10) {
+      req.env.versions.shift();
+    }
+
     db.insert(req.env, req.env._id, function (err, body) {
       if (err) return next(err);
 

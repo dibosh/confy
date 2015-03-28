@@ -23,6 +23,16 @@ module.exports = function (macro) {
           'should have update config': function (err, body) {
             assert.isNull(body.config.port);
             assert.equal(body.config.db, 'pavan');
+          },
+          'should have added the new versions': function (err, body) {
+            assert.equal(body.versions.length, 10);
+            assert.isNull(body.versions[9].config.port);
+            assert.equal(body.versions[9].config.db, 'pavan');
+          },
+          'should have removed the old versions': function (err, body) {
+            assert.equal(body.versions.length, 10);
+            assert.equal(body.versions[0].config.port, 8008);
+            assert.equal(body.versions[0].time, 1427633285584);
           }
         })
       }

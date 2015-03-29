@@ -34,6 +34,9 @@ module.exports = function (macro) {
         },
         'should not return config': function (err, res, body) {
           assert.isUndefined(body[0].config);
+        },
+        'should not return versions': function (err, res, body) {
+          assert.isUndefined(body[0].versions);
         }
       }
     }

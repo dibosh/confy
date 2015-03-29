@@ -26,6 +26,9 @@ module.exports = function (macro) {
         'should not return config': function (err, res, body) {
           assert.isUndefined(body.config);
         },
+        'should not return versions': function (err, res, body) {
+          assert.isUndefined(body.versions);
+        },
         'should update environment doc and it': macro.doc('orgs/confyio/projects/main/envs/production', {
           'should have updated description': function (err, body) {
             assert.equal(body.description, 'Main production environment');

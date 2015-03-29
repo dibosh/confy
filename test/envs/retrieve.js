@@ -36,6 +36,9 @@ module.exports = function (macro) {
         },
         'should not return config': function (err, res, body) {
           assert.isUndefined(body.config);
+        },
+        'should not return versions': function (err, res, body) {
+          assert.isUndefined(body.versions);
         }
       },
       'Retrieving environment with owner': {
@@ -53,6 +56,9 @@ module.exports = function (macro) {
         },
         'should not return config': function (err, res, body) {
           assert.isUndefined(body.config);
+        },
+        'should not return versions': function (err, res, body) {
+          assert.isUndefined(body.versions);
         }
       }
     }

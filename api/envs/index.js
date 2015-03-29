@@ -26,4 +26,5 @@ module.exports = function (app, db) {
   require('./delete')(app, db);
 
   require('./config')(app, db);
+  require('./versions')(app, db);
 };

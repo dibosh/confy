@@ -591,7 +591,7 @@ Remove project access for the given team. The __team__ in the request needs to b
 
 # Group Environments
 
-Every project has a default environment named __Production__. Each environment has __one__ configuration document which can have many keys and values.
+Every project has a default environment named __Production__. Each environment has __one__ credential document which can have many keys and values.
 
 ## Environments [/orgs/{org}/projects/{project}/envs]
 
@@ -694,9 +694,9 @@ Delete the given environment of the project. Authenticated user should have acce
 
 + Response 204
 
-## Configuration [/orgs/{org}/projects/{project}/envs/{env}/config]
+## Credentials [/orgs/{org}/projects/{project}/envs/{env}/config]
 
-Any member of the team which has access to the project can retrieve any of it's environment's configuration document or edit it.
+Any member of the team which has access to the project can retrieve any of it's environment's credential document or edit it.
 
 + Parameters
 
@@ -704,9 +704,9 @@ Any member of the team which has access to the project can retrieve any of it's 
     + project (required, string, `main`) ... Name of the project
     + env (required, string, `production`) ... Name of the environment
 
-### Retrieve the configuration [GET]
+### Retrieve the credentials [GET]
 
-Get an environment config of the project.
+Get the credential document for the given environment of the project.
 
 + Response 200 (application/json)
 
@@ -720,9 +720,9 @@ Get an environment config of the project.
           }
         }
 
-### Update the configuration [PUT]
+### Update the credentials [PUT]
 
-Update the configuration document for the given environment of the project. Replaces the whole document with the given body.
+Update the credential document for the given environment of the project. Replaces the whole document with the given body.
 
 + Request (application/json)
 
@@ -747,3 +747,34 @@ Update the configuration document for the given environment of the project. Repl
           },
           "random": null
         }
+
+## Versioning [/orgs/{org}/projects/{project}/envs/{env}/versions]
+
+We store the last 10 versions of an environment credentials which can be used by the user to restore an old version of the credential document. Authenticated user should have access to the project.
+
++ Parameters
+
+    + org (required, string, `big-company`) ... Name of the organization
+    + project (required, string, `main`) ... Name of the project
+    + env (required, string, `production`) ... Name of the environment
+
+### List all Versions [GET]
+
+List all versions of the credential document.
+
++ Response 200 (application/json)
+
+        [{
+          "config": {
+            "port": 8000,
+            "database": {
+              "port": 5984,
+              "url": "http://db.confy.io",
+              "name": "support"
+            }
+          },
+          "time": 1427633285584
+        }, {
+          "config": "EWcdL4M3UHUsdpYZKZTnYQ==RDsiGWvifNeWqrLKz9MDRQ==",
+          "time": 1427638419608
+        }]

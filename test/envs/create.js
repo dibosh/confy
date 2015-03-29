@@ -68,6 +68,9 @@ module.exports = function (macro) {
         'should not return config': function (err, res, body) {
           assert.isUndefined(body.config);
         },
+        'should not return versions': function (err, res, body) {
+          assert.isUndefined(body.versions);
+        },
         'should create environment doc and it': macro.doc('orgs/fire-size/projects/main-app/envs/staging-beta')
       }
     }

@@ -39,7 +39,7 @@ module.exports = function (app, db) {
         if (err) return next(err);
 
         res.status(201);
-        app.utils.shield(req.body, ['config']);
+        app.utils.shield(req.body, ['config', 'versions']);
         res.json(req.body);
       });
     });

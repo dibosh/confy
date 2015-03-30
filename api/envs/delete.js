@@ -13,7 +13,7 @@ module.exports = function (app, db) {
     db.bulk({docs: [req.env]}, {all_or_nothing: true}, function (err, body) {
       if (err) return next(err);
 
-      res.send(204);
+      res.sendStatus(204);
     });
   });
 };

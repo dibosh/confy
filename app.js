@@ -1,6 +1,5 @@
 var express = require('express')
   , nano = require('nano')
-  , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
   , segment = require('analytics-node')
   , raven = require('raven')
@@ -23,8 +22,8 @@ if (app.get('env') === 'production') {
 }
 
 // Setup middleware
-app.use(bodyParser());
-app.use(cookieParser(app.get('cookie')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Setup logger
 require('./utils/logger')(app);

@@ -7,7 +7,7 @@ module.exports = function (app) {
     res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     if ('OPTIONS' === req.method) {
-      res.send(200);
+      res.sendStatus(200);
     } else {
       return next();
     }

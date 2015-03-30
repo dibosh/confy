@@ -39,14 +39,14 @@ module.exports = function (app, db) {
   // Logout a user
   app.get('/user/logout', app.auth.user, function (req, res, next) {
     if (req.access_token === undefined) {
-      return res.send(204);
+      return res.sendStatus(204);
     }
 
     app.redis.del('confy_' + req.access_token, function (err, body) {
       if (err) return next(err);
 
       if (body) {
-        res.send(204);
+        res.sendStatus(204);
         app.analytics.track({ userId: req.user.username, event: 'Logged out' });
       } else next();
     });
@@ -58,7 +58,7 @@ module.exports = function (app, db) {
       , hash = crypto.createHash('sha1').update(token).digest('hex');
 
     if (req.body.token != hash || (Date.now()/1000 - 300) > parseInt(req.body.timestamp)) {
-      return res.send(403);
+      return res.sendStatus(403);
     }
 
     db.get('users/' + req.body.id, function (err, user) {

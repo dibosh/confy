@@ -16,7 +16,7 @@ module.exports = function (app, db) {
         app.utils.deleteOrg([user], body, function (err) {
           if (err) return next(err);
 
-          res.send(200);
+          res.sendStatus(200);
         });
       });
     });

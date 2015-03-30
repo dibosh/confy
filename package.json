@@ -12,21 +12,20 @@
     "node": "0.10.x"
   },
   "dependencies": {
-    "express": "~4.0.0",
+    "express": "4.12.x",
     "bcrypt": "0.8.x",
     "morgan": "1.5.x",
-    "cookie-parser": "~1.0.1",
-    "body-parser": "~1.0.0",
-    "nano": "~5.7.1",
+    "body-parser": "1.12.x",
+    "nano": "6.1.x",
     "redis": "0.12.x",
-    "mailgun-js": "~0.4.5",
-    "raven": "~0.7.2",
-    "analytics-node": "1.1.x",
-    "validator": "3.34.x"
+    "mailgun-js": "0.5.x",
+    "raven": "0.7.x",
+    "analytics-node": "1.2.x",
+    "validator": "3.x.x"
   },
   "devDependencies": {
     "vows": "~0.7.0",
-    "request": "2.53.x"
+    "request": "2.54.x"
   },
   "scripts": {
     "test": "./node_modules/.bin/vows test/test.js --spec"

@@ -53,7 +53,7 @@ module.exports = function (app, db) {
     app.utils.deleteOrg([], req.org, function (err) {
       if (err) return next(err);
 
-      res.send(204);
+      res.sendStatus(204);
     });
   });
 };

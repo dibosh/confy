@@ -21,5 +21,5 @@ module.exports = function (app, db) {
 
   require('./verify')(app, db);
   require('./login')(app, db);
-  require('./forgotpass')(app, db);
+  require('./forgot')(app, db);
 };

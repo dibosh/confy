@@ -73,6 +73,10 @@ module.exports = function (app, db) {
       // Update user
       delete user.reset_token;
       delete user.reset_expire;
+
+      // Delete the unnecessary fields
+      app.utils.shield(user, ['reset_token', 'reset_expire']);
+      // Add the password
       user.password = cryptPass(password);
 
       // Update DB
